@@ -20,6 +20,7 @@ For details see the blog posts - listed from newest to oldest:
 6. [Mac JOD](http://bakerjd99.wordpress.com/2012/06/27/mac-jod/)
 
 7. [Turn your iPhone into a jPhone](http://bakerjd99.wordpress.com/2012/06/23/turn-your-iphone-into-a-jphone-2/)
+ * [`jPhoneBlogExamples.ijs`](https://github.com/bakerjd99/jacks/blob/master/phones/jPhoneBlogExamples.ijs)
 
 8. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
 
