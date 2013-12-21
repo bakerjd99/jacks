@@ -1,0 +1,106 @@
+% A simple test document that displays some packages and settings
+% that are useful when compiling LaTeXe documents for the Kindle.
+% Compile with pdflatex or xelatex. 
+% 
+% Tested on MikTeX 2.9
+% July 22, 2011
+
+\documentclass[12pt]{article}
+
+% included graphics in immediate subdirectory
+\usepackage{graphicx}
+\graphicspath{{./image/}}
+
+% extended coloring
+\usepackage[usenames,dvipsnames]{color}
+
+% can be useful for tables that 
+% overflow the limited Kindle display
+%\usepackage{longtable}
+
+% hyperref link colors are chosen to display 
+% well on Kindle monochrome devices turn on
+% dvips for dvi -> ps -> pdf workflows
+\usepackage[
+            %dvips,   
+            colorlinks,
+            linkcolor=OliveGreen,   
+			 urlcolor=blue,
+            pdfauthor={your name},
+            pdftitle={your title},
+            pdfsubject={your subject},
+            pdfcreator={MikTeX+LaTeXe with hyperref package},
+            pdfkeywords={your,key,words},
+            ]{hyperref}
+			
+% KINDLE SIZING
+%\usepackage{fontspec}      % fontspec use XeLaTeX
+%\setmainfont{Cambria}
+%\usepackage{breqn}         % automatic equation breaking
+\usepackage{microtype}      % microtypography, reduces hyphenation
+%\usepackage{polyglossia}   % language selection
+%\setmainlanguage{english}
+
+% customize captions
+% \usepackage[font=small,labelformat=simple,]{caption} 
+
+% customizing section titles  
+% \usepackage{titlesec}      
+% \titleformat{\section}{\itshape\large}{}{0em}{}
+% \titlespacing{\section}{0pt}{8pt}{4pt}
+% \titleformat{\subsection}{\itshape}{}{0em}{}
+% \titlespacing{\subsection}{0pt}{4pt}{2pt}
+% \titleformat{\subsubsection}[runin]{\bf\scshape}{}{0em}{}
+% \titlespacing{\subsubsection}{0pt}{5pt}{5pt}
+
+% kindle page geometry (no page numbers)
+%\usepackage[papersize={3.6in,4.8in},hmargin=0.1in,vmargin={0.1in,0.1in}]{geometry}  
+
+% portrait kindle page geometry space reserved for page numbers
+\usepackage[papersize={3.6in,4.8in},hmargin=0.1in,vmargin={0.1in,0.255in}]{geometry}  
+
+% landscape geometry 
+%\usepackage[papersize={4.8in,3.6in},hmargin={0.1in,0.18},vmargin={0.1in,0.255in}]{geometry}   
+
+% headers and footers
+\usepackage{fancyhdr}  
+\pagestyle{fancy}
+\fancyhead{}            % clear page header
+\fancyfoot{}            % clear page footer
+
+%\fancyhf{}
+%\rfoot{\thepage}
+
+\setlength{\abovecaptionskip}{2pt} % space above captions 
+\setlength{\belowcaptionskip}{0pt} % space below captions
+\setlength{\textfloatsep}{2pt}     % space between last top float or first bottom float and the text
+\setlength{\floatsep}{2pt}         % space left between floats
+\setlength{\intextsep}{2pt}        % space left on top and bottom of an in-text float
+% END KINDLE SIZING
+
+% print LaTeX dimensions
+\usepackage{printlen}
+
+% reduces footer text separation adjusted for page numbers
+\setlength{\footskip}{14pt}
+
+% scales down page number font size if document is at 12pt -> page numbers 10 pt
+\renewcommand*{\thepage}{\footnotesize\arabic{page}}
+
+\begin{document}
+
+The \verb|\textwidth| is \printlength{\textwidth} which is also
+\uselengthunit{in}\printlength{\textwidth} and
+\uselengthunit{mm}\printlength{\textwidth}.
+
+\uselengthunit{pt}
+The \verb|\textheight| is \printlength{\textheight} which is also
+\uselengthunit{in}\printlength{\textheight} and
+\uselengthunit{mm}\printlength{\textheight}.
+
+\uselengthunit{pt}
+The \verb|\linewidth| is \printlength{\linewidth} which is also
+\uselengthunit{in}\printlength{\linewidth} and
+\uselengthunit{mm}\printlength{\linewidth}.
+
+\end{document}

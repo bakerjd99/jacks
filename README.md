@@ -48,5 +48,8 @@ For details see the blog posts - listed from newest to oldest:
 
 21. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
 
+22. [Fake Programming](http://bakerjd99.wordpress.com/2009/09/09/fake-progamming/)
+  * relevant file location
+
 John Baker
 December 20, 2013

@@ -1,0 +1,228 @@
+\documentclass{article}
+
+\usepackage{fontspec}
+
+% APL unicode font
+\setmonofont{APL385}
+
+% smaller margins in document 
+\usepackage[headings]{fullpage}
+
+% extended coloring
+\usepackage[dvipsnames]{xcolor}
+
+\definecolor{CodeBackGround}{cmyk}{0.0,0.0,0,0.05}  % light gray
+\definecolor{CodeComment}{rgb}{0,0.50,0.00}         % dark green {0,0.45,0.08}
+
+\usepackage{listings}
+
+% use long form control keyword terminators, i.e. endif 
+% instead of end.  It's a language design flaw to
+% support both forms. APL+WIN makes this mistake.
+\lstdefinelanguage{apl}
+{
+morekeywords={},
+otherkeywords={:if,:else,:for,:in,:while,:until
+,:andif,:orif,:repeat,:select,:case
+,:go,:return,:try,:catch,:catchif,:catchall
+,:endfor,:endwhile,:endselect,:endif,:endrepeat,:endselect},
+keywordstyle=\bfseries\color{red},
+sensitive=True,
+morecomment=[l]{⍝}
+}
+
+\lstset{%
+  basicstyle=\ttfamily\small,  
+  keywordstyle=\bfseries\normalsize,  % can color key words        
+  identifierstyle=,                             
+  commentstyle=\slshape\color{CodeComment}, % no slanted shape in APL385    
+  stringstyle=\ttfamily,                        
+  showstringspaces=false,                      
+  backgroundcolor=\color{CodeBackGround},      
+  frame=single,                               
+  framesep=1pt,                                
+  framerule=0.8pt,                              
+  rulecolor=\color{CodeBackGround},             
+  breaklines=true,      % break long code lines                        
+  breakindent=0pt                               
+}
+
+\makeatletter
+\lst@InputCatcodes
+\def\lst@DefEC{%
+ \lst@CCECUse \lst@ProcessLetter
+  ^^80^^81^^82^^83^^84^^85^^86^^87^^88^^89^^8a^^8b^^8c^^8d^^8e^^8f%
+  ^^90^^91^^92^^93^^94^^95^^96^^97^^98^^99^^9a^^9b^^9c^^9d^^9e^^9f%
+  ^^a0^^a1^^a2^^a3^^a4^^a5^^a6^^a7^^a8^^a9^^aa^^ab^^ac^^ad^^ae^^af%
+  ^^b0^^b1^^b2^^b3^^b4^^b5^^b6^^b7^^b8^^b9^^ba^^bb^^bc^^bd^^be^^bf%
+  ^^c0^^c1^^c2^^c3^^c4^^c5^^c6^^c7^^c8^^c9^^ca^^cb^^cc^^cd^^ce^^cf%
+  ^^d0^^d1^^d2^^d3^^d4^^d5^^d6^^d7^^d8^^d9^^da^^db^^dc^^dd^^de^^df%
+  ^^e0^^e1^^e2^^e3^^e4^^e5^^e6^^e7^^e8^^e9^^ea^^eb^^ec^^ed^^ee^^ef%
+  ^^f0^^f1^^f2^^f3^^f4^^f5^^f6^^f7^^f8^^f9^^fa^^fb^^fc^^fd^^fe^^ff%
+  ^^^^20ac^^^^0153^^^^0152%
+  ^^^^20a7^^^^2190^^^^2191^^^^2192^^^^2193^^^^2206^^^^2207^^^^220a%
+  ^^^^2218^^^^2228^^^^2229^^^^222a^^^^2235^^^^223c^^^^2260^^^^2261%
+  ^^^^2262^^^^2264^^^^2265^^^^2282^^^^2283^^^^2296^^^^22a2^^^^22a3%
+  ^^^^22a4^^^^22a5^^^^22c4^^^^2308^^^^230a^^^^2336^^^^2337^^^^2339%
+  ^^^^233b^^^^233d^^^^233f^^^^2340^^^^2342^^^^2347^^^^2348^^^^2349%
+  ^^^^234b^^^^234e^^^^2350^^^^2352^^^^2355^^^^2357^^^^2359^^^^235d%
+  ^^^^235e^^^^235f^^^^2361^^^^2362^^^^2363^^^^2364^^^^2365^^^^2368%
+  ^^^^236a^^^^236b^^^^236c^^^^2371^^^^2372^^^^2373^^^^2374^^^^2375%
+  ^^^^2377^^^^2378^^^^237a^^^^2395^^^^25af^^^^25ca^^^^25cb%  
+  ^^00}
+\lst@RestoreCatcodes
+\makeatother
+
+\begin{document}
+
+Plain verbatim listing. It works for UTF8 input but does not break
+lines, format syntax or update listings list.
+
+\begin{verbatim}
+z ← keyn SQLiteFrDBI dbi;t;n;st;sn;sc;sql;rf;rm;nrc;⎕io
+
+⍝ Returns a SQLite table creation statement that maps the
+⍝ structure of APL+WIN inverted DBI files to SQLite tables.
+⍝
+⍝ monad: ev ← SQLiteFrDBI cvDBIFileName
+⍝
+⍝   sqlv ← SQLiteFrDBI 'C:\BCA\bcadev\CA\ULTCL.DBI'
+
+ ⎕io ← 1
+
+⍝ default SQLite primary key name
+ :if 0=⎕nc 'keyn' ⋄ keyn ← 'rwkey' ⋄ :endif
+
+⍝ open DBI file - the DBI open function creates
+⍝ a number of global variables that are used to
+⍝ to access data stored in these files. These
+⍝ variable contain '∆_' in their names.
+ ⎕error (1∊'∆_'⍷⎕nl 2)/'DBI globals present - erase all DBI globals'
+
+ DBIOpen dbi                        ⍝ open DBI file
+ z ← (∨/'∆_'⍷⎕nl 2)⌿⎕nl 2           ⍝ varibles set by DBI open
+
+⍝ we need table name, column names, types, repeat codes
+
+ t ← ⍎(∨/'∆_fty'⍷z)⌿z       ⍝ column types
+ n ← ⍎(∨/'∆_fnm'⍷z)⌿z       ⍝ column names prefixed by table
+ rf ← ⍎(∨/'∆_fnc'⍷z)⌿z      ⍝ (0≤) indicates a DBI repeated column (numeric matrix)
+ z ← ⎕ex z                  ⍝ clear DBI open globals
+ z ← ⎕ex ⊃'∆DBIFL' '∆DBIFN'
+
+⍝ correspondence between DBI and SQLite column types - SQLite does
+⍝ not distinguish between integer types and ignores all fixed length
+⍝ declarations in SQL column declarations this is ideal for APL data
+⍝ C=text, I=integer, U=integer, F=real, D=date)
+ st ← ('text' 'integer' 'integer' 'real' 'date')['CIUFD'⍳t]
+ sn ← (¯1 + (↑n)⍳'∆') ↑ ↑n          ⍝ table name without '∆'
+ nrc ← sc ← (n ⍳¨ '∆') ↓¨ n         ⍝ just column names
+
+⍝ expand any repeated numeric columns
+ :if ∨/rm ← 0 < rf
+    sc ← ⊂¨ sc
+    (rm/sc) ← (rm/sc) ,¨¨  ⍕¨¨ ⍳¨ rm/rf
+    sc ← ⊃ ,/ sc
+    st ← (1⌈rf) / st
+ :endif
+
+⍝ SQLite tables require a primary key DBI files
+⍝ do not necessarily have a primary key
+ ⎕error ((⊂keyn)∊sc)/'(',keyn,') key name occurs in DBI file - use another name'
+ sql ← 'create table ',sn,' (',keyn,' integer primary key, '
+ sql ← sql , (¯2 ↓ ∊ sc , ' ' , st ,[1.5] ⊂', '), ')'
+
+⍝ return sql, table name, SQLite types, repeating and non-repeating columns
+ z ← sql sn st sc nrc
+\end{verbatim}
+
+\vspace{1cm}
+
+
+\begin{minipage}{0.75\linewidth}
+
+\Large
+
+The UTF8 APL ``trouble makers'' properly handled within
+a \verb|lstlisting| environment. Characters following
+the APL comment ``lamp'' character   
+\verb|⍝| get comment coloring. Syntax coloring
+is one of the features of \verb|lstlisting|.
+
+\centering
+
+\begin{lstlisting}[language=apl,extendedchars=true,
+basicstyle=\ttfamily\Huge\color{red},frame=shadowbox,
+rulesepcolor=\color{blue},framexleftmargin=10mm]
+!*+-/<=>?\^|~¨¯×÷←↑→                              
+↓∆∇∊∘∨∩∪∵∼≠≡≢≤≥⊂⊃⊖⊢⊣
+⊤⊥⋄⌈⌊⌶⌷⌹⌻⌽⌿⍀⍂⍇⍈⍉⍋⍎⍐⍒
+⍕⍗⍙⍝⍞⍟⍡⍢⍣⍤⍥⍨⍪⍫⍬⍱⍲⍳⍴⍵
+⍷⍸⍺⎕▯◊○₧
+\end{lstlisting}
+\end{minipage}
+
+\vspace{1cm}
+
+\texttt{lstlisting} verbatim with extended UTF8 APL characters.
+
+\begin{lstlisting}[language=apl,extendedchars=true]
+
+z ← keyn SQLiteFrDBI dbi;t;n;st;sn;sc;sql;rf;rm;nrc;⎕io
+
+⍝ Returns a SQLite table creation statement that maps the
+⍝ structure of APL+WIN inverted DBI files to SQLite tables.
+⍝
+⍝ monad: ev ← SQLiteFrDBI cvDBIFileName
+⍝
+⍝   sqlv ← SQLiteFrDBI 'C:\BCA\bcadev\CA\ULTCL.DBI'
+
+ ⎕io ← 1
+
+⍝ default SQLite primary key name
+ :if 0=⎕nc 'keyn' ⋄ keyn ← 'rwkey' ⋄ :endif
+
+⍝ open DBI file - the DBI open function creates
+⍝ a number of global variables that are used to
+⍝ to access data stored in these files. These
+⍝ variable contain '∆_' in their names.
+ ⎕error (1∊'∆_'⍷⎕nl 2)/'DBI globals present - erase all DBI globals'
+
+ DBIOpen dbi                        ⍝ open DBI file
+ z ← (∨/'∆_'⍷⎕nl 2)⌿⎕nl 2           ⍝ varibles set by DBI open
+
+⍝ we need table name, column names, types, repeat codes
+
+ t ← ⍎(∨/'∆_fty'⍷z)⌿z       ⍝ column types
+ n ← ⍎(∨/'∆_fnm'⍷z)⌿z       ⍝ column names prefixed by table
+ rf ← ⍎(∨/'∆_fnc'⍷z)⌿z      ⍝ (0≤) indicates a DBI repeated column (numeric matrix)
+ z ← ⎕ex z                  ⍝ clear DBI open globals
+ z ← ⎕ex ⊃'∆DBIFL' '∆DBIFN'
+
+⍝ correspondence between DBI and SQLite column types - SQLite does
+⍝ not distinguish between integer types and ignores all fixed length
+⍝ declarations in SQL column declarations this is ideal for APL data
+⍝ C=text, I=integer, U=integer, F=real, D=date)
+ st ← ('text' 'integer' 'integer' 'real' 'date')['CIUFD'⍳t]
+ sn ← (¯1 + (↑n)⍳'∆') ↑ ↑n          ⍝ table name without '∆'
+ nrc ← sc ← (n ⍳¨ '∆') ↓¨ n         ⍝ just column names
+
+⍝ expand any repeated numeric columns
+ :if ∨/rm ← 0 < rf
+    sc ← ⊂¨ sc
+    (rm/sc) ← (rm/sc) ,¨¨  ⍕¨¨ ⍳¨ rm/rf
+    sc ← ⊃ ,/ sc
+    st ← (1⌈rf) / st
+ :endif
+
+⍝ SQLite tables require a primary key DBI files
+⍝ do not necessarily have a primary key
+ ⎕error ((⊂keyn)∊sc)/'(',keyn,') key name occurs in DBI file - use another name'
+ sql ← 'create table ',sn,' (',keyn,' integer primary key, '
+ sql ← sql , (¯2 ↓ ∊ sc , ' ' , st ,[1.5] ⊂', '), ')'
+
+⍝ return sql, table name, SQLite types, repeating and non-repeating columns
+ z ← sql sn st sc nrc
+\end{lstlisting}
+
+\end{document}
