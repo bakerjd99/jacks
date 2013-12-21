@@ -1,0 +1,4 @@
+Credentials for Google Code Project; joddictionary
+
+user: bakerjd99
+pwd: qQ3QY9De6jd7

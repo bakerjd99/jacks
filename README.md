@@ -4,7 +4,7 @@ jacks (J-Hacks) README
 This repository consolidates all J language code and related files referenced in my blog
 [Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/).  
 
-For details see the blog posts:
+For details see the blog posts - listed from newest to oldest:
 
 1. [JHS with the DHTMLX Grid](http://bakerjd99.wordpress.com/2012/12/03/jhs-with-the-dhtmlx-grid/)
 
@@ -36,25 +36,17 @@ For details see the blog posts:
 
 15. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
 
-16. [JOD comes to Linux](http://bakerjd99.wordpress.com/2011/06/10/jod-comes-to-linux/)
+16. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
 
-17. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
+17. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
 
-18. [J 7.01 Now Playing in your Browser](http://bakerjd99.wordpress.com/2011/02/12/j-7-01-now-playing-in-your-browser/)
+18. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
 
-19. [The Return of APL Fingers](http://bakerjd99.wordpress.com/2010/11/12/the-return-of-apl-fingers-2/)
+19. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
 
-20. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
+20. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
 
-21. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
-
-22. [Setting Good SmugMug Key Words](http://bakerjd99.wordpress.com/2010/02/17/setting-good-smugmug-key-words/)
-
-23. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
-
-24. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
-
-25. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
+21. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
 
 John Baker
 December 20, 2013

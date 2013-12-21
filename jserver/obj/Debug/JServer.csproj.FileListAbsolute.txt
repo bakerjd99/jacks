@@ -1,0 +1,5 @@
+C:\mp\cs\demos\JServer\JServer\obj\Debug\ResolveAssemblyReference.cache
+C:\mp\cs\demos\JServer\JServer\obj\Debug\Interop.JEXEServerLib.dll
+C:\mp\cs\demos\JServer\JServer\obj\Debug\JServer.csproj.ResolveComReference.cache
+C:\mp\cs\demos\JServer\JServer\obj\Debug\JServerClass.Properties.Resources.resources
+C:\mp\cs\demos\JServer\JServer\obj\Debug\JServer.csproj.GenerateResource.Cache

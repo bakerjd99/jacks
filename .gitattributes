@@ -14,11 +14,12 @@
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
-*.ttf binary
+*.tif binary
 *.mobi binary
 *.epub binary
 *.xml binary
 *.ijn binary
+*.kmz binary
 
 # Custom for Visual Studio
 *.cs     diff=csharp
