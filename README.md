@@ -7,6 +7,7 @@ This repository consolidates all J language code and related files referenced in
 For details see the blog posts - listed from newest to oldest:
 
 1. [JHS with the DHTMLX Grid](http://bakerjd99.wordpress.com/2012/12/03/jhs-with-the-dhtmlx-grid/)
+ * [`griddemo`](https://github.com/bakerjd99/jacks/tree/master/griddemo)
 
 2. [JHS meets MathJax](http://bakerjd99.wordpress.com/2012/11/25/jhs-meets-mathjax/)
  * [`mathjaxdemo`](https://github.com/bakerjd99/jacks/tree/master/mathjaxdemo)

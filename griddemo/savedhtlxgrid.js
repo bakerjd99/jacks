@@ -1,4 +1,4 @@
-//  Example function that extracts data from the free DHTLX grid see:
+//  Example function that extracts data from the free DHTMLX grid see:
 //
 //  http://bakerjd99.wordpress.com/2012/12/04/more-about-jhs-with-dhtmlx-the-grid/
 
