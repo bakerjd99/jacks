@@ -17,6 +17,7 @@ For details see the blog posts - listed from newest to oldest:
 4. [Pandoc based J Syntax Highlighting](http://bakerjd99.wordpress.com/2012/09/20/pandoc-based-j-syntax-highlighting/)
 
 5. [Writing Portable J addons](http://bakerjd99.wordpress.com/2012/07/23/writing-portable-j-addons/)
+ * [`WritingPortableJaddons.pdf`](https://github.com/bakerjd99/jacks/blob/master/dogpony/WritingPortableJaddons.pdf)
 
 6. [Mac JOD](http://bakerjd99.wordpress.com/2012/06/27/mac-jod/)
 
