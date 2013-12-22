@@ -1,10 +1,10 @@
 jacks (J-Hacks) README
 ======================
 
-This repository consolidates all J language code and related files referenced in my blog
+This repository consolidates all J language code and related files referenced by
 [Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/).  
 
-For details see the blog posts - listed from newest to oldest:
+For details see blog posts - listed from newest to oldest:
 
 1. [JHS with the DHTMLX Grid](http://bakerjd99.wordpress.com/2012/12/03/jhs-with-the-dhtmlx-grid/)
  * [`griddemo`](https://github.com/bakerjd99/jacks/tree/master/griddemo)
@@ -25,6 +25,7 @@ For details see the blog posts - listed from newest to oldest:
  * [`jPhoneBlogExamples.ijs`](https://github.com/bakerjd99/jacks/blob/master/phones/jPhoneBlogExamples.ijs)
 
 8. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
+ * [`gpxfrmapkml.ijs`](https://github.com/bakerjd99/jacks/blob/master/geotagged/gpxfrmapkml.ijs)
 
 9. [Turn your Blog into an eBook](http://bakerjd99.wordpress.com/2012/03/04/turn-your-blog-into-an-ebook/)
 
