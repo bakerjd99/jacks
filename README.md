@@ -42,8 +42,7 @@ For details see blog posts - listed from newest to oldest:
   * [`sqlstuff`](https://github.com/bakerjd99/jacks/tree/master/sqlstuff)
 
 15. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
-  * [`RescaleHilbertGraphics.ijs`](https://github.com/bakerjd99/jacks/blob/master/hilbert/RescaleHilbertGraphics.ijs)
-  * [`latex`](https://github.com/bakerjd99/jacks/tree/master/latex)
+  * [`hilbert`](https://github.com/bakerjd99/jacks/blob/master/hilbert)
 
 16. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
   * [`SmugShotFix.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugShotFix.ijs)
