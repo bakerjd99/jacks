@@ -22,6 +22,7 @@
 *.kmz binary
 *.ttf binary
 *.ico binary
+*.dbi binary
 
 # Custom for Visual Studio
 *.cs     diff=csharp

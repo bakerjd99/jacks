@@ -1,3 +1,6 @@
+% process with a latex that supports ttf and otf fonts
+% (2013) lualatex and xelatex will handle this example
+
 \documentclass{article}
 
 \usepackage{fontspec}
@@ -21,6 +24,7 @@
 % support both forms. APL+WIN makes this mistake.
 \lstdefinelanguage{apl}
 {
+extendedchars=true,
 morekeywords={},
 otherkeywords={:if,:else,:for,:in,:while,:until
 ,:andif,:orif,:repeat,:select,:case
@@ -44,7 +48,7 @@ morecomment=[l]{⍝}
   framerule=0.8pt,                              
   rulecolor=\color{CodeBackGround},             
   breaklines=true,      % break long code lines                        
-  breakindent=0pt                               
+  breakindent=0pt                             
 }
 
 \makeatletter
@@ -74,6 +78,16 @@ morecomment=[l]{⍝}
 \makeatother
 
 \begin{document}
+
+Basic use of APL characters:
+
+\Huge
+\begin{description}
+ \item  \texttt{⍕⍗⍙⍝⍞⍟⍡⍢⍣⍤⍥⍨⍪⍫⍬⍱⍲⍳⍴⍵}.
+ \item  \textcolor{red}{\texttt{⍟⍡⍢⍣⍤}}\textcolor{green}{\texttt{⌷⌹⌻⌽⌿}}
+ \item  \textcolor{blue}{\texttt{↓∆∇∊∘∨∩∪∵∼≠}}
+\end{description}
+\normalsize
 
 Plain verbatim listing. It works for UTF8 input but does not break
 lines, format syntax or update listings list.
@@ -224,5 +238,27 @@ z ← keyn SQLiteFrDBI dbi;t;n;st;sn;sc;sql;rf;rm;nrc;⎕io
 ⍝ return sql, table name, SQLite types, repeating and non-repeating columns
  z ← sql sn st sc nrc
 \end{lstlisting}
+
+\Large
+
+APL Christmas tree. The standard means of changing text color within
+\texttt{lstlisting} environments by defining new keywords does not work with
+extended characters. December 26, 2013.
+
+\vspace{1.5cm}
+
+\begin{minipage}{0.41\linewidth}
+\centering
+\begin{lstlisting}[language=apl,basicstyle=\ttfamily\Huge\color{PineGreen},
+frame=shadowbox,framexleftmargin=10mm]
+     ⍟
+    ∆⍳⍙
+   ⍋÷⍬×⍒
+  ⊖↓⍺⌹⍵↑⌽
+ ⍱⌿⌈⍤⌶⍥⌊⍀⍲
+⊢∩≤⊂≡⍎≢⊃≥∪⊣
+     ⌷
+\end{lstlisting}
+\end{minipage}
 
 \end{document}
