@@ -2,7 +2,10 @@
 Using `dbi.ijs`
 ===============
 
-Using the J `.dbi` script is simple. The included file `allnsf.dbi` is
+See [APL Software Archaeology `.dbi` Edition](http://bakerjd99.wordpress.com/2013/12/26/apl-software-archaeology-dbi-edition/)
+for more information.
+
+Using the J `dbi.ijs` script is simple. The included file `allnsf.dbi` is
 an example `.dbi` file that holds all the *field types* supported by
 `dbi.ijs`. Simple fields are similar to SQL database columns and result 
 in single column tables when fetched. Repeated fields are actually tables
