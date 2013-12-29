@@ -22,50 +22,46 @@ For details see blog posts - listed from newest to oldest:
 6. [Writing Portable J addons](http://bakerjd99.wordpress.com/2012/07/23/writing-portable-j-addons/)
  * [`WritingPortableJaddons.pdf`](https://github.com/bakerjd99/jacks/blob/master/dogpony)
 
-7. [Mac JOD](http://bakerjd99.wordpress.com/2012/06/27/mac-jod/)
-
-8. [Turn your iPhone into a jPhone](http://bakerjd99.wordpress.com/2012/06/23/turn-your-iphone-into-a-jphone-2/)
+7. [Turn your iPhone into a jPhone](http://bakerjd99.wordpress.com/2012/06/23/turn-your-iphone-into-a-jphone-2/)
  * [`jPhoneBlogExamples.ijs`](https://github.com/bakerjd99/jacks/blob/master/phones/jPhoneBlogExamples.ijs)
 
-9. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
+8. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
  * [`gpxfrmapkml.ijs`](https://github.com/bakerjd99/jacks/blob/master/geotagged/gpxfrmapkml.ijs)
+ 
+9. The next four posts use code from the directory [`texfrwpxml`](https://github.com/bakerjd99/jacks/tree/master/texfrwpxml)
+ * [WordPress to LaTeX with Pandoc and J: Prerequisites (Part 1)](http://bakerjd99.wordpress.com/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/)
+ * [WordPress to LaTeX with Pandoc and J: LaTeX Directories (Part 2)](http://bakerjd99.wordpress.com/2012/02/18/wordpress-to-latex-with-pandoc-and-j-latex-directories-part-2-2/)
+ * [WordPress to LaTeX with Pandoc and J: Using TeXfrWpxml.ijs (Part 3)](http://bakerjd99.wordpress.com/2012/02/25/wordpress-to-latex-with-pandoc-and-j-using-texfrwpxml-ijs-part-3/)
+ * [Turn your Blog into an eBook](http://bakerjd99.wordpress.com/2012/03/04/turn-your-blog-into-an-ebook/)
 
-10. [Turn your Blog into an eBook](http://bakerjd99.wordpress.com/2012/03/04/turn-your-blog-into-an-ebook/)
-
-11. [WordPress to LaTeX with Pandoc and J: Using TeXfrWpxml.ijs (Part 3)](http://bakerjd99.wordpress.com/2012/02/25/wordpress-to-latex-with-pandoc-and-j-using-texfrwpxml-ijs-part-3/)
-
-12. [WordPress to LaTeX with Pandoc and J: LaTeX Directories (Part 2)](http://bakerjd99.wordpress.com/2012/02/18/wordpress-to-latex-with-pandoc-and-j-latex-directories-part-2-2/)
-
-13. [WordPress to LaTeX with Pandoc and J: Prerequisites (Part 1)](http://bakerjd99.wordpress.com/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/)
-
-14. [Typesetting UTF8 APL code with the LaTeX lstlisting package](http://bakerjd99.wordpress.com/2011/08/15/typesetting-utf8-apl-code-with-the-latex-lstlisting-package/)
+10. [Typesetting UTF8 APL code with the LaTeX lstlisting package](http://bakerjd99.wordpress.com/2011/08/15/typesetting-utf8-apl-code-with-the-latex-lstlisting-package/)
   * [`latex`](https://github.com/bakerjd99/jacks/tree/master/latex)
 
-15. [Common Table Expression (CTE) SQLServer Queries with J](http://bakerjd99.wordpress.com/2011/08/13/common-table-expression-cte-sqlserver-queries-with-j/)
+11. [Common Table Expression (CTE) SQLServer Queries with J](http://bakerjd99.wordpress.com/2011/08/13/common-table-expression-cte-sqlserver-queries-with-j/)
   * [`sqlstuff`](https://github.com/bakerjd99/jacks/tree/master/sqlstuff)
 
-16. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
+12. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
   * [`hilbert`](https://github.com/bakerjd99/jacks/blob/master/hilbert)
 
-17. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
+13. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
   * [`SmugShotFix.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugShotFix.ijs)
 
-18. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
+14. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
   * [`jserver`](https://github.com/bakerjd99/jacks/tree/master/jserver)  
 
-19. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
+15. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
   * [`SmugPrintSizes.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugPrintSizes.ijs)
 
-20. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
+16. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
   * [`SmugDupsFrMD5.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugDupsFrMD5.ijs)
 
-21. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
+17. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
   * [`SmugDupsFrMD5.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugDupsFrMD5.ijs)
   
-22. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
+18. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
   * [`kml.ijs`](https://github.com/bakerjd99/jacks/blob/master/geotagged/kml.ijs)
 
-23. [Fake Programming](http://bakerjd99.wordpress.com/2009/09/09/fake-progamming/)
+19. [Fake Programming](http://bakerjd99.wordpress.com/2009/09/09/fake-progamming/)
   * [`analystgraphs.ijs`](https://github.com/bakerjd99/jacks/blob/master/graphviz/analystgraphs.ijs)
 
 John Baker
