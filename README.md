@@ -16,6 +16,7 @@ For details see blog posts - listed from newest to oldest:
  * [`mathjaxdemo`](https://github.com/bakerjd99/jacks/tree/master/mathjaxdemo)
 
 4. [Semi-Literate JOD](http://bakerjd99.wordpress.com/2012/10/01/semi-literate-jod/)
+   [`jodliterate`](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
 
 5. [Pandoc based J Syntax Highlighting](http://bakerjd99.wordpress.com/2012/09/20/pandoc-based-j-syntax-highlighting/)
 
