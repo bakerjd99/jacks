@@ -1,4 +1,4 @@
-![](jacksjodlogogtiny.png) [`jacks` (J-Hacks) README](http://bakerjd99.wordpress.com/the-jod-page/)
+![](jacksjodlogotiny.png) [`jacks` (J-Hacks) README](http://bakerjd99.wordpress.com/the-jod-page/)
 ==================================================================================================
 
 This repository consolidates all J language code and related files referenced by
