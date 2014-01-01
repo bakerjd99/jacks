@@ -1,8 +1,9 @@
-jacks (J-Hacks) README
-======================
+![](jacksjodlogogtiny.png) [`jacks` (J-Hacks) README](http://bakerjd99.wordpress.com/the-jod-page/)
+==================================================================================================
 
 This repository consolidates all J language code and related files referenced by
-[Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/).  
+[Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/). Most of the J
+scripts in this repository where generated from [JOD](http://bakerjd99.wordpress.com/the-jod-page/) dictionaries.
 
 For details see blog posts - listed from newest to oldest:
 
@@ -67,4 +68,4 @@ For details see blog posts - listed from newest to oldest:
   * [`analystgraphs.ijs`](https://github.com/bakerjd99/jacks/blob/master/graphviz/analystgraphs.ijs)
 
 John Baker
-December 21, 2013
+January 1, 2014
