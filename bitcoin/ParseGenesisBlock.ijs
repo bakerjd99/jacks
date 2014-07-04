@@ -3,7 +3,7 @@ NB.
 NB. author:  John D. Baker
 NB. created: 2014jul01
 NB. changes: -----------------------------------------------------
-NB. 12jul03 added to jacks repository
+NB. 14jul03 added to jacks repository
 
 require 'sslhash'
 NB.*end-header
