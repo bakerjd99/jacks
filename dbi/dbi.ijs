@@ -11,7 +11,7 @@ NB.
 NB. created: 2012mar27
 NB. --------------------------------------------------------
 NB. 12oct09 (jodliterate) group documentation added
-NB. 13dec23 added to (jacks) repo
+NB. 14jul04 (bytebits) renamed (bytebits3) with result note
 
 coclass 'dbi'
 NB.*end-header
@@ -40,8 +40,8 @@ assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
 NB. boxes open nouns
 boxopen=:<^:(L. = 0:)
 
-NB. 8 bit patterns for bytes - internal rep must be boolean
-bytebits=:_8 {."1 [: 2&#.@(0 1&i.)^:_1 a. i. ]
+NB. like ((8$2) #: a. i. ]) but always returns boolean
+bytebits3=:_8 {."1 [: 2&#.@(0 1&i.)^:_1 a. i. ]
 
 
 changestr=:4 : 0
@@ -494,8 +494,8 @@ for_iff. lff do.
       if. s1 ~: 0 do. t=. t % 10^s1 end.
     case. 'u' do. 
       'unsigned integer field must be 1, 4 or 8 bits' assert n1 e. 1 4 8
-      if.     n1=1 do. t=. (nrf*1>.n2) {. ,bytebits t
-      elseif. n1=4 do. t=. dfb ((*/nrf,n2v),4)$,bytebits t
+      if.     n1=1 do. t=. (nrf*1>.n2) {. ,bytebits3 t
+      elseif. n1=4 do. t=. dfb ((*/nrf,n2v),4)$,bytebits3 t
       elseif. n1=8 do. t=. a. i. t 
       end.
       if. n2 >: 0 do. t=. (nrf,n2)$t end.
@@ -998,7 +998,7 @@ NB.
 NB. monad:  it =. ts7frts6 ctByte6
 
 NB. bytes to 0 1 boolean array - each byte expands to 8 bits
-tsb=. ,"2 bytebits y
+tsb=. ,"2 bytebits3 y
 
 NB. year(12), month(4), day(5), hour(5), minute(6), milliseconds(10)
 |: dfb@|:&> (1 (+/\0 12 4 5 5 6 6)} 48#0) <;.1 |: tsb 
