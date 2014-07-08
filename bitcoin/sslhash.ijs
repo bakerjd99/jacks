@@ -19,24 +19,24 @@ NB. created: 2014Jun28
 NB. changes: -----------------------------------------------------
 NB. 14jun30 changed to run on 32 bit systems
 NB. 14jul03 added to jacks repository
+NB. 14jul07 dll prototypes adjusted for portability
 
 coclass 'sslhash'
 
 NB.*dependents
 
-NB. profile & require words !(*)=. IFIOS IFWIN IF64 UNAME jpath
+NB. profile & require words !(*)=. IFIOS UNAME
 
-NB. dll/so path is machine/os specific - assumes jqt 8.02 is installed
-sslp=. ;IFWIN { '/usr/lib/';jpath '~bin/'
-OPENSSL=: sslp , ;(IFIOS + (;:'Win Linux Android Darwin') i. <UNAME) { 'libeay32.dll '; (2 $ <'libssl.so '); (2 $ <'libssl.dylib ')
+NB. dll/so is machine/os specific - assumes jqt 8.02 is installed
+OPENSSL=: ;(IFIOS + (;:'Win Linux Android Darwin') i. <UNAME) { 'libeay32.dll '; (2 $ <'libssl.so '); (2 $ <'libssl.dylib ')
 
 NB. call dll
 cd=:15!:0
 
-sslsha256=:    (OPENSSL , ;IF64{' SHA256 > + x *c x *c';' SHA256 i *c l *c')&cd
-sslsha512=:    (OPENSSL , ;IF64{' SHA512 > + x *c x *c';' SHA512 i *c l *c')&cd
-sslsha1=:      (OPENSSL , ;IF64{' SHA1 > + x *c x *c';' SHA1 i *c l *c')&cd
-sslRIPEMD160=: (OPENSSL , ;IF64{' RIPEMD160 > + x *c x *c';' RIPEMD160 i *c l *c')&cd
+sslsha256=:    (OPENSSL , ' SHA256 > + x *c x *c')&cd
+sslsha512=:    (OPENSSL , ' SHA512 > + x *c x *c')&cd
+sslsha1=:      (OPENSSL , ' SHA1 > + x *c x *c')&cd
+sslRIPEMD160=: (OPENSSL , ' RIPEMD160 > + x *c x *c')&cd
 
 NB.*enddependents
 NB.*end-header
