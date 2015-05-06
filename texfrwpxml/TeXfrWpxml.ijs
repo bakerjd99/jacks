@@ -6,10 +6,11 @@ NB. http://bakerjd99.wordpress.com/2012/02/11/wordpress-to-latex-with-pandoc-and
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------
+NB. BlogHashes       - update blog hashes
 NB. FixBaddown       - attempt to convert *.baddown files to *.markddown
 NB. LatexFrWordpress - experimental conversion of Wordpress XML to LaTeX
 NB. MainMarkdown     - assembles all *.markdown files in a master file
-NB. MarkdownFrLatex  - converts edited LaTeX post files to image free markdown                                                   
+NB. MarkdownFrLatex  - converts edited LaTeX post files to image free markdown
 NB.                                                         
 NB. author:  John D. Baker
 NB. created: 2012feb10
@@ -20,6 +21,7 @@ NB. 12feb29 (blogimgs) added
 NB. 12jun28 (sortonpublishdate) added - publish order not always post id
 NB. 12oct08 changed (texFrhtml) to process pandoc highlighted source
 NB. 13dec20 save copy in GitHub (jacks) repository
+NB. 15may06 (BlogHashes) added
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -29,6 +31,15 @@ NB. declared global here to avoid confusing
 NB. following HTML and LaTeX names with J names
 NB. (*)=: EPUBAMBLE EPUBFILE EPUBFRWPDIR HTMLREPS LSTLISTINGHDR LSTLISTINGEND MARKDOWNFILE
 NB. (*)=: TEXPREAMBLE TEXFRWPDIR TEXINCLUSIONS TEXSECTIONTITLE TEXWRAPFIGURE TEXROOTFILE
+
+NB. profile & require words (*)=. IFIOS UNAME
+
+NB. dll/so is machine/os specific - assumes jqt 8.02 or later is installed
+OPENSSL=: ;(IFIOS + (;:'Win Linux Android Darwin') i. <UNAME) { 'libeay32.dll '; (2 $ <'libssl.so '); (2 $ <'libssl.dylib ')
+
+NB. call dll
+cd=: 15!:0
+sslsha1=: (OPENSSL , ' SHA1 > + x *c x *c')&cd
 NB.*enddependents
 
 EPUBAMBLE=: 0 : 0
@@ -114,7 +125,7 @@ NB. HTML file extension
 HTMLEXT=:'.html'
 
 NB. interface words (IFACEWORDSTeXfrWpxml) group
-IFACEWORDSTeXfrWpxml=:<;._1 ' FixBaddown LatexFrWordpress MarkdownFrLatex MainMarkdown'
+IFACEWORDSTeXfrWpxml=:<;._1 ' FixBaddown LatexFrWordpress MarkdownFrLatex MainMarkdown BlogHashes'
 
 NB. substitute for WordPress $latex ... $ blocks - must be untouched by latex
 LATEXFRAGMARK=:'LLLATEXFRAGGG'
@@ -129,7 +140,7 @@ NB. pandoc shell command prefix
 PANDOCCMD=:'pandoc -o '
 
 NB. root words (ROOTWORDSTeXfrWpxml) group      
-ROOTWORDSTeXfrWpxml=:<;._1 ' FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs postfiles posttex showpass uedposts'
+ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs postfiles posttex showpass uedposts'
 
 NB. placeholder substitute for WordPress source blocks - must be untouched by LaTeX
 SOURCEBLOCKMARK=:'SSSOURCEBLOCKEEE'
@@ -148,6 +159,25 @@ TFWTEMPHTML=:'temp.html'
 
 NB. wget shell command prefix
 WGETCMD=:'wget --no-clobber --output-document='
+
+
+BlogHashes=:3 : 0
+
+NB.*BlogHashes v-- update blog hashes.
+NB.
+NB. monad:  BlogHashes uuIgnore
+
+texpath=. 'c:/pd/blog/wp2latex/'
+hash=. ctl ;"1 ' ' ,&.> sha1dir texpath,'*.pdf'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir texpath,'*.tex'
+(toJ hash) write texpath,'bmpdfsha1.txt'
+
+mdpath=. 'c:/pd/blog/wp2epub/'
+hash=. ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.epub'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.markdown'
+(toJ hash) write mdpath,'bmepubsha1.txt'
+)
 
 
 FixBaddown=:3 : 0
@@ -488,6 +518,9 @@ NB. dyad:  (clOutExt;clInExt) cleartemps clPathfile
 ferase y;('.'&beforelaststr y),outext
 )
 
+NB. character table to newline delimited list
+ctl=:}.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@]))
+
 
 cutincludegraphicsidx=:3 : 0
 
@@ -679,6 +712,9 @@ else.
   none
 end.
 )
+
+NB. hex from decimal - lower case alpha
+hfd2=:'0123456789abcdef' {~ 16 #.^:_1 ]
 
 
 htmlParagraphs=:3 : 0
@@ -956,6 +992,37 @@ end.
 NB. clear any remaining caption setup pandoc passes them to .markdown
 'ix cs'=. ('\captionsetup';'}';0) cutpxtidx tex
 tex=. ;rp ix} cs
+)
+
+
+sha1=:3 : 0
+
+NB.*sha1 v-- SHA1 hash from OpenSSL.
+NB.
+NB. monad:  clHash =. sha1 cl
+NB.
+NB.   sha1 'this is a fine mess'
+NB.
+NB.   sha1 10000 $ 'a bigger mess '
+
+sslsha1 (y);(# y);hash=. 20#' '
+hash
+)
+
+
+sha1dir=:3 : 0
+
+NB.*sha1dir v-- compute sha1 hashes for files matching pattern in directory.
+NB.
+NB. monad:  btcl =. sha1dir clPathRoot
+NB.
+NB.    sha1dir 'c:/pd/blog/wp2latex/*.tex'
+
+jfe=. ] #~ [: -. [: +./\. '/'&=   NB. just file extension 
+hdl=. [: , [: hfd2 a. i. ]        NB. hexidecimal list from integers
+
+NB. standard profile !(*)=. dir
+(jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
 )
 
 NB. show and then pass noun
@@ -1236,10 +1303,11 @@ NB.POST_TeXfrWpxml post processor
 
 smoutput 0 : 0
 NB. interface word(s):
-NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
-NB. LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
-NB. MainMarkdown      NB. assembles all *.markdown files in a master file
-NB. MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
+NB.  BlogHashes        NB. update blog hashes
+NB.  FixBaddown        NB. attempt to convert *.baddown files to *.markddown
+NB.  LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
+NB.  MainMarkdown      NB. assembles all *.markdown files in a master file
+NB.  MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
 )
 
 SetTeXfrWpxmlPaths 0
