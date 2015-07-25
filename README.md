@@ -3,7 +3,7 @@
 
 This repository consolidates all J language code and related files referenced by
 [Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/). Most of the J
-scripts in this repository where generated from [JOD](http://bakerjd99.wordpress.com/the-jod-page/) dictionaries.
+scripts in this repository were generated from [JOD](http://bakerjd99.wordpress.com/the-jod-page/) dictionaries.
 
 For details see blog posts - listed from newest to oldest:
 
@@ -71,4 +71,4 @@ For details see blog posts - listed from newest to oldest:
   * [`analystgraphs.ijs`](https://github.com/bakerjd99/jacks/blob/master/graphviz/analystgraphs.ijs)
 
 John Baker
-July 3, 2014
+July 25, 2015
