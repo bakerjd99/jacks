@@ -1,0 +1,39 @@
+SeriesName	SeriesType	Name	LongName	LongDescription
+D0	dbt	dbhouse	debt series 0	balance remaining on mortgage loans
+D1	dbt	dbcar	debt series 1	balance remaining on car loans
+D2	dbt	dbmedical	debt series 2	balance remaining on major medical loans
+D3	dbt	dbother	debt series 3	balance remaining on major other loans
+D4	dbt	dboptional	debt series 4	balance remaining on major optional loans
+Dtotal	dbt	debttotal	total debt series	total debt for month
+E0	exp	house	expense series 0	rent, mortgage
+E1	exp	living	expense series 1	normal monthly living expenses
+E2	exp	insurance	expense series 2	medical, car other insurance 
+E3	exp	taxes	expense series 3	state, federal 
+E4	exp	car	expense series 4	car maintenance and other payments
+E5	exp	loan	expense series 5	loan payments
+E6	exp	optional	expense series 6	expensive discretionary spending trips, telescopes et cetera
+E7	exp	other	expense series 7	other noncategorized expenses
+E8	exp	medical	expense series 8	medical dental expenses not regular insurance payments
+EF	utl	fee	transaction fee series	period transaction fees
+EC	utl	expcredit	expense calculation credits	calculated expense period credits 
+Etotal	exp	expensetotal	total expense series	total expenses for month
+I0	inc	salary	income series 0	main income source
+I1	inc	salarysup	income series 1	supplementary salary 
+I2	inc	annuities	income series 2	any regular monthly payment
+I3	inc	dividends	income series 3	interest, dividends, stock sales et cetera
+I4	inc	annuitysup	income series 4	additional regular monthly payments
+I5	inc	windfall	income series 5	unexpected income
+IC	utl	inccharge	income calculation charges	calculated income charges 
+Itotal	inc	incometotal	total income series	total income for month
+BB	utl	balance	balance income expenses	primary period balance income minus expenses 
+NW	utl	networth	net worth	basic period net worth
+R0	res	rssavings	reserve savings	total savings and inheritance available in current period
+R1	res	rsinvest	reserve investments	total investments available in current period
+R2	res	rsequity	reserve equity	total house, land and other equity available in current period
+R3	res	rsother	reserve other	total other cash like reserves like health spending accounts
+Rtotal	res	reservetotal	total reserve series	total reserves for period
+Date	yyyymm01	date	month date series	model time span contiguous months
+U0	utl	u0	utility series 0	utility series 0
+U1	utl	u1	utility series 1	utility series 1
+U2	utl	u2	utility series 2	utility series 2
+U3	utl	u3	utility series 3	utility series 3
