@@ -510,6 +510,7 @@ sf
 ScenarioTimeRange=:4 :0
 sdates=.((0{y)i.;:'Scenario OnDate OffDate'){"1 y
 sdates=.1 2{"1}.(alltrim ScenarioPrefix,":x)SelectScenario alltrim &.>sdates
+'no scenario time range'assert 0<#sdates
 sdates=.(<./,>./),".&>sdates-.&.>'-'
 ld=.datefrint{:sdates
 ({.sdates),intfrdate 1>.((0{ld)+12<.@%~2+1{ld),(12|2+1{ld),2{ld

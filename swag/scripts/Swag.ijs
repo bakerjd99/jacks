@@ -652,7 +652,6 @@ ifx=. I. -.fx
 NB. series names
 'sn nn'=. SeriesNameXref 0
 
-NB. credits, charges, reserves, debts and utility series
 rn=. CreditChargeSeries,ReserveSeries,DebtSeries,UtilitySeries
 
 pn=. }. pn
@@ -1121,6 +1120,7 @@ NB.   _5 ScenarioTimeRange TestParametersSheet
 
 sdates=. ((0 { y) i. ;:'Scenario OnDate OffDate') {"1 y
 sdates=. 1 2 {"1 }. (alltrim ScenarioPrefix,":x) SelectScenario alltrim&.> sdates
+'no scenario time range' assert 0 < #sdates 
 sdates=. (<./ , >./) , ".&> sdates -.&.> '-'
 
 NB. add two months to maximum date for model series shifts
@@ -1588,6 +1588,7 @@ NB.
 NB.   monthdates 2000
 NB.
 NB.   monthdates 2001 + i. 100  NB. all first of months in 21st century
+NB.
 NB.
 NB. dyad:  ilYYYYMM01 =. uu monthdates ilYears
 NB.
