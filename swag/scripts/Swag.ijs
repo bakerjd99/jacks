@@ -1569,7 +1569,7 @@ NB. mean value of a list
 mean=:+/ % #
 
 NB. median value of a list
-median=:-:@(+/)@((<. , >.)@midpt { /:~)
+median=:-:@(+/)@((<. , >.)@midpt { /:~) ::_:
 
 NB. mid-point
 midpt=:-:@<:@#

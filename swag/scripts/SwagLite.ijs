@@ -700,7 +700,7 @@ intfrdate=:0 100 100&#.@:<.
 ischar=:2&=@(3!:0)
 kurtosis=:#*+/@(^&4)@dev%*:@ssdev
 mean=:+/%#
-median=:-:@(+/)@((<.,>.)@midpt{/:~)
+median=:-:@(+/) @((<.,>.) @midpt{/:~) ::_:
 midpt=:-:@<:@#
 monthdates=:3 :0
 days=.,/(,y),"0 1/,/(>:i.12),"0/,1
