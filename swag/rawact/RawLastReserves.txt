@@ -1,0 +1,11 @@
+Date	Name	Category	Amount	Conversion	Foreign	LastActive	Description
+2015-09-01	n/a	n/a	n/a	n/a	n/a	n/a	Many reserve items are not reported monthly. This sheet maintains last known reports. Missing months will be filled based on last values
+2014-06-30	rsinvest	usret	12004.3				boo retire
+2014-12-31	rsinvest	usret	7233.28				hoo retire
+2015-09-30	rsinvest	stock	19777.64				hoo
+2015-10-01	rssavings	cash	22440.43108	0.7478	30008.6	2015-11-07	zoo ca ;; account converted to us dollar
+2015-10-31	rsinvest	rrsp	8974.153372	0.7478	12000.74		foo retire
+2015-11-15	rssavings	cash	40143.63				foo joint
+2015-11-30	rssavings	cash	57003.83				zoo joint
+2015-11-30	rssavings	cash	18246.97				foo me
+2016-01-08	rsinvest	rrsp	8504.63208	0.7056	12053.05		yada retire

@@ -4,16 +4,18 @@ NB. verbatim:
 NB.
 NB. interface word(s):
 NB. ------------------------------------------------------------------------------
-NB.  FutureScenarios - compute scenarios (y) as if all dates in future
-NB.  LoadConfig      - loads shared configuration sheets
-NB.  LoadSheets      - loads TAB delimited scenario actuals and forecast sheets
-NB.  RunTest         - run test scenario
-NB.  RunTheNumbers   - compute all scenarios on list (y)
-NB.  Swag            - compute Silly Wild Ass Guess forecast TAB delimited sheets
-NB.  SwagTest        - generates simulated scenario test sheets
+NB.  FutureScenarios     - compute scenarios (y) as if all dates in future
+NB.  LoadConfig          - loads shared configuration sheets
+NB.  LoadSheets          - loads TAB delimited scenario actuals and forecast sheets
+NB.  RawReservesFromLast - raw reserves sheet from last reserves file
+NB.  RunTest             - run test scenario
+NB.  RunTheNumbers       - compute all scenarios on list (y)
+NB.  Swag                - compute Silly Wild Ass Guess forecast TAB delimited sheets
+NB.  SwagTest            - generates simulated scenario test sheets
 NB.
 NB. created: 2015Oct04
 NB. changes: ----------------------------------------------------------------------
+NB. 16jan10 (RawReservesFromLast) added
 
 cocurrent 'Swag'
 NB.*end-header
@@ -49,7 +51,7 @@ NB. expense series names
 ExpenseSeries=:<;._1 ' E0 E1 E2 E3 E4 E5 E6 E7 E8 EC EF'
 
 NB. interface words (IFACEWORDSSwag) group
-IFACEWORDSSwag=:<;._1 ' FutureScenarios LoadConfig LoadSheets Swag SwagTest RunTest RunTheNumbers'
+IFACEWORDSSwag=:<;._1 ' FutureScenarios LoadConfig LoadSheets Swag SwagTest RawReservesFromLast RunTest RunTheNumbers'
 
 NB. income series names
 IncomeSeries=:<;._1 ' I0 I1 I2 I3 I4 I5 IC'
@@ -76,7 +78,7 @@ NB. value returned by series methods when no series are changed
 NoChange=:'';i.0
 
 NB. root words (ROOTWORDSSwag) group
-ROOTWORDSSwag=:<;._1 ' FutureScenarios IFACEWORDSSwag MainConfiguration ROOTWORDSSwag RepeatScenario RunTheNumbers TestConfiguration'
+ROOTWORDSSwag=:<;._1 ' FutureScenarios IFACEWORDSSwag MainConfiguration ROOTWORDSSwag RawReservesFromLast RepeatScenario RunTheNumbers TestConfiguration'
 
 NB. reserve series names
 ReserveSeries=:<;._1 ' R0 R1 R2 R3'
@@ -904,6 +906,20 @@ sf
 )
 
 
+LastFOM=:3 : 0
+
+NB.*LastFOM v-- last first of month.
+NB.
+NB. monad:  ilYYYYMM01 =. LastFOM ilYYYYMMDD
+NB.
+NB.   LastFOM 20160108
+NB.   LastFOM 20160108 20160215 20160321 20160409 20160501 
+
+'a m d'=. |: datefrint ,y
+($y)$intfrdate (a - 0 = <:m),.((<:m) { _1 |. >: i. 12),.1
+)
+
+
 LoadConfig=:3 : 0
 
 NB.*LoadConfig v-- loads shared configuration sheets.
@@ -975,6 +991,68 @@ NB. dyad:  il =. ilOnOff RangeIndexes ilYYYYMMDD
 
 y=. <. y [ x=. <.x 
 I. (+./\ 1 (y i. 0{x) } 0 #~ #y) * *./\ 0 (y i. 1{x) } 1 #~ #y
+)
+
+
+RawReservesFromLast=:3 : 0
+
+NB.*RawReservesFromLast v-- raw reserves sheet from last reserves
+NB. file.
+NB.
+NB. Many reserves  do  not report  on a  monthly basis. This verb
+NB. helps fill in missing months  with last known amounts.  For a
+NB. given reserve only one report per month is allowed.
+NB.
+NB. monad:  btcl =. RawReservesFromLast clLastFile
+NB.
+NB.   rr=. RawReservesFromLast TABRawPath,'RawLastReserves.txt'
+NB.   (toHOST fmttd rr) write TABRawPath,'RawReserves.txt'
+NB.
+NB. dyad:  btcl =. iaYYYYMMDD RawReservesFromLast clLastFile
+NB.
+NB.   20151101 RawReservesFromLast TABRawPath,'RawLastReserves.txt'
+
+(0 100 100 #. <.3&{.@(6!:0) '') RawReservesFromLast y
+:
+'no last reserves' assert 2 < #t=. readtd2 y
+'date last amt'=. h i. ;:'Date LastActive Amount' [ h=. 0{t
+
+NB. check dates
+d=. }. (date,last) {"1 t
+'missing reserve amount date(s)' assert -.a: e. 0 {"1 d
+'invalid reserve amount date(s)' assert valdate datefrint (0 {"1 d) BadNumber&".@-.&> '-'
+'invalid last active date(s)' assert valdate datefrint ((}. 1 {"1 d) -. a:) BadNumber&".@-.&> '-'
+
+NB. remove header and set start date
+symd=. ".(;0{0{d) -. '-' [ t=. 2 }. t
+
+NB. replace any dates before start and remove after last FOM
+d=. ".&> (}.0{"1 d) -.&.> '-' [ f=. LastFOM x
+b=. d <: f [ d=. symd (I. symd > d)} d
+d=. FormatSheetDates b # d [ t=. b # t
+
+NB. standarize keys
+k=. tolower@(rebc@(alltrim@(';;'&beforestr)))&.> t {"1~ h i. ;:'Name Category Description'
+k=. '-'&beforelaststr&.> <"1 ;"1 ' -'&charsub&.> k ,&.> '-'
+
+NB. dates to first of month with keys should be unique
+if. 0 e. b=. ~:k=. (('-'&beforelaststr&.> d) ,&.> <'-01') ,. k do.
+  smoutput (-.b) # t
+  'multiple monthly reserves' assert 0
+end.
+k=. /:~ k ,. amt {"1 t
+
+NB. month range x reserves
+s=. a: ,.~ > , { (<1 FirstMonthRange symd,f),<1 {"1 k
+
+NB. most recent known amounts - back fills history
+l=. (~: 0 1 {"1 k) {:;.1 k
+s=. (((1 {"1 s) i.~ 1 {"1 l) { 2 {"1 l) (<a:;2)} s
+
+NB. all known amounts - restores back filled history
+q=. (0 1 {"1 s) i. 0 1 {"1 k
+s=. /:~ (2{"1 k)(<q;2)} s
+(;:'Date Name Amount Key') , (('-'&beforestr&.> 1 {"1 s) (<a:;1)} s) ,. 1 {"1 s
 )
 
 
@@ -1513,7 +1591,6 @@ NB.   osb  =  outstanding balance before each payment
 NB.   ip   =  interest portion of each payment
 NB.   pp   =  principal portion of each payment
 NB.
-NB.
 NB. monad:  nt =. amort nl
 NB.
 NB.   amort 12 0.125 25  NB. 25 year loan payable monthly at 12.5%
@@ -1535,8 +1612,27 @@ pay,.osb,.ip,.pp
 NB. signal with optional message
 assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
 
+NB. retains string (y) before last occurrence of (x)
+beforelaststr=:] {.~ 1&(i:~)@([ E. ])
+
+NB. retains string before first occurrence of (x)
+beforestr=:] {.~ 1&(i.~)@([ E. ])
+
 NB. boxes open nouns
 boxopen=:<^:(L. = 0:)
+
+
+charsub=:4 : 0
+
+NB.*charsub v-- single character pair replacements.
+NB.
+NB. dyad:  clPairs charsub cu
+NB.
+NB.   '-_$ ' charsub '$123 -456 -789'
+
+'f t'=. ((#x)$0 1)<@,&a./.x
+t {~ f i. y
+)
 
 NB. YYYYMMDD to YYYY MM DD lists
 datefrint=:0 100 100&#:@<.
@@ -1618,6 +1714,9 @@ read=:1!:1&(]`<@.(32&>@(3!:0)))
 NB. read TAB delimited table files - faster than (readtd) - see long document
 readtd2=:[: <;._2&> (9{a.) ,&.>~ [: <;._2 [: (] , ((10{a.)"_ = {:) }. (10{a.)"_) (13{a.) -.~ 1!:1&(]`<@.(32&>@(3!:0)))
 
+NB. removes multiple blanks (char only)
+rebc=:] #~ [: -. '  '&E.
+
 NB. skewness
 skewness=:%:@# * +/@(^&3)@dev % ^&1.5@ssdev
 
@@ -1691,13 +1790,14 @@ NB.POST_Swag post processor.
 
 smoutput 0 : 0
 NB. interface word(s):
-NB. FutureScenarios  NB. compute scenarios (y) as if all dates in future
-NB. LoadConfig       NB. loads shared configuration sheets
-NB. LoadSheets       NB. loads TAB delimited scenario actuals and forecast sheets
-NB. RunTest          NB. run test scenario
-NB. RunTheNumbers    NB. compute all scenarios on list (y)
-NB. Swag             NB. compute Silly Wild Ass Guess forecast TAB delimited sheets
-NB. SwagTest         NB. generates simulated scenario test sheets
+NB. FutureScenarios      NB. compute scenarios (y) as if all dates in future
+NB. LoadConfig           NB. loads shared configuration sheets
+NB. LoadSheets           NB. loads TAB delimited scenario actuals and forecast sheets
+NB. RawReservesFromLast  NB. raw reserves sheet from last reserves file
+NB. RunTest              NB. run test scenario
+NB. RunTheNumbers        NB. compute all scenarios on list (y)
+NB. Swag                 NB. compute Silly Wild Ass Guess forecast TAB delimited sheets
+NB. SwagTest             NB. generates simulated scenario test sheets
 )
 
 cocurrent 'base'

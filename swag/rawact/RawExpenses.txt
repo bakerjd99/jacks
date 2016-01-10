@@ -1,0 +1,15 @@
+Date	Name	Amount	Category	Description
+2015-09-01	house	825.00	rent	apartment
+2015-09-01	living	925.00		
+2015-09-15	living	1000.00		
+2015-10-01	house	825.00	rent	
+2015-10-01	living	1000.00		
+2015-10-15	living	1400.00		
+2015-10-15	optional	1000.00	travel	modest weekend
+2015-11-01	house	825.00	rent	
+2015-11-01	living	500.00		
+2015-11-04	other	2500.00	buycamera	buy camera
+2015-11-15	living	1200.00		
+2015-12-01	house	825.00	rent	
+2015-12-08	car	343.22	car	fix muffler
+2016-01-02	house	850.00	rent	

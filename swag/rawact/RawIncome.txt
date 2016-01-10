@@ -1,0 +1,7 @@
+Date	Name	Amount	Category	Description
+2015-09-15	salary	2200.42	genericemployer	after tax bimontly salary
+2015-09-30	salary	2200.42	genericemployer	
+2015-10-15	salary	2200.42	genericemployer	
+2015-10-30	salary	2200.42	genericemployer	
+2015-11-13	salary	2200.42	genericemployer	
+2015-11-30	salary	2200.42	genericemployer	

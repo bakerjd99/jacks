@@ -18,7 +18,7 @@ loan	s_1		buy car	15000	2020-07-01	2025-07-01	borrow	Interest=. 5 [ YearTerm=. 5
 reservetotal	s_1		buy car	10000	2020-07-01	2020-08-01	spend		car down payment from savings
 reservetotal	s_1		inherit	250000	2023-01-01	2023-02-01	reserve	Initial=.1	inheritance to savings
 reservetotal	s_1		buy house	150000	2023-03-01	2023-04-01	transfer	Fee=. 200 [ DHouse=.1	pay off remaining mortgage balance after inheritance Fee is closing cost
-annuities	s_1			50	2024-12-01	2044-01-01	history		any Canada pension payments to spouse
+annuities	s_1			50	2024-12-01	2044-01-01	history		any pension payments to spouse
 annuities	s_1			100	2035-08-01	2044-01-01	history		any us social security survivor spouse collects after partner death
 living	s_10		fut history test 1	2000	2013-05-01	2019-03-01	history		mean value of relevant historical periods added to date range
 reservetotal	s_100		assumptions	0	2015-09-01	2035-09-01	assume	RSavings=. 0.5 [ RInvest=. 3 [ REquity=. 3 [ ROther=. 1	annual nominal percent reserve growth or decline during period
@@ -67,7 +67,7 @@ reservetotal	s_19		reserve test 5	1000	2027-05-01	2029-05-01	reserve	Fee=. 10 [ 
 house	s_2			625	2011-05-01	2016-08-01	history	BackPeriods=.1	current rent until  move
 insurance	s_2			115	2011-05-01	2044-01-01	history		car and home insurance
 living	s_2			1500	2011-05-01	2044-01-01	history	YearInflate=.2	normal monthly living expenses
-salary	s_2			5600	2011-05-01	2018-07-01	history	BackPeriods=.4 [ YearInflate=.1.5	maintain net monthly income until I retire
+salary	s_2			5600	2011-05-01	2018-07-01	history	BackPeriods=.4 [ YearInflate=.1.5	maintain net monthly income until retirement
 reservetotal	s_2			100000	2011-05-01	2011-06-01	reserve	Initial=.1	total savings at model start
 house	s_2			200	2016-08-01	2044-01-01	history		incidental housing expenses after move assuming no mortgage or rent
 annuities	s_2			100	2018-07-01	2035-08-01	history		monthly retirement and other annuity payments end date is unknown
@@ -238,6 +238,60 @@ annuities	s_66			50	2024-12-01	2044-01-01	history		any retirement pension paymen
 annuities	s_66			100	2035-08-01	2044-01-01	history		any us social security survivor benefit after first death
 reservetotal	s_7		borrow test 2	70000	2021-04-01	2021-05-01	reserve	Initial=. 1	deposit to savings
 loan	s_7		borrow test 2	10000	2022-03-01	2025-03-01	borrow	Interest=. 7.3 [ YearTerm=. 2 [ RSavings=. 1	borrow other at 7.3% with 2 year payback with payments from savings
+reservetotal	s_77		assumptions	0	2015-09-01	2015-10-01	assume	RSavings=. 0.5 [ RInvest=. 3 [ REquity=. 3 [ ROther=. 1	annual nominal percent reserve growth or decline during period
+car	s_77			50	2015-09-01	2035-08-01	history		annualized car maintenance until first death
+house	s_77			912	2015-09-01	2016-08-01	history	BackPeriods=.1	current rent until move
+insurance	s_77			100	2015-09-01	2035-08-01	history		car insurance
+living	s_77			1650	2015-09-01	2044-01-01	history	YearInflate=.5	normal monthly living expenses
+salary	s_77			4800	2015-09-01	2016-08-01	history	BackPeriods=.4 [ YearInflate=.1.5	maintain net monthly income until move
+reservetotal	s_77			25000	2015-09-01	2015-10-01	reserve	Initial=.1 [ RInvest=. 1	stock value at model start
+reservetotal	s_77			130000	2015-09-01	2015-10-01	reserve	Initial=.1	savings at model start
+salary	s_77			4200	2016-08-01	2023-07-01	history	BackPeriods=.4 [ YearInflate=.1.5	reduced net income after move until retirement
+house	s_77		move	2000	2016-08-01	2016-09-01	history		moving expenses
+house	s_77			100	2016-08-01	2044-01-01	history		incidental housing expenses after move
+house	s_77			100	2016-08-01	2044-01-01	history		home owners association payments
+house	s_77			150	2016-08-01	2044-01-01	history		property taxes
+reservetotal	s_77		buy house	110000	2016-08-01	2016-09-01	reserve	Initial=.1 [ REquity=. 1	down payment added to house equity initial setting prevents double spend
+loan	s_77		buy house	150000	2016-08-01	2023-02-01	borrow	Interest=. 4.5 [ YearTerm=. 30 [ DHouse=.1  [ LoanEquity=.1	30 year mortgage rate on house until inheritance 
+reservetotal	s_77		buy house	110000	2016-08-01	2016-09-01	spend		down payment on house from savings
+annuities	s_77			250	2018-07-01	2035-08-01	history		monthly retirement and other annuity payments end date is unknown
+annuities	s_77			50	2018-07-01	2035-08-01	history		any government pension payments
+reservetotal	s_77		assumptions	0	2020-01-01	2044-01-01	assume	RSavings=. -2.5 [ RInvest=. -5.0 [ REquity=. -5.0 [ ROther=. 2	market tanks government introduces negative interest
+loan	s_77		buy car	10000	2020-07-01	2025-07-01	borrow	Interest=. 5 [ YearTerm=. 5 [ DCar=.1	pay balance of car at 5% for 5 years
+reservetotal	s_77		buy car	7000	2020-07-01	2020-08-01	spend		car down payment from savings
+reservetotal	s_77		inherit	180000	2023-01-01	2023-02-01	reserve	Initial=.1	inheritance to savings
+reservetotal	s_77		buy house	150000	2023-03-01	2023-04-01	transfer	Fee=. 1500 [ DHouse=.1	pay off remaining mortgage balance after inheritance fee is closing cost
+salary	s_77			1400	2023-07-01	2035-08-01	history		estimated social security payments spread over expected life
+insurance	s_77			700	2023-07-01	2024-12-01	history		medical insurance in the gap between retirement and spouse medicare eligibility
+annuities	s_77			100	2024-12-01	2044-01-01	history		any retirement pension payments to spouse
+annuities	s_77			100	2035-08-01	2044-01-01	history		any us social security survivor benefit after first death
+reservetotal	s_78		assumptions	0	2015-09-01	2015-10-01	assume	RSavings=. 0.5 [ RInvest=. 3 [ REquity=. 3 [ ROther=. 1	annual nominal percent reserve growth or decline during period
+car	s_78			50	2015-09-01	2035-08-01	history		annualized car maintenance until first death
+house	s_78			912	2015-09-01	2016-08-01	history	BackPeriods=.1	current rent until move
+insurance	s_78			100	2015-09-01	2035-08-01	history		car insurance
+living	s_78			1650	2015-09-01	2044-01-01	history	YearInflate=.5	normal monthly living expenses
+salary	s_78			4800	2015-09-01	2016-08-01	history	BackPeriods=.4 [ YearInflate=.1.5	maintain net monthly income until move
+reservetotal	s_78			25000	2015-09-01	2015-10-01	reserve	Initial=.1 [ RInvest=. 1	stock value at model start
+reservetotal	s_78			130000	2015-09-01	2015-10-01	reserve	Initial=.1	savings at model start
+salary	s_78			4200	2016-08-01	2018-07-01	history	BackPeriods=.4 [ YearInflate=.1.5	reduced net income after move until retirement
+house	s_78		move	2000	2016-08-01	2016-09-01	history		moving expenses
+house	s_78			100	2016-08-01	2044-01-01	history		incidental housing expenses after move
+house	s_78			100	2016-08-01	2044-01-01	history		home owners association payments
+house	s_78			150	2016-08-01	2044-01-01	history		property taxes
+reservetotal	s_78		buy house	110000	2016-08-01	2016-09-01	reserve	Initial=.1 [ REquity=. 1	down payment added to house equity initial setting prevents double spend
+loan	s_78		buy house	150000	2016-08-01	2023-02-01	borrow	Interest=. 4.5 [ YearTerm=. 30 [ DHouse=.1	30 year mortgage rate on house until inheritance
+reservetotal	s_78		buy house	110000	2016-08-01	2016-09-01	spend		down payment on house from savings
+annuities	s_78			250	2018-07-01	2035-08-01	history		monthly retirement and other annuity payments end date is unknown
+annuities	s_78			50	2018-07-01	2035-08-01	history		any government pension payments
+reservetotal	s_78		assumptions	0	2020-01-01	2044-01-01	assume	RSavings=. -2.5 [ RInvest=. -5.0 [ REquity=. -5.0 [ ROther=. 2	market tanks government introduces negative interest
+loan	s_78		buy car	10000	2020-07-01	2025-07-01	borrow	Interest=. 5 [ YearTerm=. 5 [ DCar=.1	pay balance of car at 5% for 5 years
+reservetotal	s_78		buy car	7000	2020-07-01	2020-08-01	spend		car down payment from savings
+reservetotal	s_78		inherit	180000	2023-01-01	2023-02-01	reserve	Initial=.1	inheritance to savings
+reservetotal	s_78		buy house	150000	2023-03-01	2023-04-01	transfer	Fee=. 1500 [ DHouse=.1	pay off remaining mortgage balance after inheritance fee is closing cost
+salary	s_78			1400	2023-07-01	2035-08-01	history		estimated social security payments spread over expected life
+insurance	s_78			700	2023-07-01	2024-12-01	history		medical insurance in the gap between retirement and spouse medicare eligibility
+annuities	s_78			100	2024-12-01	2044-01-01	history		any retirement pension payments to spouse
+annuities	s_78			100	2035-08-01	2044-01-01	history		any us social security survivor benefit after first death
 reservetotal	s_8		borrow test 3	100000	2021-04-01	2021-05-01	reserve	Initial=. 1 [ RInvest=.1	deposit to investments
 loan	s_8		borrow test 3	20000	2022-03-01	2025-03-01	borrow	Interest=. 5 [ YearTerm=. 10 [ RInvest=. 1	borrow at 5% with 10 year payback with payments from investments to other loan
 reservetotal	s_9		borrow test 4	30000	2021-04-01	2021-05-01	reserve	Initial=. 1	deposit to savings

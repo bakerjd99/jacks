@@ -9,7 +9,7 @@ DataSheetNames=:<;._1' Actuals Forecast'
 DebtSeries=:<;._1' D0 D1 D2 D3 D4'
 DebtSeriesNames=:<;._1' dbhouse dbcar dboptional dbother dbmedical'
 ExpenseSeries=:<;._1' E0 E1 E2 E3 E4 E5 E6 E7 E8 EC EF'
-IFACEWORDSSwag=:<;._1' FutureScenarios LoadConfig LoadSheets Swag SwagTest RunTest RunTheNumbers'
+IFACEWORDSSwag=:<;._1' FutureScenarios LoadConfig LoadSheets Swag SwagTest RawReservesFromLast RunTest RunTheNumbers'
 IncomeSeries=:<;._1' I0 I1 I2 I3 I4 I5 IC'
 MainConfiguration=:<;._1' CrossReference Parameters'
 MethodArguments=:<;._1' MethodArguments BackPeriods Fee Initial Interest LoanEquity YearInflate Schedule YearTerm DHouse DCar DOptional DOther DMedical RSavings RInvest REquity ROther'
@@ -18,7 +18,7 @@ MethodTokens=:;:'()[=.'
 ModelConfiguration=:0$a:
 ModelLocale=:'Swag'
 NoChange=:'';i.0
-ROOTWORDSSwag=:<;._1' FutureScenarios IFACEWORDSSwag MainConfiguration ROOTWORDSSwag RepeatScenario RunTheNumbers TestConfiguration'
+ROOTWORDSSwag=:<;._1' FutureScenarios IFACEWORDSSwag MainConfiguration ROOTWORDSSwag RawReservesFromLast RepeatScenario RunTheNumbers TestConfiguration'
 ReserveSeries=:<;._1' R0 R1 R2 R3'
 ReserveSeriesNames=:<;._1' rssavings rsinvest rsequity rsother'
 SSpreadPrefix=:'-s'
@@ -426,6 +426,10 @@ sf=.sf,RunTest~sn,3
 end.
 sf
 )
+LastFOM=:3 :0
+'a m d'=.|:datefrint,y
+($y)$intfrdate(a-0=<:m),.((<:m){_1|.>:i.12),.1
+)
 LoadConfig=:3 :0
 ConfigSheetNames LoadConfig y
 :
@@ -456,6 +460,33 @@ OnOffDates=:[:".@(-.&'-')&>[:}.]{"1~(<;._1' OnDate OffDate')i.~0{]
 RangeIndexes=:4 :0
 y=.<.y[x=.<.x
 I.(+./\1(y i.0{x)}0#~#y )**./\0(y i.1{x)}1#~#y 
+)
+RawReservesFromLast=:3 :0
+(0 100 100#.<.3&{.@(6!:0)'')RawReservesFromLast y
+:
+'no last reserves'assert 2<#t=.readtd2 y
+'date last amt'=.h i.;:'Date LastActive Amount'[h =.0{t
+d=.}.(date,last){"1 t
+'missing reserve amount date(s)'assert-.a:e.0{"1 d
+'invalid reserve amount date(s)'assert valdate datefrint(0{"1 d)BadNumber&".@-.&>'-'
+'invalid last active date(s)'assert valdate datefrint((}.1 {"1 d)-.a:)BadNumber&".@-.&>'-'
+symd=.".(;0{0{d)-.'-'[t=.2}.t
+d=.".&>(}.0{"1 d)-.&.>'-'[f=.LastFOM x
+b=.d<:f[d=.symd(I.symd>d)}d
+d=.FormatSheetDates b#d[t=.b#t
+k=.tolower@(rebc@(alltrim@(';;'&beforestr)))&.>t{"1~h i.;:'Name Category Description'
+k=.'-'&beforelaststr&.><"1;"1' -'&charsub&.>k,&.>'-'
+if.0 e.b=.~:k =.(('-'&beforelaststr&.>d),&.><'-01'),.k do.
+smoutput(-.b)#t
+'multiple monthly reserves'assert 0
+end.
+k=./:~k,.amt{"1 t
+s=.a:,.~>,{(<1 FirstMonthRange symd,f),<1 {"1 k
+l=.(~:0 1{"1 k){:;.1 k
+s=.(((1 {"1 s)i.~1 {"1 l){2{"1 l)(<a:;2)}s
+q=.(0 1{"1 s)i.0 1{"1 k
+s=./:~(2{"1 k)(<q;2)}s
+(;:'Date Name Amount Key'),(('-'&beforestr&.>1 {"1 s)(<a:;1 )}s),.1 {"1 s
 )
 RepeatScenario=:4 :0
 'minimum replications >: 2'assert 2<:0{x
@@ -689,7 +720,13 @@ pp=.pay-ip=.osb*i
 pay,.osb,.ip,.pp
 )
 assert=:0 0"_$13!:8^:((0:e.])`(12"_))
+beforelaststr=:]{.~1&(i:~)@([E.])
+beforestr=:]{.~1&(i.~)@([E.])
 boxopen=:<^:(L.=0:)
+charsub=:4 :0
+'f t'=.((#x)$0 1)<@,&a./.x
+t{~f i.y
+)
 datefrint=:0 100 100&#:@<.
 dev=:-"_1 _ mean
 erase=:[:4!:55;: ::]
@@ -712,6 +749,7 @@ q1=:median@((median>]) #]) ::_:
 q3=:median@((median<]) #]) ::_:
 read=:1!:1&(]`<@.(32&>@(3!:0)))
 readtd2=:[:<;._2&>(9{a.),&.>~[:<;._2[:(],((10{a.)"_={:)}.(10{a.)"_)(13{a.)-.~1!:1&(]`<@.(32&>@(3!:0)))
+rebc=:]#~[:-.'  '&E.
 skewness=:%:@#*+/@(^&3)@dev%^&1.5@ssdev
 smoutput=:0 0$1!:2&2
 ssdev=:+/@:*:@dev
@@ -742,13 +780,14 @@ NB.POST_Swag post processor.
 
 smoutput 0 : 0
 NB. interface word(s):
-NB. FutureScenarios  NB. compute scenarios (y) as if all dates in future
-NB. LoadConfig       NB. loads shared configuration sheets
-NB. LoadSheets       NB. loads TAB delimited scenario actuals and forecast sheets
-NB. RunTest          NB. run test scenario
-NB. RunTheNumbers    NB. compute all scenarios on list (y)
-NB. Swag             NB. compute Silly Wild Ass Guess forecast TAB delimited sheets
-NB. SwagTest         NB. generates simulated scenario test sheets
+NB. FutureScenarios      NB. compute scenarios (y) as if all dates in future
+NB. LoadConfig           NB. loads shared configuration sheets
+NB. LoadSheets           NB. loads TAB delimited scenario actuals and forecast sheets
+NB. RawReservesFromLast  NB. raw reserves sheet from last reserves file
+NB. RunTest              NB. run test scenario
+NB. RunTheNumbers        NB. compute all scenarios on list (y)
+NB. Swag                 NB. compute Silly Wild Ass Guess forecast TAB delimited sheets
+NB. SwagTest             NB. generates simulated scenario test sheets
 )
 
 cocurrent 'base'
