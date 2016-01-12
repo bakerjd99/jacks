@@ -9,11 +9,12 @@ namespace JServerClass
 {
     /// <summary>
     /// Created by:   John D. Baker 
-    /// Last Change:  2010nov27
+    /// Last Change:  2011jan11
 	/// See: http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/
     /// 
     /// Changes: 
     /// 2010nov27     new get overload that returns general object
+    /// 2016jan11     simplify throw statements to eliminate code analysis warnings
     ///
     /// EMail:        bakerjd99@gmail.com
     /// </summary>
@@ -95,9 +96,9 @@ namespace JServerClass
             {
                 this.jSetup(jLoadType, jScripts);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -114,9 +115,9 @@ namespace JServerClass
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -178,9 +179,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -206,9 +207,9 @@ namespace JServerClass
 
                 return jstr;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -222,9 +223,9 @@ namespace JServerClass
                 jstr = Convert.ToString(jout);
                 return jstr;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -249,9 +250,9 @@ namespace JServerClass
                 // before this command takes effect
                 rc = jObject.Show(0);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -288,9 +289,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -333,9 +334,9 @@ namespace JServerClass
                     jLoad(loadpfx + scr + SQUOTE);
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -355,9 +356,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -373,9 +374,9 @@ namespace JServerClass
                 jerr = LOADERROR + jerr;
                 return jerr;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -388,9 +389,9 @@ namespace JServerClass
                 string loadpfx = (jsType == JScriptType.Library) ? LIBLOAD : SCRIPTLOAD;
                 jLoad(loadpfx + jScript + SQUOTE);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -414,9 +415,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -436,9 +437,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -458,9 +459,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -480,9 +481,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -502,9 +503,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -524,9 +525,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -546,9 +547,9 @@ namespace JServerClass
                 jSet(jName, jNumdate);
                 jDo(jName + "=:" + TSENCODE + jName);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -572,9 +573,9 @@ namespace JServerClass
                 jSet(jName, jNumdate);
                 jDo(jName + "=:" + TSENCODE + jName);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -594,9 +595,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -616,9 +617,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -638,9 +639,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -660,9 +661,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -682,9 +683,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -704,9 +705,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -726,9 +727,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -755,9 +756,9 @@ namespace JServerClass
                 // clear temp
                 jDo("(4!:55) <'" + TMPS + SQUOTE);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -782,9 +783,9 @@ namespace JServerClass
 
                 jOutput = (bool)jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -804,9 +805,9 @@ namespace JServerClass
                 }
                 jOutput = (bool[])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -826,9 +827,9 @@ namespace JServerClass
                 }
                 jOutput = (bool[,])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -849,9 +850,9 @@ namespace JServerClass
 
                 jOutput = (byte)jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -871,9 +872,9 @@ namespace JServerClass
                 }
                 jOutput = (byte[])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -893,9 +894,9 @@ namespace JServerClass
                 }
                 jOutput = (byte[,])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -917,9 +918,9 @@ namespace JServerClass
                 DateTime jDtime = new DateTime(jNumdate[0], jNumdate[1], jNumdate[2], jNumdate[3], jNumdate[4], jNumdate[5]);
                 jOutput = jDtime;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -951,9 +952,9 @@ namespace JServerClass
                 }
                 jOutput = jDtlist;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -973,9 +974,9 @@ namespace JServerClass
                 }
                 jOutput = (double)jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -995,9 +996,9 @@ namespace JServerClass
                 }
                 jOutput = (double[])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1017,9 +1018,9 @@ namespace JServerClass
                 }
                 jOutput = (double[,])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1039,9 +1040,9 @@ namespace JServerClass
                 }
                 jOutput = (int)jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
         
@@ -1063,9 +1064,9 @@ namespace JServerClass
                 }
                 jOutput = jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1085,9 +1086,9 @@ namespace JServerClass
                 }
                 jOutput = (int[])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1107,9 +1108,9 @@ namespace JServerClass
                 }
                 jOutput = (int[,])jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1129,9 +1130,9 @@ namespace JServerClass
                 }
                 jOutput = (string)jout;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }  
         }
 
@@ -1160,9 +1161,9 @@ namespace JServerClass
 
                 jOutput = jstr;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }         
         }
 
@@ -1194,9 +1195,9 @@ namespace JServerClass
 
                 jOutput = jstr;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }  
         }
 
@@ -1319,9 +1320,9 @@ namespace JServerClass
 
                 return dt;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1402,9 +1403,9 @@ namespace JServerClass
                     throw eoe;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
