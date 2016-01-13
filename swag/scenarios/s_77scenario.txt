@@ -1,0 +1,28 @@
+Name	Scenario	On	Group	Value	OnDate	OffDate	Method	MethodArguments	Description
+reservetotal	s_77		assumptions	0	2015-09-01	2015-10-01	assume	RSavings=. 0.5 [ RInvest=. 3 [ REquity=. 3 [ ROther=. 1	annual nominal percent reserve growth or decline during period
+car	s_77			50	2015-09-01	2035-08-01	history		annualized car maintenance until first death
+house	s_77			912	2015-09-01	2016-08-01	history	BackPeriods=.1	current rent until move
+insurance	s_77			100	2015-09-01	2035-08-01	history		car insurance
+living	s_77			1650	2015-09-01	2044-01-01	history	YearInflate=.5	normal monthly living expenses
+salary	s_77			4800	2015-09-01	2016-08-01	history	BackPeriods=.4 [ YearInflate=.1.5	maintain net monthly income until move
+reservetotal	s_77			25000	2015-09-01	2015-10-01	reserve	Initial=.1 [ RInvest=. 1	stock value at model start
+reservetotal	s_77			130000	2015-09-01	2015-10-01	reserve	Initial=.1	savings at model start
+salary	s_77			4200	2016-08-01	2023-07-01	history	BackPeriods=.4 [ YearInflate=.1.5	reduced net income after move until retirement
+house	s_77		move	2000	2016-08-01	2016-09-01	history		moving expenses
+house	s_77			100	2016-08-01	2044-01-01	history		incidental housing expenses after move
+house	s_77			100	2016-08-01	2044-01-01	history		home owners association payments
+house	s_77			150	2016-08-01	2044-01-01	history		property taxes
+reservetotal	s_77		buy house	110000	2016-08-01	2016-09-01	reserve	Initial=.1 [ REquity=. 1	down payment added to house equity initial setting prevents double spend
+loan	s_77		buy house	150000	2016-08-01	2023-02-01	borrow	Interest=. 4.5 [ YearTerm=. 30 [ DHouse=.1  [ LoanEquity=.1	30 year mortgage rate on house until inheritance 
+reservetotal	s_77		buy house	110000	2016-08-01	2016-09-01	spend		down payment on house from savings
+annuities	s_77			250	2018-07-01	2035-08-01	history		monthly retirement and other annuity payments end date is unknown
+annuities	s_77			50	2018-07-01	2035-08-01	history		any government pension payments
+reservetotal	s_77		assumptions	0	2020-01-01	2044-01-01	assume	RSavings=. -2.5 [ RInvest=. -5.0 [ REquity=. -5.0 [ ROther=. 2	market tanks government introduces negative interest
+loan	s_77		buy car	10000	2020-07-01	2025-07-01	borrow	Interest=. 5 [ YearTerm=. 5 [ DCar=.1	pay balance of car at 5% for 5 years
+reservetotal	s_77		buy car	7000	2020-07-01	2020-08-01	spend		car down payment from savings
+reservetotal	s_77		inherit	180000	2023-01-01	2023-02-01	reserve	Initial=.1	inheritance to savings
+reservetotal	s_77		buy house	150000	2023-03-01	2023-04-01	transfer	Fee=. 1500 [ DHouse=.1	pay off remaining mortgage balance after inheritance fee is closing cost
+salary	s_77			1400	2023-07-01	2035-08-01	history		estimated social security payments spread over expected life
+insurance	s_77			700	2023-07-01	2024-12-01	history		medical insurance in the gap between retirement and spouse medicare eligibility
+annuities	s_77			100	2024-12-01	2044-01-01	history		any retirement pension payments to spouse
+annuities	s_77			100	2035-08-01	2044-01-01	history		any us social security survivor benefit after first death
