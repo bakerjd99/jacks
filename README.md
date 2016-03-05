@@ -1,8 +1,8 @@
 ![](jacksjodlogotiny.png) [`jacks` (J-Hacks) README](http://bakerjd99.wordpress.com/the-jod-page/)
 ==================================================================================================
 
-This repository consolidates all J language code and related files referenced by
-[Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/). Most of the J
+This repository consolidates all [J language code](http://www.jsoftware.com/) and related files referenced by
+[Analyze the Data not the Drivel](http://bakerjd99.wordpress.com/). Most of the J[^1]
 scripts in this repository were generated from [JOD](http://bakerjd99.wordpress.com/the-jod-page/) dictionaries.
 
 For details see blog posts - listed from newest to oldest:
@@ -74,4 +74,7 @@ For details see blog posts - listed from newest to oldest:
   * [`analystgraphs.ijs`](https://github.com/bakerjd99/jacks/blob/master/graphviz/analystgraphs.ijs)
 
 John Baker
-January 11, 2016
+March 5, 2016
+
+[^1]:  Code from other programming languages will appear in `Jacks`. Usually with some relation to J but I am not making 
+any promises. ["A foolish consistency is the hobgoblin of little minds."](http://dictionary.reference.com/browse/a-foolish-consistency-is-the-hobgoblin-of-little-minds)
