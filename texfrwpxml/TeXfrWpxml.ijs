@@ -1299,7 +1299,7 @@ winpathsep=:'\'&(('/' I.@:= ])})
 NB. writes a list of bytes to file
 write=:1!:2 ]`<@.(32&>@(3!:0))
 
-NB.POST_TeXfrWpxml post processor 
+NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput 0 : 0
 NB. interface word(s):

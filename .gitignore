@@ -1,1 +1,6 @@
 Thumbs.db
+
+## jacks files to ignore
+jserver/Backup/
+jserver/obj/Debug/
+*.suo
