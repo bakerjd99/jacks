@@ -22,6 +22,7 @@ NB. 12jun28 (sortonpublishdate) added - publish order not always post id
 NB. 12oct08 changed (texFrhtml) to process pandoc highlighted source
 NB. 13dec20 save copy in GitHub (jacks) repository
 NB. 15may06 (BlogHashes) added
+NB. 17may13 (LATEXFIGURETEMPLATES) added
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -29,8 +30,8 @@ coclass 'TeXfrWpxml'
 NB.*dependents
 NB. declared global here to avoid confusing 
 NB. following HTML and LaTeX names with J names
-NB. (*)=: EPUBAMBLE EPUBFILE EPUBFRWPDIR HTMLREPS LSTLISTINGHDR LSTLISTINGEND MARKDOWNFILE
-NB. (*)=: TEXPREAMBLE TEXFRWPDIR TEXINCLUSIONS TEXSECTIONTITLE TEXWRAPFIGURE TEXROOTFILE
+NB. (*)=: EPUBAMBLE EPUBFILE EPUBFRWPDIR HTMLREPS LATEXFIGURETEMPLATES LSTLISTINGHDR LSTLISTINGEND 
+NB. (*)=: MARKDOWNFILE TEXPREAMBLE TEXFRWPDIR TEXINCLUSIONS TEXSECTIONTITLE TEXWRAPFIGURE TEXROOTFILE
 
 NB. profile & require words (*)=. IFIOS UNAME
 
@@ -101,6 +102,36 @@ TEXWRAPFIGURE=: 0 : 0
 %\end{floatingfigure}
 %\end{figure}
 )
+
+LATEXFIGURETEMPLATES=: 0 : 0
+ 
+% standard floating figure
+% \captionsetup[figure]{labelformat=empty}
+% \begin{figure}[htbp]
+% \centering
+% \href{}{\includegraphics[width=0.50\textwidth]{}}
+% \caption{}
+% \label{fig:????x0}
+% \end{figure}
+ 
+% captions beside figure
+% \captionsetup[figure]{labelformat=empty}
+% \begin{SCfigure}
+% \centering
+% \href{}{\includegraphics[width=0.40\textwidth]{}}
+% \caption{}
+% \label{fig:????x0}
+% \end{SCfigure}
+ 
+% wrapped figure - outer size > inner size
+% \captionsetup[floatingfigure]{labelformat=empty}
+% \begin{floatingfigure}[l]{0.23\textwidth}
+% \centering
+% \href{}{\includegraphics[width=0.22\textwidth]{}}
+% \caption{}
+% \label{fig:????x0}
+% \end{floatingfigure}
+)
 NB.*end-header
 
 NB. file extension given to tex files that do not convert to markdown
@@ -117,6 +148,9 @@ BESOURCEPREDELS=:<;._1 '|<pre class="sourceCode|</pre>'
 
 NB. carriage return character
 CR=:13{a.
+
+NB. carriage return line feed character pair
+CRLF=:13 10{a.
 
 NB. maximum length of alpha only part of file name
 FILETITLELEN=:20
@@ -252,7 +286,11 @@ if. #newposts=. (texdir;TEXEXT) prunePtable ptableFrwpxml xml do.
   for_post. newposts do.
     smoutput ;post_index{titles
     pdat=. (post_index{titles),(2 3 4{post),<cdatatext;5{post
-    tex=.  predir texFrhtml pdat
+    tex=. predir texFrhtml pdat
+
+    NB. append common figure code to each post
+    tex=. tex,CRLF,LATEXFIGURETEMPLATES
+
     tex write texdir,(;0{post),TEXEXT
   end.
 
