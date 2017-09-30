@@ -23,6 +23,7 @@ NB. 12oct08 changed (texFrhtml) to process pandoc highlighted source
 NB. 13dec20 save copy in GitHub (jacks) repository
 NB. 15may06 (BlogHashes) added
 NB. 17may13 (LATEXFIGURETEMPLATES) added
+NB. 17sep29 use J 8.06 sha hash functions - removes need for external dll
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -36,11 +37,11 @@ NB. (*)=: MARKDOWNFILE TEXPREAMBLE TEXFRWPDIR TEXINCLUSIONS TEXSECTIONTITLE TEXW
 NB. profile & require words (*)=. IFIOS UNAME
 
 NB. dll/so is machine/os specific - assumes jqt 8.02 or later is installed
-OPENSSL=: ;(IFIOS + (;:'Win Linux Android Darwin') i. <UNAME) { 'libeay32.dll '; (2 $ <'libssl.so '); (2 $ <'libssl.dylib ')
+NB. OPENSSL=: ;(IFIOS + (;:'Win Linux Android Darwin') i. <UNAME) { 'libeay32.dll '; (2 $ <'libssl.so '); (2 $ <'libssl.dylib ')
 
 NB. call dll
-cd=: 15!:0
-sslsha1=: (OPENSSL , ' SHA1 > + x *c x *c')&cd
+NB. cd=: 15!:0
+NB. sslsha1=: (OPENSSL , ' SHA1 > + x *c x *c')&cd
 NB.*enddependents
 
 EPUBAMBLE=: 0 : 0
