@@ -751,9 +751,6 @@ else.
 end.
 )
 
-NB. hex from decimal - lower case alpha
-hfd2=:'0123456789abcdef' {~ 16 #.^:_1 ]
-
 
 htmlParagraphs=:3 : 0
 
@@ -1035,7 +1032,7 @@ tex=. ;rp ix} cs
 
 sha1=:3 : 0
 
-NB.*sha1 v-- SHA1 hash from OpenSSL.
+NB.*sha1 v-- sha1 hexadecimal hash.
 NB.
 NB. monad:  clHash =. sha1 cl
 NB.
@@ -1043,8 +1040,12 @@ NB.   sha1 'this is a fine mess'
 NB.
 NB.   sha1 10000 $ 'a bigger mess '
 
-sslsha1 (y);(# y);hash=. 20#' '
-hash
+NB. code before J 8.06
+NB. sslsha1 (y);(# y);hash=. 20#' '
+NB. hash
+
+NB. use J sha foreign available after J 8.06
+1&(128!:6) y
 )
 
 
@@ -1057,10 +1058,14 @@ NB.
 NB.    sha1dir 'c:/pd/blog/wp2latex/*.tex'
 
 jfe=. ] #~ [: -. [: +./\. '/'&=   NB. just file extension 
-hdl=. [: , [: hfd2 a. i. ]        NB. hexidecimal list from integers
 
+NB. code used before J 8.06
+NB. hexadecimal list from integers
+NB. hdl=. [: , [: hfd2 a. i. ]        
 NB. standard profile !(*)=. dir
-(jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
+NB.(jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
+
+(jfe&.> files) ,.~ sha1 @ read&.> files=. 1 dir jpathsep y 
 )
 
 NB. show and then pass noun
