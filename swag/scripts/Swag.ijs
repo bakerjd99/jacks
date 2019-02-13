@@ -1,4 +1,7 @@
-NB.*Swag s-- personal cash flow forecasting.
+NB.*Swag s-- personal cash flow forecasting.f
+NB.
+NB. This  script  generated  from  JOD  dictionaries  (mep)   and
+NB. (utils). See test (buildSwag) in mep for details.
 NB.
 NB. verbatim:
 NB.
@@ -16,6 +19,7 @@ NB.
 NB. created: 2015Oct04
 NB. changes: ----------------------------------------------------------------------
 NB. 16jan10 (RawReservesFromLast) added
+NB. 18oct01 dictionary source note added
 
 cocurrent 'Swag'
 NB.*end-header
@@ -1693,7 +1697,7 @@ NB.
 NB.   monthdates~  1999 2000 2001   NB. useful idiom
 
 NB. generate all first of month dates in years
-days =. ,/ (,y) ,"0 1/ ,/ (>: i. 12) ,"0/ ,1
+days=. ,/ (,y) ,"0 1/ ,/ (>: i. 12) ,"0/ ,1
 :
 NB. convert to YYYYMM01 format
 0 100 100 #. monthdates y
