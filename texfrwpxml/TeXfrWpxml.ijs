@@ -1345,13 +1345,14 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
-smoutput 0 : 0
-NB. interface word(s):
-NB.  BlogHashes        NB. update blog hashes
-NB.  FixBaddown        NB. attempt to convert *.baddown files to *.markddown
-NB.  LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
-NB.  MainMarkdown      NB. assembles all *.markdown files in a master file
-NB.  MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
+smoutput IFACE=: (0 : 0)
+NB. (TeXfrWpxml) interface word(s):
+NB. -------------------------------
+NB. BlogHashes        NB. update blog hashes
+NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
+NB. LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
+NB. MainMarkdown      NB. assembles all *.markdown files in a master file
+NB. MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
 )
 
 SetTeXfrWpxmlPaths 0
