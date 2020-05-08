@@ -6,9 +6,9 @@ NB. http://bakerjd99.wordpress.com/2012/10/01/semi-literate-jod/
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------
-NB. grplit          make latex for group (y)
-NB. ifacesection    interface section summary string
-NB. setjodliterate  prepare for processing
+NB.  grplit         - make latex for group (y)
+NB.  ifacesection   - interface section summary string
+NB.  setjodliterate - prepare for processing
 NB.  
 NB. author:  John D. Baker
 NB. created: 2012oct01
@@ -21,6 +21,8 @@ NB. 12oct11 adjusted LaTeX preamble - changing monofonts
 NB. 12oct12 added (sbtokens) - useful for analyzing code text
 NB. 12oct17 added (wrapvrblong) - long source lines now wrapped
 NB. 13dec29 added to (jacks) GitHub repository
+NB. 20may07 adjusted word formation (wfl) for J 9.01
+NB. 20may08 updated for current (pandoc) versions 
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -31,19 +33,24 @@ NB. (*)=: JLTITLETEX JLOVIEWTEX JLGRPLITTEX JODLiteratePreamble
 
 NB. Roger Hui's word formation state machine - similiar to ;: but
 NB. parses text with LFs, retains whitespace and handles open quotes.
+NB.
+NB. verbatim: note difference
+NB.
+NB.    wfl'+/ i. 23 5, ''OPEN QUOTE'
+NB.    ;:'+/ i. 23 5, ''OPEN QUOTE'
 
 NB. hide script locals !(*)=. mfl sfl 
-mfl=. 256$0                       NB. X other
-mfl=. 1  (9,a.i.' ')        }mfl  NB. S whitespace (space and horizontal tab)
-mfl=. 2  ((a.i.'Aa')+/i.26) }mfl  NB. A A-Z a-z excluding N B
-mfl=. 3  (a.i.'N')          }mfl  NB. N the letter N
-mfl=. 4  (a.i.'B')          }mfl  NB. B the letter B
-mfl=. 5  (a.i.'0123456789_')}mfl  NB. 9 digits and _
-mfl=. 6  (a.i.'.')          }mfl  NB. D .
-mfl=. 7  (a.i.':')          }mfl  NB. C :
-mfl=. 8  (a.i.'''')         }mfl  NB. Q quote
-mfl=. 9  (13)               }mfl  NB. CR
-mfl=. 10 (10)               }mfl  NB. LF
+mfl=. 256$0                        NB. X other
+mfl=. 1  (9,a.i.' ')         }mfl  NB. S whitespace (space and horizontal tab)
+mfl=. 2  (,(a.i.'Aa')+/i.26) }mfl  NB. A A-Z a-z excluding N B
+mfl=. 3  (a.i.'N')           }mfl  NB. N the letter N
+mfl=. 4  (a.i.'B')           }mfl  NB. B the letter B
+mfl=. 5  (a.i.'0123456789_') }mfl  NB. 9 digits and _
+mfl=. 6  (a.i.'.')           }mfl  NB. D .
+mfl=. 7  (a.i.':')           }mfl  NB. C :
+mfl=. 8  (a.i.'''')          }mfl  NB. Q quote
+mfl=. 9  (13)                }mfl  NB. CR
+mfl=. 10 (10)                }mfl  NB. LF
 
 sfl=. _2]\"1 }.".;._2 (0 : 0)
 ' X     S    A    N    B    9    D    C    Q    CR     LF  ']0
@@ -281,8 +288,8 @@ JODLiteratePreamble=: 0 : 0
 NB.>>~~~~
 NB.*end-header
 
-NB. pandoc highlight string from '=:=:' mark
-BEGININDEX=:'\AlertTok{=:=:}'
+NB. string marking start of LaTeX indexed word - see FAKETOKENS
+BEGININDEX=:'\KeywordTok{=::=::}'
 
 NB. marks start of JOD group header in pandoc latex
 BEGINJODHEADER=:'\begin{JODGroupHeader}'
@@ -296,8 +303,8 @@ BEGINNOTJ=:'NB.<<~~~~'
 NB. carriage return character
 CR=:13{a.
 
-NB. pandoc highlight string from '=.=.' mark
-ENDINDEX=:'\CharTok{=.=.}'
+NB. string marking end of LaTeX indexed word - see FAKETOKENS
+ENDINDEX=:'\KeywordTok{=..=..}'
 
 NB. marks end of JOD group header in pandoc latex
 ENDJODHEADER=:'\end{JODGroupHeader}'
@@ -307,6 +314,9 @@ ENDJODPOSTP=:'\end{JODPostProcessor}'
 
 NB. marks the end of J script text that is not J
 ENDNOTJ=:'NB.>>~~~~'
+
+NB. 2 and 3 j (wfl) tokens - the trailing blank of (;1{FAKETOKENS) matters!
+FAKETOKENS=:<;._1 '|=::=::|=..=.. '
 
 NB. interface word list name prefix
 IFACEWORDSPFX=:'IFACEWORDS'
@@ -341,7 +351,7 @@ MARKDOWNTAIL=:'~~~~'
 NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
 
-NB. root words (ROOTWORDSjodliterate) group      
+
 ROOTWORDSjodliterate=:<;._1 ' IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
 
 NB. white space characters
@@ -475,6 +485,12 @@ else.
 end.
 )
 
+NB. double quotes - doubles internal " quotes like (quote)
+dbquote=:'"'&,@(,&'"')@(#~ >:@(=&'"'))
+
+NB. quote unquoted strings containing blanks: dbquoteuq 'c:\blanks in\paths bitch'
+dbquoteuq=:]`dbquote@.(([: -. '""'&-:@({: , {.)) *. ' ' e. ])
+
 
 decomm=:3 : 0
                                                                  
@@ -494,8 +510,10 @@ NB.   0 decomm jcr 'decomm'  NB. retain all blank lines
 :
 NB. mask of unquoted comment starts                              
 c=. ($y)$'NB.' E. ,y                                           
-c=. +./\"1 c > ~:/\"1 y e. ''''                                 
-y=. ,y                                                         
+c=. +./\"1 c > ~:/\"1 y e. ''''     
+
+NB. ,, work around for j8.05 bug - remove when fixed                           
+y=. ,,y                                                     
                                                                  
 NB. blank out comments                                           
 y=. ' ' (I. ,c)} y                                     
@@ -564,9 +582,10 @@ indexes=. ((#pma) # <'\AlertTok{=:}\index{00multiple@\texttt{''...''=:}}') pma} 
 indexes=. ((#pia) # <'\AlertTok{=:}\index{01indirect@\texttt{(...)=:}}') pia} indexes
   
 NB. adjust j locative chars _ they give latex indexing grief
-if. #pos=. I. '_'&e.&> indexes do. 
-  indexes=. ('#_#\_'&changestr&.> pos{indexes) pos} indexes
-end.
+NB. later versions of pandoc handle this case 
+NB. if. #pos=. I. '_'&e.&> indexes do. 
+NB.   indexes=. ('#_#\_'&changestr&.> pos{indexes) pos} indexes
+NB. end.
   
 indexes
 )
@@ -781,7 +800,7 @@ if. #y do.
   ferase ltxtmp=. JLDIRECTORY,LATEXTMP
   (toJ y) writeas mrktmp
   NB. highlighting style is overridden in latex preamble
-  shell 'pandoc --highlight-style=tango ',mrktmp,' -o ',ltxtmp
+  shell 'pandoc --highlight-style=tango ',(dbquoteuq mrktmp),' -o ',dbquoteuq ltxtmp
   assert. 0 < fsize ltxtmp
   tex=. read ltxtmp
   tex [ ferase ltxtmp [ ferase mrktmp
@@ -919,8 +938,8 @@ if. #gix=. I. ; (<'=:') e. L: 1 jtokens do.
   NB. ignoring interleaving blanks
   jat2=. (jat -.&.> ' ') -. a:
   anames=. (<:I.(<'=:') -:&> jat2){jat2
-  NB. =:=: and =.=. are invalid in j
-  faketoks=. (<'=:=:') ,&.> anames ,&.> <'=.=.'
+  NB. (0{FAKETOKENS) and (1{FAKETOKENS) are invalid in j
+  faketoks=. (0{FAKETOKENS) ,&.> anames ,&.> 1{FAKETOKENS
   jat=. <"1 jshp $ faketoks jix} jat
   jat=. (#&> jgl) {.&.> jat
   NB. adjust last LF
@@ -1040,7 +1059,7 @@ tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
 NB. character list to UTF-8
 utf8=:8&u:
 
-NB. standarizes J path delimiter to windows back slash
+NB. standardizes path delimiter to windows back \ slash
 winpathsep=:'\'&(('/' I.@:= ])})
 
 
@@ -1084,11 +1103,12 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 
 NB.POST_jodliterate post processor (-.)=:
 
-smoutput 0 : 0
+smoutput IFACE=: (0 : 0)
 NB. (jodliterate) interface word(s):
-NB.   grplit          NB. make latex for group (y)
-NB.   ifacesection    NB. interface section summary string
-NB.   setjodliterate  NB. prepare for processing
+NB. --------------------------------
+NB. grplit          NB. make latex for group (y)
+NB. ifacesection    NB. interface section summary string
+NB. setjodliterate  NB. prepare for processing
 )
 
 cocurrent 'base'
