@@ -351,8 +351,11 @@ MARKDOWNTAIL=:'~~~~'
 NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
 
-
+NB. root words (ROOTWORDSjodliterate) group
 ROOTWORDSjodliterate=:<;._1 ' IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
+
+NB. full pandoc executable path
+THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
 
 NB. white space characters
 WHITESPACE=:10 13 9 32{a.
@@ -363,11 +366,11 @@ WRAPLEAD=:'>..>'
 NB. maximum number of code listing characters - adjust for given LaTeX pagesize
 WRAPLIMIT=:110
 
-NB. invalid j string marking start of wrapped line - cannot contain '=:'
-WRAPPREFIX=:')=.)=.'
+NB. invalid j string starting wrapped line - exclude '=:' - trailing blank matters
+WRAPPREFIX=:')=.)=. '
 
-NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
-WRAPPREFIXTEX=:'\RegionMarkerTok{)}\CharTok{=.}\RegionMarkerTok{)}\CharTok{=.}'
+NB.  pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
+WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -652,7 +655,15 @@ if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
 ltx=. (gheadlatex ; gbodylatex ; gpostlatex) y
 ltx=. ]`indexgrouptex@.(1 -: x) ; tlf&.> ltx -. a:
+
+NB. convert wrap marks to LaTeX fragments - handle trailing blank first
+ltx=. ('#',WRAPPREFIXTEX,' ','#\AlertTok{',WRAPLEAD,'}') changestr ltx
 ltx=. ('#',WRAPPREFIXTEX,'#\AlertTok{',WRAPLEAD,'}') changestr ltx
+
+NB. NIMP: the next blank after \AlertTok should be removed
+NB. if it's the first blank in a \NormalTok otherwise the
+NB. wrap introduces spurious blanks.
+
 '\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
 )
 
@@ -800,7 +811,7 @@ if. #y do.
   ferase ltxtmp=. JLDIRECTORY,LATEXTMP
   (toJ y) writeas mrktmp
   NB. highlighting style is overridden in latex preamble
-  shell 'pandoc --highlight-style=tango ',(dbquoteuq mrktmp),' -o ',dbquoteuq ltxtmp
+  shell THISPANDOC,' --highlight-style=tango ',(dbquoteuq mrktmp),' -o ',dbquoteuq ltxtmp
   assert. 0 < fsize ltxtmp
   tex=. read ltxtmp
   tex [ ferase ltxtmp [ ferase mrktmp
@@ -1067,10 +1078,10 @@ wrapvrblong=:3 : 0
 
 NB.*wrapvrblong v-- wraps verbatim text lines with length > (x).
 NB.
-NB. Wraps  lines with length > (x) and prefixes each wrapped line
-NB. with the syntactically invalid  j string ')=.)=.' This string
-NB. is transformed  by  pandoc into  an easily found sequence  of
-NB. LaTeX commands.
+NB. Wraps lines with length > (x) and  prefixes each wrapped line
+NB. with the syntactically invalid j string ')=.)=.' (WRAPPREFIX)
+NB. This  string  is transformed  by pandoc into  an easily found
+NB. sequence of LaTeX commands.
 NB.
 NB. monad:  cl =. wrapvrblong clTxt
 NB. dyad:   cl =. iaLength wrapvrblong clTxt
