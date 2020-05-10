@@ -354,7 +354,7 @@ MARKDOWNTMP=:'jltemp.markdown'
 NB. root words (ROOTWORDSjodliterate) group
 ROOTWORDSjodliterate=:<;._1 ' IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
 
-NB. full pandoc executable path
+NB. full pandoc executable path - use pandoc only if on shell path
 THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
 
 NB. white space characters
