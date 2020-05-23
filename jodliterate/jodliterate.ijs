@@ -1,14 +1,19 @@
 NB.*jodliterate s-- generates literate source code documents directly from JOD groups.
 NB.
-NB. verbatim:
+NB. verbatim: see the following blog posts and github files
 NB.
-NB. http://bakerjd99.wordpress.com/2012/10/01/semi-literate-jod/
+NB. https://analyzethedatanotthedrivel.org/2012/10/01/semi-literate-jod/
+NB. https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/
+NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/UsingJodliterate.pdf
+NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/Using%20jodliterate.ipynb
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------
+NB.  THISPANDOC     - full pandoc path - use pandoc only if on shell path
 NB.  grplit         - make latex for group (y)
 NB.  ifacesection   - interface section summary string
-NB.  setjodliterate - prepare for processing
+NB.  ifc            - format interface comment text
+NB.  setjodliterate - prepare LaTeX processing - sets directory - writes preamble
 NB.  
 NB. author:  John D. Baker
 NB. created: 2012oct01
@@ -22,14 +27,14 @@ NB. 12oct12 added (sbtokens) - useful for analyzing code text
 NB. 12oct17 added (wrapvrblong) - long source lines now wrapped
 NB. 13dec29 added to (jacks) GitHub repository
 NB. 20may07 adjusted word formation (wfl) for J 9.01
-NB. 20may08 updated for current (pandoc) versions 
+NB. 20may08 updated for current (pandoc) versions
 
 coclass  'ajodliterate'
 coinsert 'ijod'
 
 NB.*dependents
 NB. declared global here to avoid confusing LaTeX names with J names
-NB. (*)=: JLTITLETEX JLOVIEWTEX JLGRPLITTEX JODLiteratePreamble
+NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JODLiteratePreamble
 
 NB. Roger Hui's word formation state machine - similiar to ;: but
 NB. parses text with LFs, retains whitespace and handles open quotes.
@@ -90,6 +95,19 @@ NB. group overview header
 JLOVIEWTEX=: 0 : 0
 % this jodliterate overview
 \section{\texttt{~#~group~#~} Overview}
+)
+
+NB. latex group build script 
+JLBUILDTEX=: 0 : 0
+rem sequence of latex commands that generate PDF
+rem assumes latex exes are on the working path
+setlocal
+cd /d %~dp0
+lualatex  ~#~group~#~
+makeindex ~#~group~#~
+lualatex  ~#~group~#~
+lualatex  ~#~group~#~
+endlocal
 )
 
 NB. group root tex - columns may need adjusting
@@ -171,6 +189,10 @@ JODLiteratePreamble=: 0 : 0
     {\setlength{\labelwidth}{4em}}
 }\makeatother
 \usepackage{enumerate}
+
+% tightlist command for list spacing
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 % build document index
 \usepackage{makeidx}
@@ -303,6 +325,9 @@ BEGINNOTJ=:'NB.<<~~~~'
 NB. carriage return character
 CR=:13{a.
 
+NB. default pandoc install location
+DEFAULTPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
+
 NB. string marking end of LaTeX indexed word - see FAKETOKENS
 ENDINDEX=:'\KeywordTok{=..=..}'
 
@@ -321,8 +346,8 @@ FAKETOKENS=:<;._1 '|=::=::|=..=.. '
 NB. interface word list name prefix
 IFACEWORDSPFX=:'IFACEWORDS'
 
-NB. interface words (IFACEWORDSjodliterate) group
-IFACEWORDSjodliterate=:<;._1 ' grplit setjodliterate ifacesection'
+NB. interface words for (jodliterate) group
+IFACEWORDSjodliterate=:<;._1 ' THISPANDOC grplit ifacesection ifc setjodliterate'
 
 NB. jodliterate author - inserted in latex \author{}
 JLAUTHOR=:'John D. Baker'
@@ -330,8 +355,14 @@ JLAUTHOR=:'John D. Baker'
 NB. suffix of jodliterate code file
 JLCODEFILE=:'code.tex'
 
+NB. markdown text string that marks where generated group interface inserted
+JLINSERTIFACEMD=:'`{~{insert_interface_md_}~}`'
+
 NB. suffix of jodliterate overview file
 JLOVIEWFILE=:'oview.tex'
+
+NB. name suffix of markdown overview text
+JLOVIEWSUFFIX=:'_oview_tex'
 
 NB. suffix of jodliterate title file
 JLTITLEFILE=:'title.tex'
@@ -351,16 +382,16 @@ MARKDOWNTAIL=:'~~~~'
 NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
 
-NB. root words (ROOTWORDSjodliterate) group
-ROOTWORDSjodliterate=:<;._1 ' IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
+NB. root words for (jodliterate) group
+ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
 
-NB. full pandoc executable path - use pandoc only if on shell path
+NB. full pandoc path - use (pandoc) if on shell path
 THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
 
 NB. white space characters
 WHITESPACE=:10 13 9 32{a.
 
-NB. leading >... line wrap mark
+NB. wrapped line prefix
 WRAPLEAD=:'>..>'
 
 NB. maximum number of code listing characters - adjust for given LaTeX pagesize
@@ -596,6 +627,9 @@ indexes
 NB. size of file in bytes
 fsize=:1!:4 ::(_1:)@(fboxname&>)@boxopen
 
+NB. opens and catenates boxed lists on the last axis
+fuserows=:>@((>@[ ,"1 >@])/)
+
 
 gbodylatex=:3 : 0
 
@@ -653,17 +687,7 @@ NB.   0 grouplatex 'jod' NB. do not replace marks with index
 NB. jod refs !(*)=. badrc_ajod_ grp jderr_ajod_
 if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
-ltx=. (gheadlatex ; gbodylatex ; gpostlatex) y
-ltx=. ]`indexgrouptex@.(1 -: x) ; tlf&.> ltx -. a:
-
-NB. convert wrap marks to LaTeX fragments - handle trailing blank first
-ltx=. ('#',WRAPPREFIXTEX,' ','#\AlertTok{',WRAPLEAD,'}') changestr ltx
-ltx=. ('#',WRAPPREFIXTEX,'#\AlertTok{',WRAPLEAD,'}') changestr ltx
-
-NB. NIMP: the next blank after \AlertTok should be removed
-NB. if it's the first blank in a \NormalTok otherwise the
-NB. wrap introduces spurious blanks.
-
+ltx=. x indexwraplatex (gheadlatex ; gbodylatex ; gpostlatex) y
 '\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
 )
 
@@ -688,20 +712,32 @@ try.
 
 if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
 if. 0=#JLDIRECTORY  do. 0;'!error: working directory is not set' return. end.
-group=. y -. ' '
-if. badrc_ajod_ gdoc=. 2 9 get group do. gdoc return. end.
 
-NB. latex from any group document markdown
-hype=. 0
-if. #gdoc=. ;{:,>1{gdoc do. 
-  gdoc=. latexfrmarkd gdoc 
-  if. badrc_ajod_ glist=. grp group do. glist return. end.
-  ifstr=. ifacesection group
-  if. (+./ifstr E. gdoc) *. (<IFACEWORDSPFX,group) e. glist do. 
-    iwords=. ifacewords group
-    gdoc=. iwords setifacelinks ifstr;gdoc 
-    hype=. 1  NB. hyperlinks set
+NB. group must exist
+if. badrc_ajod_ glist=. GROUP_ajod_ grp group=. y -. ' ' do. glist return. end.
+
+NB. default overview
+ohd=. ('/~#~group~#~/',alltrim y) changestr JLOVIEWTEX [ gdoc=. ''
+iwords=. ifacewords group
+
+NB. overview documents are either markdown/latex group headers or stored LaTeX macros
+if. badrc_ajod_ gdoc=. MACRO_ajod_ get group,JLOVIEWSUFFIX do.
+  NB. no stored LaTeX generate LaTeX from group document markdown/latex
+  if. badrc_ajod_ gdoc=. (GROUP_ajod_,DOCUMENT_ajod_) get group do. gdoc return. end.
+  if. #gdoc=. ;{:,>1{gdoc do. 
+    NB. insert interface md based on IFACEWORDSgroup
+    if. +./JLINSERTIFACEMD E. gdoc do.
+      gdoc=. ('/',JLINSERTIFACEMD,'/',ifacemarkd group) changestr gdoc
+    end.
+    gdoc=. latexfrmarkd gdoc 
+    ifstr=. ifacesection group
+    if. (+./ifstr E. gdoc) *. (<IFACEWORDSPFX,group) e. glist do. 
+      gdoc=. iwords setifacelinks ifstr;gdoc
+    end.
   end.
+else.
+  NB. stored macro LaTeX - no adjustments
+  gdoc=. ;{:,>1{gdoc
 end.
 
 NB. root .tex file - gets group name
@@ -717,19 +753,34 @@ agstrs=. '/~#~author~#~/',(alltrim JLAUTHOR),'/~#~group~#~/',alltrim y
 (toJ agstrs changestr JLTITLETEX) writeas jltitle=. wdir,group,JLTITLEFILE
 
 NB. group overview .tex file 
-ohd=. ('/~#~group~#~/',alltrim y) changestr JLOVIEWTEX
 ohd=. ohd,LF,gdoc
 (toJ ohd) writeas jloview=. wdir,group,JLOVIEWFILE
 
-NB. group source code - return file names
+NB. group build batch script - latex utils that compile generated files
+jlbuildtex=. ('/~#~group~#~/',alltrim y) changestr JLBUILDTEX
+(toJ jlbuildtex) writeas jlbuildbat=. wdir,group,'.bat'
+
+NB. group source code .tex - return file names
 gltx=. grouplatex group
-if. hype do. gltx=. iwords setifacetargs gltx end.
+gltx=. iwords setifacetargs gltx
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
-ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode
+ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
 catchd.
   0;'!error: (grplit) failure - last J error ->';13!:12 ''
 end.
+)
+
+
+ifacemarkd=:3 : 0
+
+NB.*ifacemarkd v-- generate word interface markdown section.
+NB.
+NB. monad:  clMd =. ifacemarkd clGroupName
+NB.
+NB.   ifacemarkd 'jodliterate'
+
+LF,'~~~~{ .j }',LF,(2 ifc y),LF,'~~~~',LF
 )
 
 
@@ -767,6 +818,44 @@ words [ (4!:55) <iname
 )
 
 
+ifc=:3 : 0
+
+NB.*ifc v-- format interface comment text.
+NB.
+NB. Looks up interface  words  of a  group  and formats  text for
+NB. insertion into group headers and postprocessors.
+NB.
+NB. monad:  ifc clGroupName
+NB. dyad:   iaOption ifc clGroupName
+
+1 ifc y
+:
+NB. require 'jod' !(*)=. badrc_ajod_ get jderr_ajod_ badcl_ajod_ badil_ajod_
+if. badcl_ajod_ y do. jderr_ajod_ 'invalid group name' return.
+else.
+  iface=. 'IFACEWORDS',alltrim y
+end.
+
+x=. {. ,x [ msg=. 'invalid ifc options'
+if. badil_ajod_ x do. jderr_ajod_ msg return. end.
+if. -.x e. i.3    do. jderr_ajod_ msg return. end.
+
+NB. set comment style (header, postprocessor)
+cpx=. ; x { (<'NB.  ';' - '),(<'NB. ';'  NB. '),<'';' NB. '
+
+NB. define interface list in jod scratch locale
+NB. !(*)=. SO__JODobj erase__SO__JODobj locsfx_ajod_ nl__SO__JODobj
+if. badrc_ajod_ rc=. (;SO__JODobj) get iface   do. rc   return.
+elseif.  ilist=. ".iface , ;locsfx_ajod_ ;SO__JODobj
+         erase__SO__JODobj nl__SO__JODobj i. 4
+         badrc_ajod_ rc=. 0 8 get /:~ ~.ilist  do. rc return.
+elseif.  0=#txt=. >1{rc do. jderr_ajod_ 'no interface words' return.
+elseif.do.
+   ctl fuserows >&.> <"1 |: ((#txt)#,:cpx) ,&.> txt
+end.
+)
+
+
 indexgrouptex=:3 : 0
 
 NB.*indexgrouptex v-- insert index commands in pandoc highlight group latex.
@@ -775,6 +864,27 @@ NB. dyad:  cl =. clGroupName indexgrouptex clTex
 
 'pos ltx'=. (BEGININDEX;ENDINDEX) cutnestidx y
 if. #pos do. ; (formtexindexes pos{ltx) pos} ltx else. y end.
+)
+
+
+indexwraplatex=:4 : 0
+
+NB.*indexwraplatex v-- insert index commands and handle spurious blanks.
+NB.
+NB. dyad:  clLatex =. paIndex indexwraplatex clLatex
+
+ltx=. ]`indexgrouptex@.(1 -: x) ; tlf&.> y -. a:
+
+NB. wrap prefix final LaTeX 
+wpfx=. '\AlertTok{',WRAPLEAD,'}'
+
+NB. convert wrap marks to LaTeX fragments - handle trailing blank first
+ltx=. ('#',WRAPPREFIXTEX,' ','#',wpfx) changestr ltx
+ltx=. ('#',WRAPPREFIXTEX,'#',wpfx) changestr ltx
+
+NB. remove spurious normal token blanks
+sprb=. wpfx,'\NormalTok{'
+('#',sprb,' #',sprb) changestr ltx
 )
 
 NB. standarizes J path delimiter to unix/linux forward slash
@@ -1008,8 +1118,8 @@ head=. ifstr&beforestr tex
 tail=. ifstr&afterstr tex
 
 if. +./rmrk E. tail do.
-  ifbk =. formifacetex x
-  tail =. rmrk&afterstr tail
+  ifbk=. formifacetex x
+  tail=. rmrk&afterstr tail
   head,ifstr,(2#LF),ifbk,tail
 else.
   tex
@@ -1032,16 +1142,23 @@ chgs changestr y
 
 setjodliterate=:3 : 0
 
-NB.*setjodliterate v-- prepare for processing.
+NB.*setjodliterate v-- prepare LaTeX processing - sets out directory writes preamble.
 NB.
-NB. monad:  (paRc ; clDir) =. setjodliterate clWorkingDir
+NB. monad:  (paRc ; clDir) =. setjodliterate clWorkingDir | zl
 NB.
 NB.   setjodliterate 'c:\temp'           NB. windows
 NB.   setjodliterate '/home/john/temp'   NB. linux 
+NB.
+NB.   NB. use the current JOD put dictionary document directory
+NB.   setjodliterate ''
 
 try.
 
 if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
+if. 0 = #DPATH__ST__JODobj   do. 0;'!error: no open jod dictionaries' return. end.
+
+NB. if the path is empty use the current put dictionary document directory !(*)=. dob
+if. 0 e. $y do. y=. DOC__dob [ dob=: {:{.DPATH__ST__JODobj end.
 
 NB. profile (*)=. IFWIN
 JLDIRECTORY_ajodliterate_=: jpathsep`winpathsep@.(IFWIN) tslash2 y
@@ -1117,10 +1234,21 @@ NB.POST_jodliterate post processor (-.)=:
 smoutput IFACE=: (0 : 0)
 NB. (jodliterate) interface word(s):
 NB. --------------------------------
+NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. grplit          NB. make latex for group (y)
 NB. ifacesection    NB. interface section summary string
-NB. setjodliterate  NB. prepare for processing
+NB. ifc             NB. format interface comment text
+NB. setjodliterate  NB. prepare LaTeX processing - sets out directory writes preamble
 )
 
 cocurrent 'base'
 coinsert  'ajodliterate'
+
+(3 : 0) ''
+if. +./@('pandoc'&E.) panver=. ;0{ <;._2 tlf (shell THISPANDOC,' --version') -. CR do.
+  smoutput 'NOTE: adjust pandoc path if version (',panver,') is not >= 2.9.1.1'
+else.
+  smoutput 'ERROR: pandoc not set - adjust THISPANDOC'
+  smoutput 'THISPANDOC_ajodliterate_=: ''pandoc'' NB. use when proper pandoc on path'
+end.
+)
