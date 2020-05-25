@@ -583,8 +583,8 @@ ctok=. '\CommentTok{'
 ntok=. '\NormalTok{'
 href=. '\hyperlink{'
 
-NB. fetch current short descriptions
-'rc tab'=. 0 8 get y
+NB. fetch current short descriptions !(*)=. WORD_ajod_ EXPLAIN_ajod_
+'rc tab'=. (WORD_ajod_,EXPLAIN_ajod_) get y
 words=. 0 {"1 tab
 desc=.  1 {"1 tab
 
@@ -1007,8 +1007,8 @@ NB.
 NB.   NB. markdown text from JOD group words
 NB.   mtxt=. markdfrwords }. grp 'jod'
 
-NB. jod refs !(*)=. badrc_ajod_ get wttext__MK__JODobj
-if. badrc_ajod_ src=. 0 10 get y do. src return. end.
+NB. require 'jod' !(*)=. WORD_ajod_ NVTABLE_ajod_ badrc_ajod_ get wttext__MK__JODobj
+if. badrc_ajod_ src=. (WORD_ajod_,NVTABLE_ajod_) get y do. src return. end.
 
 NB. commented source code (name,source) table.
 if. badrc_ajod_ src=. 0 0 1 wttext__MK__JODobj >1{src do. src
