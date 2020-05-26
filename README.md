@@ -10,7 +10,7 @@ For details see blog posts - listed from newest to oldest:
 `[begin-list]`
 
 1. [Using jodliterate](https://analyzethedatanotthedrivel.org/2020/05/25/using-jodliterate/)
- * [jodliterate](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
+ * [`jodliterate`](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
 
 2. [More J Pandoc Syntax HighLighting](https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/)
  * [`jpdh.md`](https://github.com/bakerjd99/jacks/tree/master/pandocexamples)
