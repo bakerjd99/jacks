@@ -9,11 +9,13 @@ NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/Using%20jodlitera
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------
-NB.  THISPANDOC     - full pandoc path - use pandoc only if on shell path
+NB.  THISPANDOC     - full pandoc path - use (pandoc) if on shell path
+NB.  formifacetex   - formats hyperlinked and highlighted interface words
 NB.  grplit         - make latex for group (y)
 NB.  ifacesection   - interface section summary string
 NB.  ifc            - format interface comment text
-NB.  setjodliterate - prepare LaTeX processing - sets directory - writes preamble
+NB.  setjodliterate - prepare LaTeX processing - sets out directory writes preamble
+NB.  wordlit        - make latex from word list (y)
 NB.  
 NB. author:  John D. Baker
 NB. created: 2012oct01
@@ -28,13 +30,14 @@ NB. 12oct17 added (wrapvrblong) - long source lines now wrapped
 NB. 13dec29 added to (jacks) GitHub repository
 NB. 20may07 adjusted word formation (wfl) for J 9.01
 NB. 20may08 updated for current (pandoc) versions
+NB. 20jun07 added (formifacetex) to interface words
 
 coclass  'ajodliterate'
 coinsert 'ijod'
 
 NB.*dependents
 NB. declared global here to avoid confusing LaTeX names with J names
-NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JODLiteratePreamble
+NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JLWORDLITTEX JODLiteratePreamble
 
 NB. Roger Hui's word formation state machine - similiar to ;: but
 NB. parses text with LFs, retains whitespace and handles open quotes.
@@ -140,6 +143,32 @@ JLGRPLITTEX=: 0 : 0
 
 \end{document}
 )
+
+NB. word lit root tex
+JLWORDLITTEX=: 0 : 0
+% Main jodliterate (wordlit) latex file. 
+
+\input{JODLiteratePreamble.tex}
+
+\newpage
+
+% commands for adjusting distance
+% between columns and inserting a rule
+%\setlength{\columnsep}{3em}
+%\setlength{\columnseprule}{0.5pt}
+%\twocolumn
+
+%\onecolumn
+\input{~#~texname~#~code.tex}
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{\texttt{=:} Index}
+\printindex
+
+\end{document}
+)
+
 
 NB. main jodliterate LaTeX preamble
 JODLiteratePreamble=: 0 : 0
@@ -347,7 +376,7 @@ NB. interface word list name prefix
 IFACEWORDSPFX=:'IFACEWORDS'
 
 NB. interface words for (jodliterate) group
-IFACEWORDSjodliterate=:<;._1 ' THISPANDOC grplit ifacesection ifc setjodliterate'
+IFACEWORDSjodliterate=:<;._1 ' THISPANDOC formifacetex grplit ifacesection ifc setjodliterate wordlit'
 
 NB. jodliterate author - inserted in latex \author{}
 JLAUTHOR=:'John D. Baker'
@@ -383,7 +412,7 @@ NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
 
 NB. root words for (jodliterate) group
-ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate'
+ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate wordlit'
 
 NB. full pandoc path - use (pandoc) if on shell path
 THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
@@ -575,8 +604,11 @@ formifacetex=:3 : 0
 NB.*formifacetex v-- formats hyperlinked and highlighted interface words.
 NB.
 NB. monad:  cl =. formifacetex blclIwords
+NB.
+NB.   NB. inteface latex
+NB.   formifacetex IFACEWORDSjodliterate
 
-NB. jod refs !(*)=. get
+NB. require 'jod' !(*)=. get
 head=. '\begin{Shaded}',LF,'\begin{Highlighting}[]',LF
 tail=. '\end{Highlighting}',LF,'\end{Shaded}',LF
 ctok=. '\CommentTok{'
@@ -684,7 +716,7 @@ NB.   0 grouplatex 'jod' NB. do not replace marks with index
 
 1 grouplatex y
 :
-NB. jod refs !(*)=. badrc_ajod_ grp jderr_ajod_
+NB. require 'jod' !(*)=. badrc_ajod_ grp jderr_ajod_
 if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
 ltx=. x indexwraplatex (gheadlatex ; gbodylatex ; gpostlatex) y
@@ -707,7 +739,7 @@ NB.   0 grplit 'jodliterate'
 
 1 grplit y 
 :
-NB. jod refs !(*)=. badrc_ajod_ get grp jderr_ajod_ ok_ajod_
+NB. require 'jod' !(*)=. badrc_ajod_ get grp jderr_ajod_ ok_ajod_
 try.
 
 if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
@@ -809,7 +841,7 @@ NB. representation so define it in the JOD scratch object.
 NB.
 NB. monad:  blcl =. ifacewords clGroupname
 
-NB. jod refs !(*)=. get
+NB. require 'jod' !(*)=. get
 iname=. (IFACEWORDSPFX,y) -. ' '
 (;SO__JODobj) get iname
 iname=. iname,'__SO__JODobj'
@@ -940,8 +972,8 @@ NB.
 NB.   mtxt=. markdfrghead 'jod'
 NB.   (toHOST mtxt) write 'c:/temp/jodhdr.markdown'
 
-NB. jod refs !(*)=. badrc_ajod_ get HEADEND_ajodmake_
-if. badrc_ajod_ hdr=. 2 get y do. hdr return. end.
+NB. require 'jod' !(*)=. badrc_ajod_ get HEADEND_ajodmake_ GROUP_ajod_
+if. badrc_ajod_ hdr=. GROUP_ajod_ get y do. hdr return. end.
 if. 0=#hdr=. ;1{,>1{hdr       do. ''  return. end.
 hdr=. hdr,LF,HEADEND_ajodmake_
 
@@ -967,8 +999,8 @@ NB.*markdfrgpost v-- markdown from group post processor.
 NB.
 NB. monad:  clMarkdown =. markdfrgpost clGroupname
 
-NB. jod refs !(*)=. get
-'rc post'=.  2 {. 4 get 'POST_',y -.' '
+NB. require 'jod' !(*)=. get MACRO_ajod_ 
+'rc post'=.  2 {. MACRO_ajod_ get 'POST_',y -.' '
 if. rc do. markdj markgassign ; {: , post else. '' end.
 )
 
@@ -982,7 +1014,7 @@ NB.
 NB.   mtxt=. markdfrgroup 'jod'
 NB.   (toHOST mtxt) write 'c:/temp/jcode.markdown'
 
-NB. jod refs !(*)=. badrc_ajod_ get gdeps grp
+NB. require 'jod' !(*)=. badrc_ajod_ get gdeps grp
 if. badrc_ajod_ gnl=. grp y   do. gnl return. end.
 if. badrc_ajod_ gdp=. gdeps y do. gdp return. end.
 if. #gnl=. (gnl -. gdp) -. a: do. markdfrwords gnl else. '' end.
@@ -1191,6 +1223,73 @@ NB. standardizes path delimiter to windows back \ slash
 winpathsep=:'\'&(('/' I.@:= ])})
 
 
+wordlatex=:3 : 0
+
+NB.*wordlatex v-- LaTeX from word list.
+NB.
+NB. monad:  clLatex =. wordlatex blclWords
+
+NB. require 'jod' !(*) badcl_ajod_
+if. badcl_ajod_ mtxt=. markdfrwords y do. mtxt return.
+elseif. #mtxt do. 1 indexwraplatex <latexfrmarkd mtxt
+elseif.do. ''
+end.
+)
+
+
+wordlit=:3 : 0
+
+NB.*wordlit v-- make latex from word list (y).
+NB.
+NB. monad:  (paRc ; blclTeXfiles) =. wordlit blclWords
+NB.
+NB.   wordlit 'jodliterate'  
+NB.
+NB. dyad:  (paRc ; blclTeXfiles) =. paOw wordlit blclWords
+NB.
+NB.   NB. do not overwrite root tex - allows for latex tweaking
+NB.   0 wordlit 'jodliterate'
+
+1 wordlit y 
+:
+NB. require 'jod' !(*)=. badrc_ajod_ badcl_ajod_ checknames_ajod_ 
+try.
+
+if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
+if. 0=#JLDIRECTORY  do. 0;'!error: working directory is not set' return. end.
+
+NB. only valid jod names 
+if. badrc_ajod_ wlist=. checknames_ajod_ y do. wlist return. end.
+
+NB. use first name on word list for tex file names
+texname=. ;0{wlist=. }.wlist
+
+NB. make latex
+if. badcl_ajod_ wltx=. wordlatex wlist do. wltx return. end.
+ 
+NB. root .tex file 
+wdir=. JLDIRECTORY
+jlroot=. wdir,texname,'.tex'
+if. chroot=. x -: 1 do.
+  root=. ('/~#~texname~#~/',texname) changestr JLWORDLITTEX
+  (toJ root) writeas jlroot
+end.
+
+NB. group build batch script - latex utils that compile generated files
+jlbuildtex=. ('/~#~group~#~/',texname) changestr JLBUILDTEX
+(toJ jlbuildtex) writeas jlbuildbat=. wdir,texname,'.bat'
+
+NB. source code .tex - return file names
+NB. gltx=. iwords setifacetargs gltx
+(toJ wltx) writeas jlcode=. wdir,texname,JLCODEFILE
+ok_ajod_ (-.chroot) }. jlroot;jlcode;jlbuildbat
+
+catchd.
+  0;'!error: (wordlit) failure - last J error ->';13!:12 ''
+end.
+)
+
+
 wrapvrblong=:3 : 0
 
 NB.*wrapvrblong v-- wraps verbatim text lines with length > (x).
@@ -1235,10 +1334,12 @@ smoutput IFACE=: (0 : 0)
 NB. (jodliterate) interface word(s):
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
+NB. formifacetex    NB. formats hyperlinked and highlighted interface words
 NB. grplit          NB. make latex for group (y)
 NB. ifacesection    NB. interface section summary string
 NB. ifc             NB. format interface comment text
 NB. setjodliterate  NB. prepare LaTeX processing - sets out directory writes preamble
+NB. wordlit         NB. make latex from word list (y)
 )
 
 cocurrent 'base'
@@ -1249,6 +1350,6 @@ if. +./@('pandoc'&E.) panver=. ;0{ <;._2 tlf (shell THISPANDOC,' --version') -. 
   smoutput 'NOTE: adjust pandoc path if version (',panver,') is not >= 2.9.1.1'
 else.
   smoutput 'ERROR: pandoc not set - adjust THISPANDOC'
-  smoutput 'THISPANDOC_ajodliterate_=: ''pandoc'' NB. use when proper pandoc on path'
+  smoutput 'THISPANDOC_ajodliterate_=: ''pandoc'' NB. when pandoc on path'
 end.
 )
