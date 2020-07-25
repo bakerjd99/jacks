@@ -24,6 +24,7 @@ NB. 13dec20 save copy in GitHub (jacks) repository
 NB. 15may06 (BlogHashes) added
 NB. 17may13 (LATEXFIGURETEMPLATES) added
 NB. 17sep29 use J 8.06 sha hash functions - removes need for external dll
+NB. 20jul11 (BlogHashes) adjusted to track xhtml version
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -212,6 +213,12 @@ hash=. ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.epub'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.markdown'
 (toJ hash) write mdpath,'bmepubsha1.txt'
+
+xhtmlpath=. 'c:/pd/blog/wp2epub/xhtml/'
+hash=. ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.xhtml'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.css'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.ncx'
+(toJ hash) write xhtmlpath,'bmexhtmlsha1.txt'
 )
 
 
