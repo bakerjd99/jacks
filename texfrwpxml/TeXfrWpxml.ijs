@@ -194,7 +194,7 @@ NB. temporary HTML file
 TFWTEMPHTML=:'temp.html'
 
 NB. wget shell command prefix
-WGETCMD=:'wget --no-clobber --output-document='
+WGETCMD=:'wget --no-clobber --no-check-certificate --output-document='
 
 
 BlogHashes=:3 : 0
