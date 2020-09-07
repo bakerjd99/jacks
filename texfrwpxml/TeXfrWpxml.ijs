@@ -172,6 +172,9 @@ LF=:10{a.
 NB. extension of markdown text files
 MARKDOWNEXT=:'.markdown'
 
+NB. markdown post/section prefix
+MDSECTIONPFX=:''
+
 NB. pandoc shell command prefix
 PANDOCCMD=:'pandoc -o '
 
@@ -330,9 +333,9 @@ NB.   MainMarkdown 'c:/pd/blog/wordpress/analyzethedatanotthedrivel.wordpress.xm
 NB.
 NB. dyad:   bl =. (clMdownfile;clDirectory;clAmble) MainMarkdown clPathFile
 
-(MARKDOWNFILE;EPUBFRWPDIR;EPUBAMBLE) MainMarkdown y
+(MARKDOWNFILE;EPUBFRWPDIR;EPUBAMBLE;MDSECTIONPFX) MainMarkdown y
 :
-'mdownfile epubdir epubamble'=. x
+'mdownfile epubdir epubamble mdsecpfx'=. x
 
 NB. read wordpress xml - valid posts
 if. fexist y do. xml=. read y else. 0;'missing or invalid XML export file' return. end.
@@ -354,7 +357,7 @@ NB. files=. sortonid files
 
 NB. mash posts together - affix date
 epubamble=. (allwhitetrim epubamble),LF,('% ',timestamp ''),2#LF
-posts=. ; '#' ,&.> (allwhitetrim&.> read&.> files) ,&.> <2#LF
+posts=. ; (<mdsecpfx) ,&.> (allwhitetrim&.> read&.> files) ,&.> <2#LF
 posts=. utf8 toHOST epubamble,(2#LF),posts
 posts write file=. epubdir,mdownfile
 1;((":#files),' post(s)');file
