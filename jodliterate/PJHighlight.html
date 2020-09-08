@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; }
+code > span.dt { color: #204a87; }
+code > span.dv { color: #0000cf; }
+code > span.bn { color: #0000cf; }
+code > span.fl { color: #0000cf; }
+code > span.ch { color: #4e9a06; }
+code > span.st { color: #4e9a06; }
+code > span.co { color: #8f5902; font-style: italic; }
+code > span.ot { color: #8f5902; }
+code > span.al { color: #ef2929; }
+code > span.fu { color: #000000; }
+code > span.er { font-weight: bold; }
+  </style>
+</head>
+<body>
+<h1 id="pandoc-based-j-syntax-highlighting">Pandoc based J Syntax Highlighting</h1>
+<p><a href="http://johnmacfarlane.net/">John MacFarlane's</a> excellent command line utility <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> is a Haskell program that converts to and from various <a href="http://en.wikipedia.org/wiki/Markup_language">text markup languages</a>. Pandoc's help option lists its supported input and output formats.</p>
+<p><em>The following examples are Linux bash shell commands. Windows shell commands are identical.</em></p>
+<pre><code>$ pandoc --help
+pandoc [OPTIONS] [FILES]
+Input formats:  native, json, markdown, markdown+lhs, rst, rst+lhs, docbook,
+                textile, html, latex, latex+lhs
+Output formats: native, json, html, html5, html+lhs, html5+lhs, s5, slidy,
+                slideous, dzslides, docbook, opendocument, latex, latex+lhs,
+                beamer, beamer+lhs, context, texinfo, man, markdown,
+                markdown+lhs, plain, rst, rst+lhs, mediawiki, textile, rtf, org,
+                asciidoc, odt, docx, epub</code></pre>
+<p>Pandoc performs some conversions better than others. It does a better job of turning <a href="http://daringfireball.net/projects/markdown/syntax">markdown</a> into LaTeX than LaTeX into markdown. It's also better at converting HTML into LaTeX than LaTeX into HTML. Pandoc works best when converting markdown, the simplest of its inputs, to other formats. In fact Pandoc does such a good job of converting markdown to HTML, HTML+<a href="http://www.mathjax.org/">MathJax</a>, LaTeX and PDF that many writers are now saving their source documents as markdown text knowing they can easily produce other formats as needed.</p>
+<p>As handy as Pandoc's markup conversions are this nifty tool also supports syntax highlighting for over a hundred programming languages. Unfortunately, my favorite <a href="http://www.jsoftware.com/">language J</a> is not on Pandoc's list of highlighted languages. [1] Where have I run into <a href="http://bakerjd99.wordpress.com/2010/11/12/the-return-of-apl-fingers-2/">this problem</a> before? Luckily for me Pandoc is an open source tool and Pandoc's author has made it easy to add new highlight languages.</p>
+<p>Pandoc is a <a href="http://www.haskell.org/haskellwiki/Haskell">Haskell</a> program. I've been aware of Haskell's existence for years but until I decided to take on this specialized Pandoc hack I had never studied or used the language. Usually when you set out to modify a large program in an unfamiliar programming language you're in for what can only be described as an <em>f'ing educational experience.</em> It's a testament to the quality of the Haskell's global libraries and standard tools that a complete Haskell novice can effectively tweak large Haskell programs. Here's what you have to do.</p>
+<ol style="list-style-type: decimal">
+<li><p>Install the <a href="http://hackage.haskell.org/platform/index.html">Haskell Platform</a>. The Haskell Platform is available for all the usual suspects. I've used both the Windows and Linux versions. I almost installed the Mac version on my wife's Mac but resisted the urge.</p></li>
+<li><p><a href="http://www.haskell.org/cabal/">Get with the Cabal</a>. Cabal is the main Haskell package distribution and build utility. Cabal comes with the Haskell Platform and is easily accessed from the command line. Type <code>cabal --help</code> in your favorite shell to view the program's options.</p></li>
+<li><p>Spend sometime playing with <a href="http://hackage.haskell.org/packages/hackage.html">Hackage</a>. Hackage contains a large set of Haskell packages including all the source code required to build Pandoc.</p></li>
+</ol>
+<p>After installing the Haskell Platform and familiarizing yourself with Cabal try building Pandoc. This will thoroughly exercise your Haskell system. Instructions for building Haskell packages are <a href="http://www.haskell.org/haskellwiki/Cabal-Install">here</a>. After reading the package build instructions run the following in your command shell:</p>
+<pre><code>$ cabal update
+$ cabal install pandoc</code></pre>
+<p>This will download, compile and install a number of Haskell packages. Where Cabal puts the packages depends on your operating system. Cabal saves Linux packages in a hidden local directory. On my machine they ended up in:</p>
+<pre><code>/home/john/.cabal/lib</code></pre>
+<p>If you managed to build Pandoc you're now ready to add a new highlighting language. Pandoc uses the <a href="http://hackage.haskell.org/package/highlighting-kate-0.5.3.2"><code>highlighting-kate</code></a> package for syntax highlighting. <code>highlighting-kate</code> works by reading a directory of <a href="http://kate-editor.org/">Kate</a> editor xml language regex based definition files and generating custom language parsers. We want to generate a custom J parser so we need to download <code>highlighting-kate</code> source and add a Kate xml definition file for J.</p>
+<p>You can find such a J Kate file on the J Wiki <a href="http://www.jsoftware.com/jwiki/Guides/Syntax%20Coloring?action=AttachFile&amp;do=view&amp;target=j.xml.txt">here</a>. Download this file by cutting and pasting and save it as <a href="https://www.box.com/s/wvms2a1ws3il81kyb1qo"><code>j.xml</code></a>. Now do the following.</p>
+<ol style="list-style-type: decimal">
+<li><p>Run the Pandoc version command <code>pandoc --version</code> of the Pandoc you just built to determine the version of the <code>highlighting-kate</code> package you need.</p></li>
+<li><p>Use Cabal to unpack the required <code>highlighting-kate</code> package. This downloads the required package and creates a temporary subdirectory in your current directory that contains package source code.</p>
+<pre><code>$ cabal unpack highlighting-kate-0.5.3.2
+Unpacking to highlighting-kate-0.5.3.2/</code></pre></li>
+<li><p>Move into the temporary subdirectory and copy the Kate <code>j.xml</code> file to the package's xml subdirectory.</p>
+<pre><code>$ cd highlighting-kate-0.5.3.2
+$ cp ~/pd/blog/j.xml ~/temp/highlighting-kate-0.5.3.2/xml/j.xml</code></pre></li>
+<li><p>Configure the package.</p>
+<pre><code>$ cabal configure
+Resolving dependencies...
+Configuring highlighting-kate-0.5.3.2...</code></pre></li>
+<li><p>Build the <code>highlighting-kate</code> package.</p>
+<pre><code>$ cabal build
+Resolving dependencies...
+    ... (omitted) ...</code></pre></li>
+<li><p>If <code>highlighting-kate</code> builds without problems run the command.</p>
+<pre><code>$ runhaskell ParseSyntaxFiles.hs xml
+Writing Text/Highlighting/Kate/Syntax/SqlPostgresql.hs
+Writing Text/Highlighting/Kate/Syntax/Scala.hs
+    ... (omitted) ...</code></pre>
+<p><code>ParseSyntaxFiles</code> scans the package's xml subdirectory and generates language specific parsers. If all goes well you will find <a href="https://www.box.com/s/20x4mes7neyj05lppued"><code>J.hs</code></a> in this directory.</p>
+<pre><code>~/temp/highlighting-kate-0.5.3.2/Text/Highlighting/Kate/Syntax</code></pre>
+<p><code>J.hs</code>, like all the files referred to in this post, are available in the files sidebar in the <a href="https://www.box.com/s/vqg6chj0hpysjnxhulz5"><code>haskell/pandoc</code></a> subdirectory.</p></li>
+<li><p>Now rebuild the <code>highlighting-kate</code> package. This compiles your new <code>J.hs</code> parser file.</p>
+<pre><code>$ cabal build
+Resolving dependencies...
+    ... (omitted) ...</code></pre></li>
+<li><p>After rebuilding the package run the Cabal copy command to put the modified package in the expected library location.</p>
+<pre><code>$ cabal copy
+Installing library in
+/home/john/.cabal/lib/highlighting-kate-0.5.3.2/ghc-7.4.1</code></pre></li>
+</ol>
+<p>Now that the highlighting library is up to date we have to rebuild Pandoc. To do this mirror the steps taken to download and build the highlighting package.</p>
+<ol style="list-style-type: decimal">
+<li><p>Use Cabal to unpack the Pandoc package.</p>
+<pre><code>$ cd ~/temp
+$ cabal unpack pandoc-1.9.4.2
+Unpacking to pandoc-1.9.4.2/</code></pre></li>
+<li><p>Switch to the Pandoc subdirectory and configure the package.</p>
+<pre><code>$ cabal configure
+Resolving dependencies...
+[1 of 1] Compiling Main      ( Setup.hs, dist/setup/Main.o )
+    ... (omitted) ...</code></pre></li>
+<li><p>Rebuild Pandoc.</p>
+<pre><code>$ cabal build 
+Building pandoc-1.9.4.2...
+Preprocessing executable &#39;pandoc&#39; for pandoc-1.9.4.2...
+    ... (omitted) ...</code></pre>
+<p>If all goes well a Pandoc executable will be written to this subdirectory.</p>
+<pre><code>~/temp/pandoc-1.9.4.2/dist/build/pandoc</code></pre></li>
+<li><p>You can check the new executable by running <code>pandoc --version</code>. The result should display J in the list of supported languages.</p></li>
+</ol>
+<p>Now that we have a Pandoc that can highlight J we're almost ready to blog gaudy J code. However before doing this we need to install some custom <a href="http://www.htmldog.com/guides/cssbeginner/">CSS</a>. Custom CSS is not available on free <em>WordPress.com</em> blogs. To apply custom coloring schemes get the <a href="http://en.support.wordpress.com/custom-design/">custom package</a> and learn how to use WordPress's custom CSS editor. As daunting as this sounds it's <a href="http://www.youtube.com/watch?v=4QWfrxYt9DQ">no problemo</a> for my limited purposes. To enable tango style Pandoc syntax highlighting on your WordPress blog paste <a href="https://www.box.com/s/dklf0lofp7pc1k98i3h2"><code>tango.css</code></a> into the custom CSS editor, check the &quot;Add my CSS to <mytheme> CSS stylesheet&quot; button and then press the &quot;Save Stylesheet&quot; button. Now your WordPress blog will be sensitive to the HTML span tags generated by Pandoc.</p>
+<p>To show that all this hacking works as intended you can check out the Pandoc generated versions of this blog post. I've posted the original <a href="https://www.box.com/s/ld5l7y9v7ueo6ml37mqu">markdown source</a> with <a href="https://www.box.com/s/0ogxgtmrrzicrn5o9o51">PDF</a>, <a href="https://www.box.com/s/zbcragtg35tgmciunnpp">LaTeX</a> and <a href="https://www.box.com/s/q8lza89lf1s1s5161qkz">HTML</a> versions. All these files are available via the files sidebar. You can generate the HTML version with the command:</p>
+<pre><code>$ pandoc -s --highlight-style=tango PandocJHighlight.markdown -o PandocJHighlight.html</code></pre>
+<p>To get other versions simply change the file extension of the output <code>-o</code> file.</p>
+<p>Finally we are ready to post syntax highlighted J code. The following J verb generates all possible lock combinations for the <a href="http://en.wikipedia.org/wiki/Myst_IV:_Revelation">MYST IV</a> Bonebridge <a href="http://www.fisicx.com/revelation/walkthrough.htm">puzzle</a> in Pandoc's tango style.</p>
+<div class="figure">
+<img src="bonebridge2.jpg" alt="Bonebridge puzzle in MYST IV" /><p class="caption">Bonebridge puzzle in MYST IV</p>
+</div>
+<p>At one time I was a big fan of MYST computer games. I always enjoyed being lost in a beautiful puzzle which, if you discard the <em>beautiful</em> bit, is a pretty accurate description of my programmer day job.</p>
+<pre class="sourceCode j"><code class="sourceCode j">bonebridge<span class="kw">=:</span>3 <span class="kw">:</span> 0
+
+<span class="co">NB.*bonebridge  v--  lists  totem  symbol  permutations for  bone</span>
+<span class="co">NB. bridge.</span>
+<span class="co">NB.</span>
+<span class="co">NB. The  solution to  this MYST IV puzzle is similiar to the book</span>
+<span class="co">NB. shelf puzzle in Tomanha but requires far more  exploration of</span>
+<span class="co">NB. the age.</span>
+<span class="co">NB.</span>
+<span class="co">NB. You are confronted with  5  bones on the lock.  All the bones</span>
+<span class="co">NB. move independently. You can see the settings for 4 bones. One</span>
+<span class="co">NB. bone  has a  broken display.  The four  visible bones  have 8</span>
+<span class="co">NB. symbols on them in the  same order.  The  5th bone also has 8</span>
+<span class="co">NB. symbols and you can &quot;safely&quot; infer they are in the same order</span>
+<span class="co">NB. as the visible bones.</span>
+<span class="co">NB.</span>
+<span class="co">NB. Four  bone  symbols   match  symbols  found  on  totem  poles</span>
+<span class="co">NB. distributed around the  age. There is a  5th  totem pole  but</span>
+<span class="co">NB. fruit eating mangrees  obscure  the  totem symbol and  I have</span>
+<span class="co">NB. never  seen it.  The  totem  poles are  associated  with  age</span>
+<span class="co">NB. animals. In addition to the totem poles  there is  a chart in</span>
+<span class="co">NB. the  mangree  observation  hut  that  displays  a  triangular</span>
+<span class="co">NB. pattern  of paw  prints.  The  paw  prints  define an  animal</span>
+<span class="co">NB. ordering. The order  seems to be how  dangerous a  particular</span>
+<span class="co">NB. animal is;  big scary animals  are at the top and vegetarians</span>
+<span class="co">NB. are at the bottom.</span>
+<span class="co">NB.</span>
+<span class="co">NB. Putting the clues together you infer:</span>
+<span class="co">NB.</span>
+<span class="co">NB. a)  the  bridge  combination  is  some  permutation  of  five</span>
+<span class="co">NB. different symbols</span>
+<span class="co">NB.</span>
+<span class="co">NB. b) two possible symbol orders are given by the paw chart</span>
+<span class="co">NB.</span>
+<span class="co">NB. c) you know 5 symbols and the 4th is one of the remaining 4</span>
+<span class="co">NB.</span>
+<span class="co">NB. If this is  the  case  the number of  possible  lock settings</span>
+<span class="co">NB. shrinks from 32768 to the ones listed by this verb.</span>
+<span class="co">NB.</span>
+<span class="co">NB. monad:  bonebridge uuIgnore</span>
+<span class="co">NB.</span>
+<span class="co">NB.   bonebridge 0</span>
+
+<span class="co">NB. known in paw order</span>
+known<span class="kw">=.</span>    <span class="kw">s:</span> <span class="st">&#39; square triangle hourglass yingyang&#39;</span>
+unknown<span class="kw">=.</span>  <span class="kw">s:</span> <span class="st">&#39; clover cross xx yy&#39;</span>
+
+<span class="co">NB. all possible lock permutations</span>
+settings<span class="kw">=.</span> <span class="kw">~.</span> 5 <span class="kw">{.&quot;</span>1 tapl known<span class="kw">,</span>unknown
+<span class="kw">assert.</span> <span class="re">((</span><span class="kw">!</span>8<span class="re">)</span><span class="kw">%!</span>8<span class="kw">-</span>5<span class="re">)</span> <span class="kw">=</span> <span class="kw">#</span>settings
+
+<span class="co">NB. possible ordering - we don&#39;t know</span>
+<span class="co">NB. what the fifth symbol is but it</span>
+<span class="co">NB. occurs in the 3rd slot</span>
+order<span class="kw">=.</span> 8<span class="kw">#s:&lt;</span><span class="st">&#39;&#39;</span>
+order<span class="kw">=.</span> known <span class="re">(</span>0 1 6 7<span class="re">)</span><span class="kw">}</span> order
+order<span class="kw">=.</span> unknown <span class="re">(</span>2 3 4 5<span class="re">)</span><span class="kw">}</span> order
+
+<span class="co">NB. keep unknown only in 3rd slot</span>
+settings<span class="kw">=.</span> settings <span class="kw">#~</span> <span class="kw">-.</span> <span class="kw">+./&quot;</span>1 <span class="re">(</span>0 1 3 4<span class="kw">{&quot;</span>1 settings<span class="re">)</span> <span class="kw">e.</span> unknown
+settings<span class="kw">=.</span> settings <span class="kw">#~</span> <span class="re">(</span>2 <span class="kw">{&quot;</span>1 settings<span class="re">)</span> <span class="kw">e.</span> unknown
+
+<span class="co">NB. strict row sequence adverb</span>
+srsm<span class="kw">=.</span>  1 <span class="kw">:</span> <span class="st">&#39;*./&quot;1 u/&amp;&gt; 2 &lt;\&quot;1 y&#39;</span>
+
+<span class="co">NB. retain strictly increasing and strictly decreasing rows</span>
+grade<span class="kw">=.</span> order <span class="kw">i.</span> settings
+settings <span class="kw">#~</span> <span class="re">((</span><span class="kw">&lt;</span> srsm<span class="re">)</span><span class="kw">&quot;</span>1 grade<span class="re">)</span> <span class="kw">+.</span> <span class="re">(</span><span class="kw">&gt;</span> srsm<span class="re">)</span><span class="kw">&quot;</span>1 grade
+<span class="re">)</span></code></pre>
+<p>1 J has its own syntax highlighting tools but they are not part of a document generation system. pandoc's highlighters elegantly feed into many output formats making them far more useful.</p>
+</body>
+</html>
