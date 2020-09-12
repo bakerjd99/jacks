@@ -25,6 +25,7 @@ NB. 15may06 (BlogHashes) added
 NB. 17may13 (LATEXFIGURETEMPLATES) added
 NB. 17sep29 use J 8.06 sha hash functions - removes need for external dll
 NB. 20jul11 (BlogHashes) adjusted to track xhtml version
+NB. 20sep12 (mdfootnotes) added to prefix markdown footnotes with post number
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -409,6 +410,7 @@ if. #newposts=. (epubdir;MARKDOWNEXT) prunePtable ptableFrwpxml xml do.
         NB. save the original file - tweaking is necessary
         (utf8 tex) write epubdir,post,BADDOWNEXT
       else.
+        mdown=. post mdfootnotes mdown
         mdown write epubdir,post,MARKDOWNEXT
       end.
       outinext cleartemps texfile
@@ -840,6 +842,41 @@ lstlisting=. ('#~~~LSTLABEL~~~#scr',x) changestr LSTLISTINGHDR
 
 NB. leave original header as latex comment
 LF,'%',head,LF,lstlisting,LF,body,LSTLISTINGEND
+)
+
+
+mdfootnotes=:4 : 0
+
+NB.*mdfootnotes  v-- prefix  numbered  pandoc markdown  footnotes
+NB. with post number.
+NB.
+NB. When  building EPUB documents  from many  markdown texts it's
+NB. important that all footnote labels  are unique.  The standard
+NB. practice  of [^1],  [^2],  ... leads  to clashes.  This  verb
+NB. prefixes all numbered pandoc footnotes with the  post number.
+NB. The post number is a unique blog specific integer assigned by
+NB. WordPress.com.  A  superior unique key  like a secure hash is
+NB. overkill  here but may be necessary if  you are merging posts
+NB. across many blogs.
+NB.
+NB. dyad:  cl =. clPostId mdfootnotes clMd
+NB.
+NB.   md=. read 'c:/pd/blog/wp2epub/oscarsnowasmeaningle6975.markdown'
+NB.   'oscarsnowasmeaningle6975' mdfootnotes md
+
+NB. require 'jregex' !(*)=. rxall rxmatches rxmerge
+
+fp=. '\[\^[0-9]\]'  NB. pandoc footnotes
+
+if. #fn=. >fp rxall y do. 
+  NB. post number 
+  pn=. 'x' ,~ x #~ x e. '0123456789'  
+  NB. relabeled footnotes
+  nfn=. <"1 ' ' -."1~ ((0 1 {"1 fn) ,"1 pn) ,"1 > 2 }."1 fn 
+  nfn (fp rxmatches y) rxmerge y 
+else.
+  y NB. no footnotes
+end.
 )
 
 
