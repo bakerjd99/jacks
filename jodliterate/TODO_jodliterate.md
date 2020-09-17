@@ -4,7 +4,7 @@
 
 Pending and considered changes for `jodliterate`.
 
-`jodliterate` is a J/JOD class group that provides
+`jodliterate` is a [J/JOD](https://analyzethedatanotthedrivel.org/the-jod-page/) class group that provides
 [literate programming](http://literateprogramming.com/index.html) support
 for J code stored in JOD dictionaries.
 
@@ -17,5 +17,13 @@ by trolling over the version history of this file.
 
 1. `<_1rgjo3vsbbgv2ihpu3p858tf_>` Insert page number references in Interface Sections. Cross referencing in
    `jodliterate` documents should work both online and in paper form!
+
+2. `<_bw6ok5amtc4yn4bfv8mjr06tk_>` Hyperlinks in Interface section does not work for J words with underscore `_` characters.
+
+3. `<_1zzbs1b2rtph7yqozgpsj642l_>` Add date to page headers.
+
+4. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
+
+5. `<_4zpddhpvjawr9kvrkyaxuktiv_>` Add a section briefly describing how to run `jodliterate`.
 
 `[end-todo]`
