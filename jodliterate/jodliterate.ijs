@@ -2,6 +2,9 @@ NB.*jodliterate s-- generates literate source code documents directly from JOD g
 NB.
 NB. verbatim: see the following blog posts and github files
 NB.
+NB. Source code (this) script
+NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/jodliterate.ijs
+NB.
 NB. https://analyzethedatanotthedrivel.org/2012/10/01/semi-literate-jod/
 NB. https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/
 NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/UsingJodliterate.pdf
@@ -284,6 +287,9 @@ JODLiteratePreamble=: 0 : 0
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+
+% date on page footers
+\rfoot{\emph{\today}}
 
 \ifxetex
   \usepackage[setpagesize=false, % page size defined by xetex
@@ -759,7 +765,7 @@ if. badrc_ajod_ gdoc=. MACRO_ajod_ get group,JLOVIEWSUFFIX do.
   if. #gdoc=. ;{:,>1{gdoc do. 
     NB. insert interface md based on IFACEWORDSgroup
     if. +./JLINSERTIFACEMD E. gdoc do.
-      gdoc=. ('/',JLINSERTIFACEMD,'/',ifacemarkd group) changestr gdoc
+      gdoc=. group setifacesummary gdoc
     end.
     gdoc=. latexfrmarkd gdoc 
     ifstr=. ifacesection group
@@ -1156,6 +1162,16 @@ if. +./rmrk E. tail do.
 else.
   tex
 end.
+)
+
+
+setifacesummary=:4 : 0
+
+NB.*setifacesummary v-- replace markdown interface summary tag with text. 
+NB.
+NB. dyad:  cl =. clGname setifacesummary clMd
+
+(JLINSERTIFACEMD beforestr y),(ifacemarkd x),JLINSERTIFACEMD afterstr y
 )
 
 
