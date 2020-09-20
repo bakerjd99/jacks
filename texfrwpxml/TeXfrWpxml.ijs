@@ -864,7 +864,7 @@ NB.
 NB.   md=. read 'c:/pd/blog/wp2epub/oscarsnowasmeaningle6975.markdown'
 NB.   'oscarsnowasmeaningle6975' mdfootnotes md
 
-NB. require 'jregex' !(*)=. rxall rxmatches rxmerge
+NB. require 'regex' !(*)=. rxall rxmatches rxmerge
 
 fp=. '\[\^[0-9]\]'  NB. pandoc footnotes
 
