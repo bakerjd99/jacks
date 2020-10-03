@@ -1,24 +1,25 @@
-`jodliterate` TODO
+`TeXfrWpxml` TODO
 ==================
 
-Pending and considered changes for `jodliterate`.
+Pending and considered changes for `TeXfrWpxml`.
 
-`jodliterate` is a [J/JOD](https://analyzethedatanotthedrivel.org/the-jod-page/) class group that provides
-[literate programming](http://literateprogramming.com/index.html) support
-for J code stored in JOD dictionaries.
+`TeXfrWpxml` is a [J/JOD](https://analyzethedatanotthedrivel.org/the-jod-page/) class group that
+converts WordPress.com export XML to LaTeX and Markdown. See the following for more information:
 
-This document tracks pending and considered changes for `jodliterate`.
+* https://analyzethedatanotthedrivel.org/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/
+* https://github.com/bakerjd99/jacks/tree/master/texfrwpxml
+* https://github.com/bakerjd99/jacks/blob/master/texfrwpxml/wordpresstolatexwith2374.pdf
+
+This document tracks pending and considered changes for `TeXfrWpxml`.
 The base 36 case insensitive GUID key is stable over the lifetime of a task. It uniquely
 labels each task and makes it possible compile detailed change histories
 by trolling over the version history of this file.
 
 `[begin-todo]`
 
-1. `<_1rgjo3vsbbgv2ihpu3p858tf_>` Insert page number references in Interface Sections. Cross referencing in
-   `jodliterate` documents should work both online and in paper form!
+1. `<_33xb34nbtb2xqf46lit3e6oaq_>` Test graphics downloading. Graphics
+   downloading fails to fetch WordPress.com images see `WGETCMD`.
 
-2. `<_bw6ok5amtc4yn4bfv8mjr06tk_>` Hyperlinks in Interface section does not work for J words with underscore `_` characters.
-
-3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
+2. `<_e5puo4u676b0tn461z945jm7o_>` Consider swapping `curl` for `wget`.
 
 `[end-todo]`
