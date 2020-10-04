@@ -2,9 +2,6 @@ NB.*jodliterate s-- generates literate source code documents directly from JOD g
 NB.
 NB. verbatim: see the following blog posts and github files
 NB.
-NB. Source code (this) script
-NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/jodliterate.ijs
-NB.
 NB. https://analyzethedatanotthedrivel.org/2012/10/01/semi-literate-jod/
 NB. https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/
 NB. https://github.com/bakerjd99/jacks/blob/master/jodliterate/UsingJodliterate.pdf
@@ -288,7 +285,7 @@ JODLiteratePreamble=: 0 : 0
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-% date on page footers
+% date each page
 \rfoot{\emph{\today}}
 
 \ifxetex
@@ -384,6 +381,9 @@ IFACEWORDSPFX=:'IFACEWORDS'
 NB. interface words for (jodliterate) group
 IFACEWORDSjodliterate=:<;._1 ' THISPANDOC formifacetex grplit ifacesection ifc setjodliterate wordlit'
 
+NB. interface words \pageref \label prefix
+IFCPFX=:'ifc:'
+
 NB. jodliterate author - inserted in latex \author{}
 JLAUTHOR=:'John D. Baker'
 
@@ -422,6 +422,9 @@ ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodli
 
 NB. full pandoc path - use (pandoc) if on shell path
 THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
+
+NB. interface word _ character replacement
+UBARSUB=:'_:'
 
 NB. white space characters
 WHITESPACE=:10 13 9 32{a.
@@ -500,6 +503,19 @@ while. lim > cnt=.>:cnt do.         NB. process each change pair
     y=.(c $~ q *# r) (,p +/i. q)} y  NB. insert replacements
   end.
 end. y                              NB. altered string
+)
+
+
+charsub=:4 : 0
+
+NB.*charsub v-- single character pair replacements.
+NB.
+NB. dyad:  clPairs charsub cu
+NB.
+NB.   '-_$ ' charsub '$123 -456 -789'
+
+'f t'=. ((#x)$0 1)<@,&a./.x
+t {~ f i. y
 )
 
 NB. character table to newline delimited list
@@ -582,10 +598,10 @@ c=. ($y)$'NB.' E. ,y
 c=. +./\"1 c > ~:/\"1 y e. ''''     
 
 NB. ,, work around for j8.05 bug - remove when fixed                           
-y=. ,,y                                                     
+NB. y=. ,,y                                                     
                                                                  
 NB. blank out comments                                           
-y=. ' ' (I. ,c)} y                                     
+y=. ' ' (I. ,c)} ,y                                     
 y=. y $~ $c                                                    
                                                                  
 NB. remove blank lines - default                                 
@@ -621,15 +637,25 @@ ctok=. '\CommentTok{'
 ntok=. '\NormalTok{'
 href=. '\hyperlink{'
 
+NB. using [] brackets for page references
+pgrefhd=. '[\pageref{',IFCPFX
+pgreftl=. '}] '
+
 NB. fetch current short descriptions !(*)=. WORD_ajod_ EXPLAIN_ajod_
 'rc tab'=. (WORD_ajod_,EXPLAIN_ajod_) get y
 words=. 0 {"1 tab
 desc=.  1 {"1 tab
 
+NB. _ chars create problems with page and hyperref 
+hlwords=. UBARSUB&charsub&.> words
+
+NB. page references
+pgref=. (<pgrefhd) ,&.> hlwords ,&.> <pgreftl
+
 NB. set hyperlinks on words - colors on comments
-words=. (<href) ,&.> words ,&.> (<'}{',ntok) ,&.> (<"1 (>words),"1 ' ') ,&.> <'}}'
+words=. (<href) ,&.> hlwords ,&.> (<'}{',ntok) ,&.> (<"1 (>words),"1 ' ') ,&.> <'}}'
 desc=. (<ctok) ,&.> (alltrim&.> desc) ,&.> '}'
-tex=. ;words ,&.> desc ,&.> LF
+tex=. ;words ,&.> pgref ,&.> desc ,&.> LF
 head,tex,tail
 )
 
@@ -1181,9 +1207,20 @@ NB.*setifacetargs v-- set hyperlink targets in group latex.
 NB.
 NB. dyad:  cl =. blclIwords setifacetargs clTex
 
-targs=. (<'\NormalTok{') ,&.> x ,&.> <'}\AlertTok{=:}\index'
-rstrs=. (<'\hypertarget{') ,&.> x ,&.> (<'}{\NormalTok{') ,&.> x ,&.> <'}}\AlertTok{=:}\index'
-chgs=.  ;('#' ,&.> targs) ,&.> '#' ,&.> rstrs
+NB. replace troublesome _ in names
+hlwords=. UBARSUB&charsub&.> x
+
+NB. any _ chars are expanded to \_ at this stage
+wnames=. '#_#\_'&changestr &.> x
+targs=. (<'\NormalTok{') ,&.> wnames ,&.> <'}\AlertTok{=:}\index'
+
+labels=. (<'}}\AlertTok{=:}\phantomsection\label{',IFCPFX),&.> hlwords ,&.> <'}\index'
+rstrs=. (<'\hypertarget{') ,&.> hlwords ,&.> (<'}{\NormalTok{') ,&.> wnames ,&.> labels
+
+NB. delimter character cannot be in text
+assert. -.'#' e. ;targs,rstrs
+
+chgs=. ;'#' ,&.> targs ,. rstrs
 chgs changestr y
 )
 

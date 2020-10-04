@@ -2,7 +2,9 @@ NB.*TeXfrWpxml s-- LaTeX source from WordPress export XML.
 NB.
 NB. verbatim:
 NB.
-NB. http://bakerjd99.wordpress.com/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/
+NB. https://analyzethedatanotthedrivel.org/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/
+NB. https://github.com/bakerjd99/jacks/tree/master/texfrwpxml
+NB. https://github.com/bakerjd99/jacks/blob/master/texfrwpxml/wordpresstolatexwith2374.pdf
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------

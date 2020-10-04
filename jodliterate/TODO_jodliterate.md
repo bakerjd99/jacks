@@ -22,16 +22,15 @@ by trolling over the version history of this file.
 
 3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
 
-4. Line breaking character lists are not colored. Consider improving.
+4. `<_4ctj1kp0o2mh4lhrpx231esg9_>` Line breaking character lists are not colored. Consider improving.
 
-5. 0 : 0 literal text is not colored , e.g.
-
-```J
-   0 : 0
-   this is literal text but
-   it is not literally colored
-   consider improving
-   )
-```
+5. `<_aecwwj3odj2v8xxoktw6vlj25_>` 0 : 0 literal text is not colored , e.g.
+    ```J
+    0 : 0
+    this is literal text but
+    it is not literally colored
+    consider improving
+    )
+    ```
 
 `[end-todo]`
