@@ -24,13 +24,11 @@ by trolling over the version history of this file.
 
 3. `<_8lku2tasr4shbdhbeyki9ylib_>` Extend `setjodliterate` to write helper files like `00cleantex.bat` to document directory.
 
-4. `<_647bj5anemc05b1d6ysy13x0j_>` Add SHA-256 group script hash to overview to cross reference PDF and IJS.
+4. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
 
-5. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
+5. `<_4ctj1kp0o2mh4lhrpx231esg9_>` Line breaking character lists are not colored. Consider improving.
 
-6. `<_4ctj1kp0o2mh4lhrpx231esg9_>` Line breaking character lists are not colored. Consider improving.
-
-7. `<_aecwwj3odj2v8xxoktw6vlj25_>` 0 : 0 literal text is not colored , e.g.
+6. `<_aecwwj3odj2v8xxoktw6vlj25_>` 0 : 0 literal text is not colored , e.g.
     ```J
     0 : 0
     this is literal text but

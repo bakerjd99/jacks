@@ -31,6 +31,8 @@ NB. 13dec29 added to (jacks) GitHub repository
 NB. 20may07 adjusted word formation (wfl) for J 9.01
 NB. 20may08 updated for current (pandoc) versions
 NB. 20jun07 added (formifacetex) to interface words
+NB. 20nov01 added graphics and inclusions subdirectory to preamble
+NB. 20nov01 \begin{document} moved to root file for OverLeaf.com
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -89,8 +91,12 @@ NB.<<~~~~ { .latex }
 
 NB. group title and author - standard \maketitle
 JLTITLETEX=: 0 : 0
-% latex author and title
-\author{~#~author~#~}
+% latex author, title, optional url and hash
+\author{~#~author~#~ %\\
+%\\
+%\small \url{~#~ijsurl~#~} \\
+%\footnotesize \texttt{SHA-256: ~#~sha256~#~} \normalsize
+}
 \title{\texttt{~#~group~#~} Group}
 )
 
@@ -119,6 +125,8 @@ JLGRPLITTEX=: 0 : 0
 % named versions of this file for each JOD group it processes.
 
 \input{JODLiteratePreamble.tex}
+
+\begin{document}
 
 \input{~#~group~#~title.tex}
 \maketitle
@@ -189,6 +197,10 @@ JODLiteratePreamble=: 0 : 0
 
 % provides \textsubscript
 \usepackage{fixltx2e} 
+
+% graphics inclusions
+\usepackage{graphicx,subfigure}
+\graphicspath{{./inclusions/}}
 
 % use microtype if available
 \IfFileExists{microtype.sty}{\usepackage{microtype}}{}
@@ -309,7 +321,7 @@ JODLiteratePreamble=: 0 : 0
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \setcounter{secnumdepth}{0}
 
-% reset latex index to use four columns - default is two
+% reset latex index to use three columns - default is two
 % which results in lots of wasted page space in landscape
 % NOTE: adjust if index names run together 
 % from: http://www.latex-community.org/viewtopic.php?f=4&t=1735
@@ -323,7 +335,8 @@ JODLiteratePreamble=: 0 : 0
    \fi
    \setlength{\columnseprule}{0pt}
    \setlength{\columnsep}{35pt}
-   \begin{multicols}{4}[\section*{\indexname}]
+   % change 3 to desired number of index columns
+   \begin{multicols}{3}[\section*{\indexname}]
    \markboth{\MakeUppercase\indexname}%
             {\MakeUppercase\indexname}%
    \thispagestyle{plain}
@@ -335,8 +348,6 @@ JODLiteratePreamble=: 0 : 0
 \makeatother
 
 \makeindex
-
-\begin{document}
 
 )
 NB.>>~~~~
@@ -813,8 +824,9 @@ if. chroot=. x -: 1 do.
 end.
 
 NB. author title .tex file
+tittex=. JLTITLETEX seturlsha256 y
 agstrs=. '/~#~author~#~/',(alltrim JLAUTHOR),'/~#~group~#~/',alltrim y
-(toJ agstrs changestr JLTITLETEX) writeas jltitle=. wdir,group,JLTITLEFILE
+(toJ agstrs changestr tittex) writeas jltitle=. wdir,group,JLTITLEFILE
 
 NB. group overview .tex file 
 ohd=. ohd,LF,gdoc
@@ -1257,6 +1269,32 @@ end.
 
 catchd.
   0;'!error: (setjodliterate) failure - last J error ->';13!:12 ''
+end.
+)
+
+
+seturlsha256=:4 : 0
+
+NB.*seturlsha256 v-- set url and sha-256 hash in (x).
+NB.
+NB. If a word has  an associated '_dateurlhash'  set the url  and
+NB. hash in (x).
+NB.
+NB. dyad:  clTex =. clTex seturlsha256 clname
+NB.
+NB.   JLTITLETEX seturlsha256 'jodliterate'
+
+NB. require 'jod' !(*)=. get
+
+NB. load any hash date url noun into the JOD scratch object
+if. badrc_ajod_ (;SO__JODobj) get hdu=. (alltrim y),'_hashdateurl' do. x
+else.
+  NB. set the hash and url
+  'hash url'=. 0 2{".hdu=. hdu,'__SO__JODobj'
+  pav=. 254{a. NB. use an unlikely delimiter
+  tex=. (pav,'~#~ijsurl~#~',pav,url,pav,'~#~sha256~#~',pav,hash) changestr x [ (4!:55) <hdu
+  NB. uncomment %\ - leave %  - geared for JLTITLETEX
+  tex=. '#%\#\' changestr tex
 end.
 )
 
