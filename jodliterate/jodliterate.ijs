@@ -33,13 +33,15 @@ NB. 20may08 updated for current (pandoc) versions
 NB. 20jun07 added (formifacetex) to interface words
 NB. 20nov01 added graphics and inclusions subdirectory to preamble
 NB. 20nov01 \begin{document} moved to root file for OverLeaf.com
+NB. 20nov04 (setjodliterate) cleaner script, author(s), email added
 
 coclass  'ajodliterate'
 coinsert 'ijod'
 
 NB.*dependents
 NB. declared global here to avoid confusing LaTeX names with J names
-NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JLWORDLITTEX JODLiteratePreamble
+NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JLWORDLITTEX 
+NB. (*)=: JODLiteratePreamble JLCLEANTEX 
 
 NB. Roger Hui's word formation state machine - similiar to ;: but
 NB. parses text with LFs, retains whitespace and handles open quotes.
@@ -85,6 +87,32 @@ wfl=: (0;sfl;mfl) & ;:
 
 JLDIRECTORY=: ''
 NB.*enddependents
+
+
+NB.<<~~~~ { . bat }
+
+NB. shell script that erases temporrary LaTeX files
+NB. NIMP: generalize for linux/macos 
+JLCLEANTEX=: 0 : 0
+rem remove latex/tex temp files
+del *.aux
+del *.bbl
+del *.dvi
+del *.ps
+del *.idx
+del *.out
+del *.log
+del *.toc
+del *.lof
+del *.lol
+del *.lot
+del *.ind
+del *.ilg
+del *.blg
+del *.gz
+del *.gz(busy)
+)
+NB.>>~~~~
 
 
 NB.<<~~~~ { .latex }
@@ -400,6 +428,9 @@ JLAUTHOR=:'John D. Baker'
 
 NB. suffix of jodliterate code file
 JLCODEFILE=:'code.tex'
+
+NB. default LaTeX \author{ ... } text
+JLDEFAULTAUTHORS=:''
 
 NB. markdown text string that marks where generated group interface inserted
 JLINSERTIFACEMD=:'`{~{insert_interface_md_}~}`'
@@ -795,7 +826,7 @@ NB. default overview
 ohd=. ('/~#~group~#~/',alltrim y) changestr JLOVIEWTEX [ gdoc=. ''
 iwords=. ifacewords group
 
-NB. overview documents are either markdown/latex group headers or stored LaTeX macros
+NB. overviews are either markdown/latex group long documents or stored LaTeX macros
 if. badrc_ajod_ gdoc=. MACRO_ajod_ get group,JLOVIEWSUFFIX do.
   NB. no stored LaTeX generate LaTeX from group document markdown/latex
   if. badrc_ajod_ gdoc=. (GROUP_ajod_,DOCUMENT_ajod_) get group do. gdoc return. end.
@@ -964,7 +995,7 @@ sprb=. wpfx,'\NormalTok{'
 )
 
 NB. standarizes J path delimiter to unix/linux forward slash
-jpathsep=:'/'&(('\' I.@:= ])})
+jpathsep=:'/'&(('\' I.@:= ])} )
 
 
 jtokenize=:3 : 0
@@ -1248,7 +1279,16 @@ NB.   setjodliterate '/home/john/temp'   NB. linux
 NB.
 NB.   NB. use the current JOD put dictionary document directory
 NB.   setjodliterate ''
+NB.
+NB. dyad: (paRc ; clDir) =. clAuthor setjodliterate clWorkingDir | zl
+NB.
+NB.   NB. set LaTeX \author{...} text
+NB.   'Bob Squarepants (\texttt{pinapple@undersea.org})' setjodliterate ''
+NB.   'Batman (\texttt{dn@jl.com}), Dr. Who (\texttt{who@univ.edu})' setjodliterate ''
+NB.   'First Author \\ Lowly Minion' setjodliterate ''
 
+JLDEFAULTAUTHORS setjodliterate y
+:
 try.
 
 if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
@@ -1257,13 +1297,19 @@ if. 0 = #DPATH__ST__JODobj   do. 0;'!error: no open jod dictionaries' return. en
 NB. if the path is empty use the current put dictionary document directory !(*)=. dob
 if. 0 e. $y do. y=. DOC__dob [ dob=: {:{.DPATH__ST__JODobj end.
 
+JLAUTHOR_ajodliterate_=: x
+
 NB. profile (*)=. IFWIN
 JLDIRECTORY_ajodliterate_=: jpathsep`winpathsep@.(IFWIN) tslash2 y
 
-NB. write main latex preamble once per directory
-preamble=. 'JODLiteratePreamble.tex'
+NB. write main latex preamble and cleaner iff missing
+preamble=. 'JODLiteratePreamble.tex'  
+cleaner=.  '00cleantex.bat'           NB. NIMP: linux/mac scripts
 if. -.fexist JLDIRECTORY,preamble do.
   (toJ JODLiteratePreamble) writeas JLDIRECTORY,preamble
+end.
+if. -.fexist JLDIRECTORY,cleaner do.
+  (toJ JLCLEANTEX) writeas JLDIRECTORY,cleaner
 end.
 1;JLDIRECTORY
 
@@ -1302,7 +1348,7 @@ NB. appends trailing line feed character if necessary
 tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
 NB. converts character strings to J delimiter LF
-toJ=:((10{a.) I.@(e.&(13{a.))@]} ])@:(#~ -.@((13 10{a.)&E.@,))
+toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
 
 NB. appends trailing / iff last character is not \ or /
 tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
@@ -1311,7 +1357,7 @@ NB. character list to UTF-8
 utf8=:8&u:
 
 NB. standardizes path delimiter to windows back \ slash
-winpathsep=:'\'&(('/' I.@:= ])})
+winpathsep=:'\'&(('/' I.@:= ])} )
 
 
 wordlatex=:3 : 0

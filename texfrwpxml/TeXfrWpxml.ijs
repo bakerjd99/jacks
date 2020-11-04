@@ -812,7 +812,7 @@ end.
 )
 
 NB. standarizes J path delimiter to unix/linux forward slash
-jpathsep=:'/'&(('\' I.@:= ])})
+jpathsep=:'/'&(('\' I.@:= ])} )
 
 NB. extracts the drive from qualified file names
 justdrv=:[: }: ] #~ [: +./\. ':'&=
@@ -1356,7 +1356,7 @@ NB. converts character strings to host delimiter
 toHOST=:toCRLF
 
 NB. converts character strings to J delimiter LF
-toJ=:((10{a.) I.@(e.&(13{a.))@]} ])@:(#~ -.@((13 10{a.)&E.@,))
+toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
 
 
 tolower=:3 : 0
@@ -1390,7 +1390,7 @@ NB. character list to UTF-8
 utf8=:8&u:
 
 NB. to windows \ character in paths
-winpathsep=:'\'&(('/' I.@:= ])})
+winpathsep=:'\'&(('/' I.@:= ])} )
 
 NB. writes a list of bytes to file
 write=:1!:2 ]`<@.(32&>@(3!:0))
