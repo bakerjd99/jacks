@@ -995,7 +995,7 @@ sprb=. wpfx,'\NormalTok{'
 )
 
 NB. standarizes J path delimiter to unix/linux forward slash
-jpathsep=:'/'&(('\' I.@:= ])} )
+jpathsep=:'/'&(('\' I.@:= ])})
 
 
 jtokenize=:3 : 0
@@ -1348,7 +1348,7 @@ NB. appends trailing line feed character if necessary
 tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
 NB. converts character strings to J delimiter LF
-toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
+toJ=:((10{a.) I.@(e.&(13{a.))@]} ])@:(#~ -.@((13 10{a.)&E.@,))
 
 NB. appends trailing / iff last character is not \ or /
 tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
@@ -1357,7 +1357,7 @@ NB. character list to UTF-8
 utf8=:8&u:
 
 NB. standardizes path delimiter to windows back \ slash
-winpathsep=:'\'&(('/' I.@:= ])} )
+winpathsep=:'\'&(('/' I.@:= ])})
 
 
 wordlatex=:3 : 0
@@ -1483,10 +1483,13 @@ cocurrent 'base'
 coinsert  'ajodliterate'
 
 (3 : 0) ''
-if. +./@('pandoc'&E.) panver=. ;0{ <;._2 tlf (shell THISPANDOC,' --version') -. CR do.
-  smoutput 'NOTE: adjust pandoc path if version (',panver,') is not >= 2.9.1.1'
-else.
-  smoutput 'ERROR: pandoc not set - adjust THISPANDOC'
-  smoutput 'THISPANDOC_ajodliterate_=: ''pandoc'' NB. when pandoc on path'
+try.
+NB. use any pandoc set in the JOD profile for this machine
+if. wex_ajod_ <'PREFERREDPANDOC_ijod_' do. THISPANDOC_ajodliterate_=: PREFERREDPANDOC_ijod_ end.
+if. +./@('pandoc'&E.) panver=. ;0{ <;._2 tlf (shell THISPANDOC_ajodliterate_,' --version') -. CR do.
+  smoutput 'NOTE: adjust pandoc path if current version (',panver,') is not >= 2.9.1.1'
+end.
+catch.
+  smoutput 'ERROR: pandoc not set - adjust THISPANDOC_ajodliterate_'
 end.
 )

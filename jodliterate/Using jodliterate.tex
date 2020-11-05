@@ -361,7 +361,7 @@
     
     \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
     
-    
+     \author{\includegraphics{inclusions/jodliteratelionlittle.png} \\John D. Baker \\ \url{https://analyzethedatanotthedrivel.org/}}
 
 \begin{document}
     
@@ -370,7 +370,9 @@
     
 
     
-    \hypertarget{using-jodliterate}{%
+    %\includegraphics{https://bakerjd99.files.wordpress.com/2020/11/jodliteratelionlittle-1.png}
+
+\hypertarget{using-jodliterate}{%
 \subsection{Using jodliterate}\label{using-jodliterate}}
 
 The
@@ -385,6 +387,7 @@ Programming is Donald Knuth's
 \href{https://www.goodreads.com/book/show/112245.Literate_Programming}{masterful
 tome} of the same name.
 
+%\includegraphics{https://bakerjd99.files.wordpress.com/2020/05/literate_programming_book_cover_smaller.png}
 \includegraphics{inclusions/literate_programming_book_cover_smaller.png}
 
 Knuth applied Literate Programming to his \(\TeX\) systems and produced
@@ -415,7 +418,9 @@ PDF document}.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-j901/j64avx/windows/release-e/commercial/www.jsoftware.com/2020-01-29T11:15:50
+
+j902/j64avx2/windows/beta-k/commercial/www.jsoftware.com/2020-11-03T10:24:54/cla
+ng-9-0-0/SLEEF=1
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -433,6 +438,13 @@ j901/j64avx/windows/release-e/commercial/www.jsoftware.com/2020-01-29T11:15:50
 \PY{c+c1}{NB. Converting Jupyter notebooks to LaTeX is }
 \PY{c+c1}{NB. simplified by ASCII box characters.}
 \PY{n+nv}{portchars} \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZsq{}}
+
+\PY{c+c1}{NB. Verb to convert character tables to newline delimited }
+\PY{c+c1}{NB. lists. Useful for displaying J tables in Jupyter}
+\PY{n+nv}{ctl\PYZus{}ijod\PYZus{}}\PY{o}{=:}\PY{o}{\PYZcb{}}\PY{o}{.}\PY{o}{@}\PY{p}{(}\PY{o}{,}\PY{o}{@}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZam{}}\PY{p}{(}\PY{o}{,}\PY{o}{\PYZdq{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{@}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{o}{.}\PY{o}{@}\PY{p}{(}\PY{o}{*}\PY{o}{.}\PY{o}{/}\PY{o}{\PYZbs{}}\PY{o}{.}\PY{o}{\PYZdq{}}\PY{l+m+mi}{1}\PY{o}{@}\PY{p}{(}\PY{o}{=}\PY{o}{\PYZam{}}\PY{l+s}{\PYZsq{}}\PY{l+s}{ }\PY{l+s}{\PYZsq{}}\PY{o}{@}\PY{o}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZsh{}} \PY{o}{,}\PY{o}{@}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{10}\PY{o}{\PYZob{}}\PY{n+nv}{a}\PY{o}{.}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{o}{,}\PY{o}{\PYZdq{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{@}\PY{o}{]}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{NB. Appends line feed character if necessary.}
+\PY{n+nv}{tlf\PYZus{}ijod\PYZus{}}\PY{o}{=:}\PY{o}{]} \PY{o}{,} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{10}\PY{o}{\PYZob{}}\PY{n+nv}{a}\PY{o}{.}\PY{p}{)}\PY{o}{\PYZdq{}}\PY{l+m}{\PYZus{}} \PY{o}{=} \PY{o}{\PYZob{}}\PY{o}{:}\PY{p}{)} \PY{o}{\PYZcb{}}\PY{o}{.} \PY{p}{(}\PY{l+m+mi}{10}\PY{o}{\PYZob{}}\PY{n+nv}{a}\PY{o}{.}\PY{p}{)}\PY{o}{\PYZdq{}}\PY{l+m}{\PYZus{}}
 
 \PY{c+c1}{NB. Verb to show large boxed displays in}
 \PY{c+c1}{NB. the notebook without ugly wrapping.}
@@ -587,11 +599,13 @@ pacman}\label{installing-addons-with-jqt-gui-pacman}}
     I mostly use the Windows JQT version of pacman to install and maintain J
 addons. You can find pacman on the tools menu.
 
-\includegraphics{inclusions/jqt_pacman_menu-1.png}
+%\includegraphics{https://bakerjd99.files.wordpress.com/2020/05/jqt_pacman_menu-1.png}
+\includegraphics{inclusions/jqt_pacman_menu.png}
 
 pacman shows all available addons and provides tools for installing,
 updating, and removing them.
 
+%\includegraphics{https://bakerjd99.files.wordpress.com/2020/05/jqt_pacman.png}
 \includegraphics{inclusions/jqt_pacman.png}
 
 The GUI version is easy to use. Press the \texttt{Select\ All} button
@@ -704,22 +718,41 @@ high-lighting.
 \PY{c+c1}{NB. a recent version of pandoc. There may be different}
 \PY{c+c1}{NB. versions in many locations on various systems.}
 
-\PY{n+nv}{ppath}\PY{o}{=:} \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZdq{}}\PY{l+s}{C}\PY{l+s}{:}\PY{l+s}{\PYZbs{}}\PY{l+s}{P}\PY{l+s}{r}\PY{l+s}{o}\PY{l+s}{g}\PY{l+s}{r}\PY{l+s}{a}\PY{l+s}{m}\PY{l+s}{ }\PY{l+s}{F}\PY{l+s}{i}\PY{l+s}{l}\PY{l+s}{e}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{P}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZbs{}}\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZsq{}}
-\PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{=:} \PY{n+nv}{ppath}
-\PY{n+nv}{shell} \PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{ }\PY{l+s}{\PYZhy{}}\PY{l+s}{\PYZhy{}}\PY{l+s}{v}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{i}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{\PYZsq{}}
+\PY{c+c1}{NB. some common paths to pandoc }
+\PY{c+c1}{NB. PREFERREDPANDOC\PYZus{}ijod\PYZus{}=: \PYZsq{}\PYZdq{}C:\PYZbs{}Program Files\PYZbs{}Pandoc\PYZbs{}pandoc\PYZdq{}\PYZsq{}}
+\PY{n+nv}{PREFERREDPANDOC\PYZus{}ijod\PYZus{}}\PY{o}{=:} \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZdq{}}\PY{l+s}{C}\PY{l+s}{:}\PY{l+s}{\PYZbs{}}\PY{l+s}{U}\PY{l+s}{s}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{h}\PY{l+s}{n}\PY{l+s}{.}\PY{l+s}{b}\PY{l+s}{a}\PY{l+s}{k}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{\PYZbs{}}\PY{l+s}{A}\PY{l+s}{p}\PY{l+s}{p}\PY{l+s}{D}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{a}\PY{l+s}{\PYZbs{}}\PY{l+s}{L}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{a}\PY{l+s}{l}\PY{l+s}{\PYZbs{}}\PY{l+s}{P}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZbs{}}\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZsq{}}
+
+\PY{c+c1}{NB. use when correct version is on the shell path}
+\PY{c+c1}{NB. PREFERREDPANDOC\PYZus{}ijod\PYZus{} \PYZsq{}pandoc\PYZsq{} }
+
+\PY{c+c1}{NB. the pandoc jodliterate uses}
+\PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{=:} \PY{n+nv}{PREFERREDPANDOC\PYZus{}ijod\PYZus{}}
+
+\PY{n+nv}{chkpandoc}\PY{o}{=:} \PY{n+nf}{3 : 0}
+\PY{n+nl}{if.} \PY{o}{+}\PY{o}{.}\PY{o}{/}\PY{o}{@}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZsq{}}\PY{o}{\PYZam{}}\PY{n+nv}{E}\PY{o}{.}\PY{p}{)} \PY{n+nv}{panver}\PY{o}{=.} \PY{o}{;}\PY{l+m+mi}{0}\PY{o}{\PYZob{}} \PY{o}{\PYZlt{}}\PY{o}{;}\PY{o}{.}\PY{l+m+mi}{\PYZus{}2} \PY{n+nv}{tlf} \PY{p}{(}\PY{n+nv}{shell} \PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{ }\PY{l+s}{\PYZhy{}}\PY{l+s}{\PYZhy{}}\PY{l+s}{v}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{i}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{.} \PY{n+nv}{CR} \PY{n+nl}{do.}
+  \PY{l+s}{\PYZsq{}}\PY{l+s}{N}\PY{l+s}{O}\PY{l+s}{T}\PY{l+s}{E}\PY{l+s}{:}\PY{l+s}{ }\PY{l+s}{a}\PY{l+s}{d}\PY{l+s}{j}\PY{l+s}{u}\PY{l+s}{s}\PY{l+s}{t}\PY{l+s}{ }\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{ }\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{h}\PY{l+s}{ }\PY{l+s}{i}\PY{l+s}{f}\PY{l+s}{ }\PY{l+s}{v}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{i}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{ }\PY{l+s}{(}\PY{l+s}{\PYZsq{}}\PY{o}{,}\PY{n+nv}{panver}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{)}\PY{l+s}{ }\PY{l+s}{i}\PY{l+s}{s}\PY{l+s}{ }\PY{l+s}{n}\PY{l+s}{o}\PY{l+s}{t}\PY{l+s}{ }\PY{l+s}{\PYZgt{}}\PY{l+s}{=}\PY{l+s}{ }\PY{l+s}{2}\PY{l+s}{.}\PY{l+s}{9}\PY{l+s}{.}\PY{l+s}{1}\PY{l+s}{.}\PY{l+s}{1}\PY{l+s}{\PYZsq{}}
+\PY{n+nl}{else.}
+  \PY{l+s}{\PYZsq{}}\PY{l+s}{E}\PY{l+s}{R}\PY{l+s}{R}\PY{l+s}{O}\PY{l+s}{R}\PY{l+s}{:}\PY{l+s}{ }\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{ }\PY{l+s}{n}\PY{l+s}{o}\PY{l+s}{t}\PY{l+s}{ }\PY{l+s}{s}\PY{l+s}{e}\PY{l+s}{t}\PY{l+s}{ }\PY{l+s}{\PYZhy{}}\PY{l+s}{ }\PY{l+s}{a}\PY{l+s}{d}\PY{l+s}{j}\PY{l+s}{u}\PY{l+s}{s}\PY{l+s}{t}\PY{l+s}{ }\PY{l+s}{T}\PY{l+s}{H}\PY{l+s}{I}\PY{l+s}{S}\PY{l+s}{P}\PY{l+s}{A}\PY{l+s}{N}\PY{l+s}{D}\PY{l+s}{O}\PY{l+s}{C}\PY{l+s}{\PYZus{}}\PY{l+s}{a}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{d}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{\PYZus{}}\PY{l+s}{\PYZsq{}}
+  \PY{l+s}{\PYZsq{}}\PY{l+s}{T}\PY{l+s}{H}\PY{l+s}{I}\PY{l+s}{S}\PY{l+s}{P}\PY{l+s}{A}\PY{l+s}{N}\PY{l+s}{D}\PY{l+s}{O}\PY{l+s}{C}\PY{l+s}{\PYZus{}}\PY{l+s}{a}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{d}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{\PYZus{}}\PY{l+s}{=}\PY{l+s}{:}\PY{l+s}{ }\PY{l+s}{\PYZsq{}\PYZsq{}}\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{\PYZsq{}\PYZsq{}}\PY{l+s}{ }\PY{l+s}{N}\PY{l+s}{B}\PY{l+s}{.}\PY{l+s}{ }\PY{l+s}{w}\PY{l+s}{h}\PY{l+s}{e}\PY{l+s}{n}\PY{l+s}{ }\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{o}\PY{l+s}{c}\PY{l+s}{ }\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{ }\PY{l+s}{p}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{h}\PY{l+s}{\PYZsq{}}
+\PY{n+nl}{end.}
+\PY{n+nl}{)}
+
+\PY{n+nv}{smoutput} \PY{n+nv}{shell} \PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{ }\PY{l+s}{\PYZhy{}}\PY{l+s}{\PYZhy{}}\PY{l+s}{v}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{i}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{\PYZsq{}}
+\PY{n+nv}{chkpandoc} \PY{l+m+mi}{0}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 pandoc 2.9.1.1
 Compiled with pandoc-types 1.20, texmath 0.12, skylighting 0.8.3
-Default user data directory: C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AppData\textbackslash{}Roaming\textbackslash{}pandoc
+Default user data directory: C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}AppData\textbackslash{}Roaming\textbackslash{}pandoc
 Copyright (C) 2006-2019 John MacFarlane
 Web:  https://pandoc.org
 This is free software; see the source for copying conditions.
 There is no warranty, not even for merchantability or fitness
 for a particular purpose.
 
+NOTE: adjust pandoc path if version (pandoc 2.9.1.1) is not >= 2.9.1.1
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -728,17 +761,40 @@ for a particular purpose.
 \PY{c+c1}{NB. make sure your version of pandoc }
 \PY{c+c1}{NB. supports J syntax\PYZhy{}highlighting}
 
-\PY{c+c1}{NB. appends line feed character if necessary}
-\PY{n+nv}{tlf}\PY{o}{=:}\PY{o}{]} \PY{o}{,} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{10}\PY{o}{\PYZob{}}\PY{n+nv}{a}\PY{o}{.}\PY{p}{)}\PY{o}{\PYZdq{}}\PY{l+m}{\PYZus{}} \PY{o}{=} \PY{o}{\PYZob{}}\PY{o}{:}\PY{p}{)} \PY{o}{\PYZcb{}}\PY{o}{.} \PY{p}{(}\PY{l+m+mi}{10}\PY{o}{\PYZob{}}\PY{n+nv}{a}\PY{o}{.}\PY{p}{)}\PY{o}{\PYZdq{}}\PY{l+m}{\PYZus{}}
-
-\PY{c+c1}{NB. J is on the supported languages list}
+\PY{c+c1}{NB. check that J is on the supported languages list}
 \PY{n+nv}{pcmd}\PY{o}{=:} \PY{n+nv}{THISPANDOC\PYZus{}ajodliterate\PYZus{}}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{ }\PY{l+s}{\PYZhy{}}\PY{l+s}{\PYZhy{}}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{s}\PY{l+s}{t}\PY{l+s}{\PYZhy{}}\PY{l+s}{h}\PY{l+s}{i}\PY{l+s}{g}\PY{l+s}{h}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{g}\PY{l+s}{h}\PY{l+s}{t}\PY{l+s}{\PYZhy{}}\PY{l+s}{l}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{g}\PY{l+s}{u}\PY{l+s}{a}\PY{l+s}{g}\PY{l+s}{e}\PY{l+s}{s}\PY{l+s}{\PYZsq{}}
-\PY{p}{(}\PY{o}{\PYZlt{}}\PY{o}{;}\PY{o}{.}\PY{l+m+mi}{\PYZus{}2} \PY{n+nv}{tlf} \PY{p}{(}\PY{n+nv}{shell} \PY{n+nv}{pcmd}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{.} \PY{n+nv}{CR}\PY{p}{)} \PY{n+nv}{e}\PY{o}{.}\PY{o}{\PYZti{}} \PY{o}{\PYZlt{}}\PY{o}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{j}\PY{l+s}{\PYZsq{}}
+\PY{n+nv}{ctl} \PY{l+m+mi}{80} \PY{n+nv}{list} \PY{n+nv}{shell} \PY{n+nv}{pcmd}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-1
+abc             asn1            asp             ats             awk
+actionscript    ada             agda            alertindent     apache
+bash            bibtex          boo             c               cs
+cpp             cmake           css             changelog       clojure
+coffee          coldfusion      commonlisp      curry           d
+dtd             default         diff            djangotemplate  dockerfile
+doxygen         doxygenlua      eiffel          elixir          elm
+email           erlang          fsharp          fortran         gcc
+glsl            gnuassembler    m4              go              html
+hamlet          haskell         haxe            ini             isocpp
+idris           fasm            nasm            j               json
+jsp             java            javascript      javascriptreact javadoc
+julia           kotlin          llvm            latex           lex
+lilypond        literatecurry   literatehaskell lua             mips
+makefile        markdown        mathematica     matlab          maxima
+mediawiki       metafont        modelines       modula2         modula3
+monobasic       mustache        ocaml           objectivec      objectivecpp
+octave          opencl          php             povray          pascal
+perl            pike            postscript      powershell      prolog
+protobuf        pure            purebasic       python          qml
+r               relaxng         relaxngcompact  roff            ruby
+rhtml           rust            sgml            sml             sql
+sqlmysql        sqlpostgresql   scala           scheme          stata
+tcl             tcsh            texinfo         mandoc          typescript
+vhdl            verilog         xml             xul             yaml
+yacc            zsh             dot             noweb           rest
+sci             sed             xorg            xslt
     \end{Verbatim}
 
     \hypertarget{step-5-install-a-current-version-of-latex}{%
@@ -772,6 +828,21 @@ The Comprehensive \(\TeX\) Archive Network
 reprocess your files a few times to insure all the required packages are
 downloaded and installed.
 
+    \hypertarget{step-5.5-use-an-online-version-of-latex}{%
+\paragraph{Step 5.5: Use an online version of
+LaTeX}\label{step-5.5-use-an-online-version-of-latex}}
+
+\textbf{If you don't want to bother with installing and maintaining a
+\(\LaTeX\) system you can use online systems like
+\href{https://www.overleaf.com}{OverLeaf.com}.} If you opt for
+OverLeaf.com you will have to copy the files \texttt{jodliterate}
+generates to and from OverLeaf.com. OverLeaf.com integrates with
+\href{https://github.com/}{GitHub} so ferrying copies is not an onerous
+chore.
+
+\href{https://www.overleaf.com/read/tckqdmcjfkqw}{Here's some
+\texttt{jodliterate} files on Overleaf.com}
+
     \hypertarget{step-6-make-the-jodliterate-j-script}{%
 \paragraph{Step: 6 Make the jodliterate J
 script}\label{step-6-make-the-jodliterate-j-script}}
@@ -804,9 +875,9 @@ Once the JOD development dictionaries are built (Step 3) making
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-+-+--------------------+------------------------------------+               {\ldots}
-|1|load script saved ->|c:/jod/joddev/script/jodliterate.ijs|               {\ldots}
-+-+--------------------+------------------------------------+               {\ldots}
++-+--------------------+--------------------------------------------------- {\ldots}
+|1|load script saved ->|c:/users/john.baker/onedrive - jackson companies/jo {\ldots}
++-+--------------------+--------------------------------------------------- {\ldots}
     \end{Verbatim}
 
     \texttt{mls} creates a standard J load script. Once generated this
@@ -825,13 +896,15 @@ test this by restarting J without JOD and loading \texttt{jodliterate}.
 NB. (jodliterate) interface word(s):
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
+NB. formifacetex    NB. formats hyperlinked and highlighted interface words
 NB. grplit          NB. make latex for group (y)
 NB. ifacesection    NB. interface section summary string
 NB. ifc             NB. format interface comment text
 NB. setjodliterate  NB. prepare LaTeX processing - sets out directory writes
 preamble
+NB. wordlit         NB. make latex from word list (y)
 
-NOTE: adjust pandoc path if version (pandoc 2.9.1.1) is not >= 2.9.1.1
+NOTE: adjust pandoc path if current version (pandoc 2.9.1.1) is not >= 2.9.1.1
     \end{Verbatim}
 
     \hypertarget{step-7-run-jodliterate-on-a-jod-group-with-pandoc-compatible-document-fragments}{%
@@ -929,19 +1002,23 @@ program  cont
 \PY{c+c1}{NB. run jodliterate on (sunmoon)}
 \PY{n+nv}{require} \PY{l+s}{\PYZsq{}}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{d}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{\PYZsq{}}
 
-\PY{c+c1}{NB. set the output directory \PYZhy{} when }
-\PY{c+c1}{NB. running in Jupyter use a subdirectory}
-\PY{c+c1}{NB. of your notebook directory.}
+\PY{c+c1}{NB. set the output directory \PYZhy{} when running in Jupyter }
+\PY{c+c1}{NB. use a subdirectory of your notebook directory other }
+\PY{c+c1}{NB. directories generate access errors \PYZhy{} you really don\PYZsq{}t}
+\PY{c+c1}{NB. want web browsers roaming your drives unsupervised}
 
-\PY{n+nv}{ltxpath}\PY{o}{=:} \PY{l+s}{\PYZsq{}}\PY{l+s}{C}\PY{l+s}{:}\PY{l+s}{\PYZbs{}}\PY{l+s}{U}\PY{l+s}{s}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{h}\PY{l+s}{n}\PY{l+s}{\PYZbs{}}\PY{l+s}{A}\PY{l+s}{n}\PY{l+s}{a}\PY{l+s}{c}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{a}\PY{l+s}{P}\PY{l+s}{r}\PY{l+s}{o}\PY{l+s}{j}\PY{l+s}{e}\PY{l+s}{c}\PY{l+s}{t}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{s}\PY{l+s}{t}\PY{l+s}{f}\PY{l+s}{o}\PY{l+s}{l}\PY{l+s}{d}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{\PYZbs{}}\PY{l+s}{g}\PY{l+s}{r}\PY{l+s}{p}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{\PYZbs{}}\PY{l+s}{\PYZsq{}} 
-\PY{n+nv}{setjodliterate} \PY{n+nv}{ltxpath}
+\PY{c+c1}{NB. ltxpath=: \PYZsq{}C:\PYZbs{}Users\PYZbs{}john\PYZbs{}AnacondaProjects\PYZbs{}testfolder\PYZbs{}grplit\PYZbs{}\PYZsq{} }
+\PY{n+nv}{ltxpath}\PY{o}{=:} \PY{l+s}{\PYZsq{}}\PY{l+s}{C}\PY{l+s}{:}\PY{l+s}{\PYZbs{}}\PY{l+s}{U}\PY{l+s}{s}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{h}\PY{l+s}{n}\PY{l+s}{.}\PY{l+s}{b}\PY{l+s}{a}\PY{l+s}{k}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{\PYZbs{}}\PY{l+s}{b}\PY{l+s}{i}\PY{l+s}{x}\PY{l+s}{m}\PY{l+s}{l}\PY{l+s}{\PYZbs{}}\PY{l+s}{b}\PY{l+s}{l}\PY{l+s}{o}\PY{l+s}{g}\PY{l+s}{\PYZbs{}}\PY{l+s}{g}\PY{l+s}{r}\PY{l+s}{p}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{\PYZbs{}}\PY{l+s}{\PYZsq{}}
+
+\PY{c+c1}{NB. (x) argument sets LaTeX \PYZbs{}author\PYZob{}\PYZcb{} text}
+\PY{l+s}{\PYZsq{}}\PY{l+s}{B}\PY{l+s}{a}\PY{l+s}{t}\PY{l+s}{m}\PY{l+s}{a}\PY{l+s}{n}\PY{l+s}{ }\PY{l+s}{(}\PY{l+s}{\PYZbs{}}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{x}\PY{l+s}{t}\PY{l+s}{t}\PY{l+s}{t}\PY{l+s}{\PYZob{}}\PY{l+s}{d}\PY{l+s}{n}\PY{l+s}{@}\PY{l+s}{j}\PY{l+s}{l}\PY{l+s}{.}\PY{l+s}{c}\PY{l+s}{o}\PY{l+s}{m}\PY{l+s}{\PYZcb{}}\PY{l+s}{)}\PY{l+s}{\PYZsq{}} \PY{n+nv}{setjodliterate} \PY{n+nv}{ltxpath}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-+-+-------------------------------------------------+
-|1|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}|
-+-+-------------------------------------------------+
++-+--------------------------------------+
+|1|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}|
++-+--------------------------------------+
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -956,19 +1033,19 @@ program  cont
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-+-----------------------------------------------------------------+
-|1                                                                |
-+-----------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}sunmoon.tex     |
-+-----------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}sunmoontitle.tex|
-+-----------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}sunmoonoview.tex|
-+-----------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}sunmooncode.tex |
-+-----------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}sunmoon.bat     |
-+-----------------------------------------------------------------+
++------------------------------------------------------+
+|1                                                     |
++------------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}sunmoon.tex     |
++------------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}sunmoontitle.tex|
++------------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}sunmoonoview.tex|
++------------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}sunmooncode.tex |
++------------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}sunmoon.bat     |
++------------------------------------------------------+
     \end{Verbatim}
 
     \hypertarget{step-8-compile-the-files-of-the-previous-step-to-produce-a-pdf}{%
@@ -983,14 +1060,25 @@ PDF}\label{step-8-compile-the-files-of-the-previous-step-to-produce-a-pdf}}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-gular.otf><c:/program files/miktex 2.9/fonts/ope
-ntype/public/lm/lmmono12-regular.otf>
-Output written on sunmoon.pdf (22 pages, 107711 bytes).
+/?/c:/users/john.baker/appdata/local/progr
+ams/miktex 2.9/fonts/opentype/public/lm/lmmono12-regular.otf>
+Output written on sunmoon.pdf (22 pages, 114284 bytes).
 Transcript written on sunmoon.log.
 
-(base) C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit>endlocal
+C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit>endlocal
 
     \end{Verbatim}
+
+    Instead of compiling \(\LaTeX\) with shell commands issued from a J
+kernel running under Jupyter it's easier to navigate to the output
+directory and manually run the generated scripts. This is particularily
+the case if you have to edit the files. From the good old fashioned DOS
+prompt do something like:
+
+\begin{verbatim}
+C:\>cd C:\Users\john.baker\bixml\blog\grplit
+C:\Users\john.baker\bixml\blog\grplit>sunmoon.bat
+\end{verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{23}{\boxspacing}
@@ -1008,8 +1096,8 @@ Effective use of \texttt{jodliterate} requires a melange of Markdown,
 \(\LaTeX\), JOD, and J skills combined with a healthy attitude about
 \emph{experimentation}. You have to try things and see if they work!
 
-However, before you can \emph{try} \texttt{jodliterate} document
-fragments you have \texttt{put} them in JOD dictionaries.
+However, before you can \emph{try} \texttt{jodliterate} you have to
+\texttt{put} document fragments in JOD dictionaries.
 
 \texttt{jodliterate} uses two types of document fragments:
 
@@ -1017,9 +1105,11 @@ fragments you have \texttt{put} them in JOD dictionaries.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  markdown overview group documents.
+  Markdown overview group documents:
+  \texttt{2\ 9\ put\ \textquotesingle{}groupname\textquotesingle{}}
 \item
-  \(\LaTeX\) overview macros.
+  \(\LaTeX\) overview macros:
+  \texttt{4\ put\ \textquotesingle{}groupname\textquotesingle{},\textquotesingle{}\_oview\_tex\textquotesingle{}}
 \end{enumerate}
 
 Markdown group documents are transformed by pandoc into \(\LaTeX\) but
@@ -1044,7 +1134,7 @@ Dictionary}\label{create-a-jodliterate-demo-dictionary}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+---------------------+------------------------------------------+------- {\ldots}
-|1|dictionary created ->|aaa327403631806685638405507439206657280913|c:/user {\ldots}
+|1|dictionary created ->|aaa138032830560151674235281395581473261722|c:/user {\ldots}
 +-+---------------------+------------------------------------------+------- {\ldots}
     \end{Verbatim}
 
@@ -1069,7 +1159,7 @@ Dictionary}\label{create-a-jodliterate-demo-dictionary}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+--------------+------------------------------------------+
-|1|opened (rw) ->|aaa327403631806685638405507439206657280913|
+|1|opened (rw) ->|aaa138032830560151674235281395581473261722|
 +-+--------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1101,7 +1191,7 @@ Dictionary}\label{create-a-jodliterate-demo-dictionary}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+-------------------------------+------------------------------------------+
-|1|5 word explanation(s) put in ->|aaa327403631806685638405507439206657280913|
+|1|5 word explanation(s) put in ->|aaa138032830560151674235281395581473261722|
 +-+-------------------------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1116,7 +1206,7 @@ Dictionary}\label{create-a-jodliterate-demo-dictionary}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+--------------------------+------------------------------------------+
-|1|group <litmacro> put in ->|aaa327403631806685638405507439206657280913|
+|1|group <litmacro> put in ->|aaa138032830560151674235281395581473261722|
 +-+--------------------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1130,7 +1220,7 @@ Dictionary}\label{create-a-jodliterate-demo-dictionary}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+-------------------+------------------------------------------+
-|1|1 word(s) put in ->|aaa327403631806685638405507439206657280913|
+|1|1 word(s) put in ->|aaa138032830560151674235281395581473261722|
 +-+-------------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1164,7 +1254,7 @@ Markdown}\label{use-group-document-overview-markdown}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+-----------------------------+------------------------------------------+
-|1|1 group document(s) put in ->|aaa327403631806685638405507439206657280913|
+|1|1 group document(s) put in ->|aaa138032830560151674235281395581473261722|
 +-+-----------------------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1172,16 +1262,15 @@ Markdown}\label{use-group-document-overview-markdown}}
 \prompt{In}{incolor}{31}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{c+c1}{NB. run jodliterate on group}
-\PY{n+nv}{ltxpath}\PY{o}{=:} \PY{l+s}{\PYZsq{}}\PY{l+s}{C}\PY{l+s}{:}\PY{l+s}{\PYZbs{}}\PY{l+s}{U}\PY{l+s}{s}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{j}\PY{l+s}{o}\PY{l+s}{h}\PY{l+s}{n}\PY{l+s}{\PYZbs{}}\PY{l+s}{A}\PY{l+s}{n}\PY{l+s}{a}\PY{l+s}{c}\PY{l+s}{o}\PY{l+s}{n}\PY{l+s}{d}\PY{l+s}{a}\PY{l+s}{P}\PY{l+s}{r}\PY{l+s}{o}\PY{l+s}{j}\PY{l+s}{e}\PY{l+s}{c}\PY{l+s}{t}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{t}\PY{l+s}{e}\PY{l+s}{s}\PY{l+s}{t}\PY{l+s}{f}\PY{l+s}{o}\PY{l+s}{l}\PY{l+s}{d}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{\PYZbs{}}\PY{l+s}{g}\PY{l+s}{r}\PY{l+s}{p}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{\PYZbs{}}\PY{l+s}{\PYZsq{}} 
 \PY{n+nv}{setjodliterate} \PY{n+nv}{ltxpath}
 \PY{o}{\PYZob{}}\PY{o}{:} \PY{n+nv}{grplit} \PY{l+s}{\PYZsq{}}\PY{l+s}{l}\PY{l+s}{i}\PY{l+s}{t}\PY{l+s}{h}\PY{l+s}{e}\PY{l+s}{a}\PY{l+s}{d}\PY{l+s}{e}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-+--------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}litheader.bat|
-+--------------------------------------------------------------+
++---------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}litheader.bat|
++---------------------------------------------------+
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -1193,12 +1282,12 @@ Markdown}\label{use-group-document-overview-markdown}}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-lar.otf><c:/program files/miktex 2.9/fonts/o
-pentype/public/lm/lmmono12-regular.otf>
-Output written on litheader.pdf (4 pages, 47726 bytes).
+/c:/users/john.baker/appdata/local/programs/miktex 2.9/fonts/opentype
+/public/lm/lmmono12-regular.otf>
+Output written on litheader.pdf (4 pages, 50907 bytes).
 Transcript written on litheader.log.
 
-(base) C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit>endlocal
+C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit>endlocal
 
     \end{Verbatim}
 
@@ -1252,7 +1341,7 @@ Transcript written on litheader.log.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 +-+--------------------+------------------------------------------+
-|1|1 macro(s) put in ->|aaa327403631806685638405507439206657280913|
+|1|1 macro(s) put in ->|aaa138032830560151674235281395581473261722|
 +-+--------------------+------------------------------------------+
     \end{Verbatim}
 
@@ -1265,9 +1354,9 @@ Transcript written on litheader.log.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-+-------------------------------------------------------------+
-|C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit\textbackslash{}litmacro.bat|
-+-------------------------------------------------------------+
++--------------------------------------------------+
+|C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit\textbackslash{}litmacro.bat|
++--------------------------------------------------+
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -1279,12 +1368,13 @@ Transcript written on litheader.log.
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-e1/public/lm/lmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lms
-y8.pfb>
-Output written on litmacro.pdf (4 pages, 138976 bytes).
+lm/lmsy6.p
+fb><C:/Users/john.baker/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm
+/lmsy8.pfb>
+Output written on litmacro.pdf (4 pages, 141689 bytes).
 Transcript written on litmacro.log.
 
-(base) C:\textbackslash{}Users\textbackslash{}john\textbackslash{}AnacondaProjects\textbackslash{}testfolder\textbackslash{}grplit>endlocal
+C:\textbackslash{}Users\textbackslash{}john.baker\textbackslash{}bixml\textbackslash{}blog\textbackslash{}grplit>endlocal
 
     \end{Verbatim}
 
