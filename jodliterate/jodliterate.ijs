@@ -450,6 +450,12 @@ LATEXTMP=:'jltemp.tex'
 NB. line feed character
 LF=:10{a.
 
+NB. regex for start of long LaTeX encoded J (0 : 0) strings
+LONGCHRBEGPAT=:'\\DecValTok\{0\}[ ]*\\RegionMarkerTok\{:[ ]*0[ \)]*\}'
+
+NB. regex for end of long LaTeX encoded J (0 : 0) strings
+LONGCHRENDPAT=:'^\\RegionMarkerTok{[ ]*\)[ ]*}$'
+
 NB. marks start of J code for pandoc -- requires pandoc with j syntax coloring
 MARKDOWNHEAD=:'~~~~ { .j }'
 
@@ -458,6 +464,9 @@ MARKDOWNTAIL=:'~~~~'
 
 NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
+
+NB. regex matching pandoc LaTeX token commands
+PANDOCTOKPAT=:'\\[[:alpha:]]*Tok{'
 
 NB. root words for (jodliterate) group
 ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate wordlit'
@@ -609,6 +618,48 @@ if. #y do.
   (dp i. sp);<ut <;.1 y         NB. nest indexes cut list
 else.
   (i.0);<<y                     NB. empty arg result
+end.
+)
+
+
+cutpatidx=:4 : 0
+
+NB.*cutpatidx v-- cut character list into begin/end patterns and non-pattern.
+NB.
+NB. dyad:  (ilIdx ;< blcl) =.  (clBeginpat;clEndpat) cutpatidx cl
+NB.
+NB.   (;:'<>') cutpatidx 'no matches'
+NB.   ('begin[ ]*';'end') cutpatidx '  begin     end begin end begin     end'
+NB.   ('\{\([ yad012]*';'\)\}') cutpatidx 'boo hoo {( yada yada yada   )}   {( 1   0   22222 )}'
+NB.
+NB.   NB. starts without ends
+NB.   (;:'@;') cutpatidx '@@@;@@@@@;@;'
+
+NB. require 'regex' !(*)=. rxmatches rxmatch
+if. #y do.
+  's e'=. ,&.> x  NB. start/end patterns
+
+  NB. quit if no start patterns
+  if. 0=#h=. s rxmatches y do. (i.0);<<y return. end.
+
+  pxh=. {."1@,"2   NB. start positions from (rmatches)
+  sp=. pxh h       NB. start positions
+  
+  NB. first end pattern within started 
+  ep=. pxh (1 sp} 0 #~ #y) e&rxmatch;.1 y
+
+  NB. remove starts without end patterns 
+  NB. HARDCODE: _1 is the (rxmatch) for not found
+  if. 0=#cp=. (ep ~: _1) # sp ,. ep do. (i.0);<<y return. end.
+
+  cp=. +/\&.|: cp  NB. convert ends to (y) indexes
+
+  NB. cut list into start/end pattern and non-pattern
+  sp=.  (0={.,cp) }. 0,,cp
+  idx=. (sp i. {."1 cp) -. #sp
+  idx;<(1 sp} 0 #~ #y) <;.1 y
+else.
+  (i.0);<<y NB. empty arg result
 end.
 )
 
@@ -870,6 +921,7 @@ jlbuildtex=. ('/~#~group~#~/',alltrim y) changestr JLBUILDTEX
 NB. group source code .tex - return file names
 gltx=. grouplatex group
 gltx=. iwords setifacetargs gltx
+gltx=. ppcodelatex gltx
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
 ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
@@ -1038,6 +1090,17 @@ end.
 )
 
 
+long0d0latex=:3 : 0
+
+NB.*long0d0latex v-- adjust long 0 : 0 encoded LaTeX.
+NB.
+NB. monad:  clNewTeX =. long0d0latex clTex
+
+NB. exclude first line from token replacements
+(LF beforestr y),LF,('\StringTok{';'\AlertTok{') replacetoks LF afterstr y
+)
+
+
 markdfrghead=:3 : 0
 
 NB.*markdfrghead v-- markdown text from group header.
@@ -1202,8 +1265,81 @@ ct=. ;(LF ,&.>~ markgassign&.> pos{ct) pos} ct
 (-LF={:y) }. ct
 )
 
+
+patpartstr=:4 : 0
+
+NB.*patpartstr v-- split list into sublists of pattern and non-pattern.
+NB.
+NB. dyad:  (ilIdx ;< blcl) =. clPattern patpartstr clStr
+NB.
+NB.   'hoo' patpartstr 'hoohoohoo'  
+NB.   'ab.c' patpartstr   'abhc yada yada abNcabuc boo freaking hoo'
+NB.   'nada' patpartstr 'nothing to match'
+NB.
+NB.   NB. result pattern indexes and split list
+NB.   'idx substrs'=. 'yo[a-z]*'  patpartstr 'yo yohomeboy no no yoman'
+NB.   idx{substrs  NB. patterns
+
+NB. require 'regex' !(*)=. rxmatches
+if. #pat=. ,"2 x rxmatches y do.
+  mask=. (#y)#0
+  starts=. 0 {"1 pat
+  ends=. starts + <: 1 {"1 pat
+  m1=. 1 (0,starts)} mask 
+  m2=. _1 (|.!. 0) 1 ends} mask 
+  m2=. m1 +. m2 
+  mask=. 1 starts} mask
+  idx=. (m2 {.;.1 mask) # i. +/m2       
+  idx;< m2 <;.1 y
+else.
+  (i.0);<<y
+end.
+)
+
+
+ppcodelatex=:3 : 0
+
+NB.*ppcodelatex v-- post process generated source code latex.
+NB.
+NB. This verb applies final adjustments to generated LaTeX source
+NB. code In particular it alters the syntax coloring of long J (0
+NB. : 0)  character nouns and long  wrapped  quoted  'long  ....'
+NB. strings.
+NB.
+NB. monad:  clNewTeX =. ppcodelatex clTex
+
+NB. y return.
+
+NB. adjust 0 : 0 text
+'idx strs'=. (LONGCHRBEGPAT;LONGCHRENDPAT) cutpatidx y
+if. #idx do.
+  lg0strs=. long0d0latex&.> idx{strs
+  ;lg0strs idx} strs
+else.
+  y
+end.
+)
+
 NB. reads a file as a list of bytes
 read=:1!:1&(]`<@.(32&>@(3!:0)))
+
+
+replacetoks=:4 : 0
+
+NB.*replacetoks v-- set all  but (;1{x)  pandoc tokens to  (;0{x)
+NB. tokens.
+NB.
+NB. dyad:  clNewTex =. (clStringTok ; clAlertTok) replacetoks clTex
+NB.
+NB.   ('\StringTok{';'\AlertTok{') replacetoks 'this is \atestTok{ bitch \NormalTok{ \99999Tok{'
+NB.   ('\StringTok{';'\AlertTok{') replacetoks 'no matches hombre'
+NB.   ('\StringTok{';'\AlertTok{') replacetoks ''
+
+'idx strs'=. PANDOCTOKPAT patpartstr y
+
+NB. all non (1{x) tokens to (0{x) tokens
+if. 0=#idx do. y else. ;(0{x) (idx #~ (1{x) ~: idx{strs)} strs end.
+)
 
 NB. trim right (trailing) blanks
 rtrim=:] #~ [: -. [: *./\. ' '"_ = ]
@@ -1417,7 +1553,7 @@ jlbuildtex=. ('/~#~group~#~/',texname) changestr JLBUILDTEX
 (toJ jlbuildtex) writeas jlbuildbat=. wdir,texname,'.bat'
 
 NB. source code .tex - return file names
-NB. gltx=. iwords setifacetargs gltx
+wltx=. ppcodelatex wltx
 (toJ wltx) writeas jlcode=. wdir,texname,JLCODEFILE
 ok_ajod_ (-.chroot) }. jlroot;jlcode;jlbuildbat
 
