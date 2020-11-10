@@ -1,6 +1,6 @@
 
-![](inclusions/jodliteratelionlittle.png)`jodliterate` TODO
-==========================================================
+![jodliteratelion](inclusions/jodliteratelionlittle.png)`jodliterate` TODO
+==========================================================================
 
 Pending and considered changes for `jodliterate`.
 
@@ -20,17 +20,10 @@ by trolling over the version history of this file.
    inflection scheme and will ripple through all J code parsing tools including
    `jodliterate`.
 
-2. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
+2. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
+   don't use underbar characters in group names.
 
-3. `<_4ctj1kp0o2mh4lhrpx231esg9_>` Line breaking character lists are not colored. Consider improving.
+3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
 
-4. `<_aecwwj3odj2v8xxoktw6vlj25_>` 0 : 0 literal text is not colored , e.g.
-    ```J
-    0 : 0
-    this is literal text but
-    it is not literally colored
-    consider improving
-    )
-    ```
 
 `[end-todo]`

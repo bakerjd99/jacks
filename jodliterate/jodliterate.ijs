@@ -642,11 +642,10 @@ if. #y do.
   NB. quit if no start patterns
   if. 0=#h=. s rxmatches y do. (i.0);<<y return. end.
 
-  pxh=. {."1@,"2   NB. start positions from (rmatches)
-  sp=. pxh h       NB. start positions
+  sp=. srxm h  NB. start positions
   
   NB. first end pattern within started 
-  ep=. pxh (1 sp} 0 #~ #y) e&rxmatch;.1 y
+  ep=. srxm (1 sp} 0 #~ #y) e&rxmatch;.1 y
 
   NB. remove starts without end patterns 
   NB. HARDCODE: _1 is the (rxmatch) for not found
@@ -1067,6 +1066,9 @@ ct=. wfl y,LF
 (ct -:&> <,LF) <;.2 ct
 )
 
+NB. 0's all but last 1 in runs of 1's - fastest lastones's verb
+lastones=:> 1&(|.!.0)
+
 
 latexfrmarkd=:3 : 0
 
@@ -1308,16 +1310,38 @@ NB. strings.
 NB.
 NB. monad:  clNewTeX =. ppcodelatex clTex
 
-NB. y return.
-
 NB. adjust 0 : 0 text
 'idx strs'=. (LONGCHRBEGPAT;LONGCHRENDPAT) cutpatidx y
 if. #idx do.
   lg0strs=. long0d0latex&.> idx{strs
-  ;lg0strs idx} strs
-else.
-  y
+  y=. ;lg0strs idx} strs
 end.
+
+NB. adjust any long wrapped 'quoted stuf .......'
+if. (atok=. '\AlertTok{',WRAPLEAD,'}') +./@E. y do.
+  
+  rlns=. <;.2 tlf y            NB. all code lines
+  alns=. +./@(atok&E.)&> rlns  NB. alert lines
+
+  NB. wrapped alert lines form contigous 1 runs
+  NB. include the line before each run - what was wrapped
+  alns=. (1 |.!.0 alns) +. alns
+  
+  NB. all indexes in 1 runs
+  ix=. <:&.> 0 -.&.>~ (firstones alns) <;.1 alns * >:i.#alns
+
+  NB. turn off alert 1 runs that are not LaTeX quoted text
+  ex=. ;(+./@('\textquotesingle{}}'&E.)&.> (I. lastones alns){rlns) *&.> ix
+  sx=. ;(+./@('\textquotesingle{}'&E.)&.> (I. firstones alns){rlns) *&.> ix
+  if. #ix=. (ex <. sx) -. 0 do. 
+
+    NB. flip tokens in remaining lines
+    y=. ;(wrapQtlatex&.> ix{rlns) ix} rlns
+  end.
+  
+end.
+
+y  NB. adjusted latex
 )
 
 NB. reads a file as a list of bytes
@@ -1480,6 +1504,9 @@ else.
 end.
 )
 
+NB. start indexes from (rxmatches): srxm 's' rxmatches 'start me up silly'
+srxm=:{."1@,"2
+
 NB. appends trailing line feed character if necessary
 tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
@@ -1559,6 +1586,31 @@ ok_ajod_ (-.chroot) }. jlroot;jlcode;jlbuildbat
 
 catchd.
   0;'!error: (wordlit) failure - last J error ->';13!:12 ''
+end.
+)
+
+
+wrapQtlatex=:3 : 0
+
+NB.*wrapQtlatex v-- adjust wrapped quoted string LaTeX.
+NB.
+NB. monad:  clNewTeX =. wrapQtlatex clTex
+
+alx=. '\AlertTok{=:}'
+pfx=. '\textquotesingle{}'
+if. alx +./@E. y do.
+
+  NB. last token in string before quote after assignment
+  NB. hack to handle forms like: text=. <;._1 ' you parsing me'
+  if. #ltp=. }.srxm PANDOCTOKPAT rxmatches pfx beforestr y do.
+    hd=. ltp {. y [ ltp=. _1{ltp
+    hd,('\StringTok{';'\AlertTok{') replacetoks ltp}.y
+  else.
+    (alx beforestr y),alx,('\StringTok{';'\AlertTok{') replacetoks alx afterstr y
+  end.
+
+else.
+  ('\StringTok{';'\AlertTok{') replacetoks y
 end.
 )
 
