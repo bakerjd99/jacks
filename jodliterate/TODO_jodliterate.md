@@ -25,5 +25,6 @@ by trolling over the version history of this file.
 
 3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
 
+4. `<_9jjorvuf9kbnly6fdhdqqf2na_>` Wrapped comment `NB.` lines are being set to string token color.
 
 `[end-todo]`
