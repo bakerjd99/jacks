@@ -86,6 +86,12 @@ NB. word formation for lines
 wfl=: (0;sfl;mfl) & ;:
 
 JLDIRECTORY=: ''
+
+NB. wrapped line prefix
+WRAPLEAD=:'>..>'
+
+NB. pandoc transformed wrapped line lead token
+ALERTTOKWRAP=: '\AlertTok{',WRAPLEAD,'}'
 NB.*enddependents
 
 
@@ -381,6 +387,9 @@ JODLiteratePreamble=: 0 : 0
 NB.>>~~~~
 NB.*end-header
 
+NB. pandoc LaTeX alert token prefix
+ALERTTOKPFX=:'\AlertTok{'
+
 NB. string marking start of LaTeX indexed word - see FAKETOKENS
 BEGININDEX=:'\KeywordTok{=::=::}'
 
@@ -392,6 +401,9 @@ BEGINJODPOSTP=:'\begin{JODPostProcessor}'
 
 NB. marks the start of J script text that is not J
 BEGINNOTJ=:'NB.<<~~~~'
+
+NB. pandoc LaTeX comment token prefix
+COMMENTTOKPFX=:'\CommentTok{'
 
 NB. carriage return character
 CR=:13{a.
@@ -471,6 +483,12 @@ PANDOCTOKPAT=:'\\[[:alpha:]]*Tok{'
 NB. root words for (jodliterate) group
 ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate wordlit'
 
+NB. pandoc LaTeX string token prefix
+STRINGTTOKPFX=:'\StringTok{'
+
+NB. pandoc transformed LaTeX single quote
+TEXTQUOTESINGLE=:'\textquotesingle{}'
+
 NB. full pandoc path - use (pandoc) if on shell path
 THISPANDOC=:'"C:\Program Files\Pandoc\pandoc"'
 
@@ -479,9 +497,6 @@ UBARSUB=:'_:'
 
 NB. white space characters
 WHITESPACE=:10 13 9 32{a.
-
-NB. wrapped line prefix
-WRAPLEAD=:'>..>'
 
 NB. maximum number of code listing characters - adjust for given LaTeX pagesize
 WRAPLIMIT=:110
@@ -844,7 +859,7 @@ NB. require 'jod' !(*)=. badrc_ajod_ grp jderr_ajod_
 if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
 ltx=. x indexwraplatex (gheadlatex ; gbodylatex ; gpostlatex) y
-'\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
+ppcodelatex '\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
 )
 
 
@@ -920,7 +935,6 @@ jlbuildtex=. ('/~#~group~#~/',alltrim y) changestr JLBUILDTEX
 NB. group source code .tex - return file names
 gltx=. grouplatex group
 gltx=. iwords setifacetargs gltx
-gltx=. ppcodelatex gltx
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
 ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
@@ -1099,7 +1113,7 @@ NB.
 NB. monad:  clNewTeX =. long0d0latex clTex
 
 NB. exclude first line from token replacements
-(LF beforestr y),LF,('\StringTok{';'\AlertTok{') replacetoks LF afterstr y
+(LF beforestr y),LF,(STRINGTTOKPFX;ALERTTOKPFX) replacetoks LF afterstr y
 )
 
 
@@ -1305,8 +1319,8 @@ NB.*ppcodelatex v-- post process generated source code latex.
 NB.
 NB. This verb applies final adjustments to generated LaTeX source
 NB. code In particular it alters the syntax coloring of long J (0
-NB. : 0)  character nouns and long  wrapped  quoted  'long  ....'
-NB. strings.
+NB. : 0)  character nouns, long  wrapped  quoted  'long  ....'
+NB. strings and wrapped comment lines.
 NB.
 NB. monad:  clNewTeX =. ppcodelatex clTex
 
@@ -1318,10 +1332,10 @@ if. #idx do.
 end.
 
 NB. adjust any long wrapped 'quoted stuf .......'
-if. (atok=. '\AlertTok{',WRAPLEAD,'}') +./@E. y do.
+if. ALERTTOKWRAP +./@E. y do.
   
-  rlns=. <;.2 tlf y            NB. all code lines
-  alns=. +./@(atok&E.)&> rlns  NB. alert lines
+  rlns=. <;.2 tlf y  NB. all code lines
+  alns=. +./@(ALERTTOKWRAP&E.)&> rlns  NB. alert lines
 
   NB. wrapped alert lines form contigous 1 runs
   NB. include the line before each run - what was wrapped
@@ -1330,9 +1344,16 @@ if. (atok=. '\AlertTok{',WRAPLEAD,'}') +./@E. y do.
   NB. all indexes in 1 runs
   ix=. <:&.> 0 -.&.>~ (firstones alns) <;.1 alns * >:i.#alns
 
+  NB. wrapped comments
+  if. +./bm=. {.@((COMMENTTOKPFX,'N','B.')&E.)&> ({.&> ix){rlns do.
+    alns=. 0 (;cx)} alns [ cx=. bm # ix
+    rlns=. ((COMMENTTOKPFX;ALERTTOKPFX)&replacetoks&.> (;cx){rlns) (;cx)} rlns
+    if. 0=#ix=. ix -. cx do. ;rlns return. end.
+  end.
+
   NB. turn off alert 1 runs that are not LaTeX quoted text
-  ex=. ;(+./@('\textquotesingle{}}'&E.)&.> (I. lastones alns){rlns) *&.> ix
-  sx=. ;(+./@('\textquotesingle{}'&E.)&.> (I. firstones alns){rlns) *&.> ix
+  ex=. ;(+./@((TEXTQUOTESINGLE,'}')&E.)&.> (I. lastones alns){rlns) *&.> ix
+  sx=. ;(+./@(TEXTQUOTESINGLE&E.)&.> (I. firstones alns){rlns) *&.> ix
   if. #ix=. (ex <. sx) -. 0 do. 
 
     NB. flip tokens in remaining lines
@@ -1455,7 +1476,7 @@ if. 3~:(4!:0) <'badrc_ajod_' do. 0;'!error: jod is not loaded' return. end.
 if. 0 = #DPATH__ST__JODobj   do. 0;'!error: no open jod dictionaries' return. end.
 
 NB. if the path is empty use the current put dictionary document directory !(*)=. dob
-if. 0 e. $y do. y=. DOC__dob [ dob=: {:{.DPATH__ST__JODobj end.
+if. 0 e. $y do. y=. DOC__dob [ dob=. {:{.DPATH__ST__JODobj end.
 
 JLAUTHOR_ajodliterate_=: x
 
@@ -1596,21 +1617,24 @@ NB.*wrapQtlatex v-- adjust wrapped quoted string LaTeX.
 NB.
 NB. monad:  clNewTeX =. wrapQtlatex clTex
 
-alx=. '\AlertTok{=:}'
-pfx=. '\textquotesingle{}'
-if. alx +./@E. y do.
+NB. require 'regex' !(*)=. rxmatches
+
+NB. assignment latex 
+alx=. '\AlertTok{=:}' [ klx=. '\KeywordTok{=.}'
+
+if. +./ (alx;klx) +./@E.&> < y do.
 
   NB. last token in string before quote after assignment
   NB. hack to handle forms like: text=. <;._1 ' you parsing me'
-  if. #ltp=. }.srxm PANDOCTOKPAT rxmatches pfx beforestr y do.
+  if. #ltp=. }.srxm PANDOCTOKPAT rxmatches TEXTQUOTESINGLE beforestr y do.
     hd=. ltp {. y [ ltp=. _1{ltp
-    hd,('\StringTok{';'\AlertTok{') replacetoks ltp}.y
+    hd,(STRINGTTOKPFX;ALERTTOKPFX) replacetoks ltp}.y
   else.
-    (alx beforestr y),alx,('\StringTok{';'\AlertTok{') replacetoks alx afterstr y
+    (alx beforestr y),alx,(STRINGTTOKPFX;ALERTTOKPFX) replacetoks alx afterstr y
   end.
 
 else.
-  ('\StringTok{';'\AlertTok{') replacetoks y
+  (STRINGTTOKPFX;ALERTTOKPFX) replacetoks y
 end.
 )
 
