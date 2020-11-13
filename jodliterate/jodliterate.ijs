@@ -34,6 +34,7 @@ NB. 20jun07 added (formifacetex) to interface words
 NB. 20nov01 added graphics and inclusions subdirectory to preamble
 NB. 20nov01 \begin{document} moved to root file for OverLeaf.com
 NB. 20nov04 (setjodliterate) cleaner script, author(s), email added
+NB. 20nov12 (ppcodelatex) added to adjust coloring of wrapped lines
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -191,6 +192,8 @@ JLWORDLITTEX=: 0 : 0
 % Main jodliterate (wordlit) latex file. 
 
 \input{JODLiteratePreamble.tex}
+
+\begin{document}
 
 \newpage
 
@@ -1080,9 +1083,6 @@ ct=. wfl y,LF
 (ct -:&> <,LF) <;.2 ct
 )
 
-NB. 0's all but last 1 in runs of 1's - fastest lastones's verb
-lastones=:> 1&(|.!.0)
-
 
 latexfrmarkd=:3 : 0
 
@@ -1319,47 +1319,41 @@ NB.*ppcodelatex v-- post process generated source code latex.
 NB.
 NB. This verb applies final adjustments to generated LaTeX source
 NB. code In particular it alters the syntax coloring of long J (0
-NB. : 0)  character nouns, long  wrapped  quoted  'long  ....'
-NB. strings and wrapped comment lines.
+NB. : 0) character nouns, long wrapped quoted 'long ....' strings
+NB. and wrapped comment lines.
 NB.
 NB. monad:  clNewTeX =. ppcodelatex clTex
 
-NB. adjust 0 : 0 text
+NB. adjust any 0 : 0 text
 'idx strs'=. (LONGCHRBEGPAT;LONGCHRENDPAT) cutpatidx y
 if. #idx do.
   lg0strs=. long0d0latex&.> idx{strs
   y=. ;lg0strs idx} strs
 end.
 
-NB. adjust any long wrapped 'quoted stuf .......'
+NB. adjust any wrapped alert lines
 if. ALERTTOKWRAP +./@E. y do.
-  
-  rlns=. <;.2 tlf y  NB. all code lines
-  alns=. +./@(ALERTTOKWRAP&E.)&> rlns  NB. alert lines
 
-  NB. wrapped alert lines form contigous 1 runs
-  NB. include the line before each run - what was wrapped
-  alns=. (1 |.!.0 alns) +. alns
-  
-  NB. all indexes in 1 runs
-  ix=. <:&.> 0 -.&.>~ (firstones alns) <;.1 alns * >:i.#alns
+  NB. all code lines and start/end table of wraps
+  wrgx=. wraprgidx +./@(ALERTTOKWRAP&E.)&> rlns=. <;.2 tlf y  
+ 
+  NB. classify wrapped lines: comment, quoted string
+  cm=. {.&> (COMMENTTOKPFX,'NB.')&E. &.> (0 {"1 wrgx){rlns
+  qm=. *./"1 +./@(TEXTQUOTESINGLE&E.) &> wrgx{rlns
 
-  NB. wrapped comments
-  if. +./bm=. {.@((COMMENTTOKPFX,'N','B.')&E.)&> ({.&> ix){rlns do.
-    alns=. 0 (;cx)} alns [ cx=. bm # ix
-    rlns=. ((COMMENTTOKPFX;ALERTTOKPFX)&replacetoks&.> (;cx){rlns) (;cx)} rlns
-    if. 0=#ix=. ix -. cx do. ;rlns return. end.
+  NB. comments override quotes and normals
+  if. +./cm do.
+    cx=. cm wraplix wrgx
+    rlns=. ((COMMENTTOKPFX;ALERTTOKPFX)&replacetoks&.> cx{rlns) cx} rlns
+    if. *./cm  do. ;rlns return. end. 
   end.
 
-  NB. turn off alert 1 runs that are not LaTeX quoted text
-  ex=. ;(+./@((TEXTQUOTESINGLE,'}')&E.)&.> (I. lastones alns){rlns) *&.> ix
-  sx=. ;(+./@(TEXTQUOTESINGLE&E.)&.> (I. firstones alns){rlns) *&.> ix
-  if. #ix=. (ex <. sx) -. 0 do. 
-
-    NB. flip tokens in remaining lines
-    y=. ;(wrapQtlatex&.> ix{rlns) ix} rlns
+  NB. quoted text
+  if. +./qm=.0 (I. cm)} qm do.
+    qx=. qm wraplix wrgx
+    y=. ;(wrapQtlatex&.> qx{rlns) qx} rlns
   end.
-  
+
 end.
 
 y  NB. adjusted latex
@@ -1636,6 +1630,21 @@ if. +./ (alx;klx) +./@E.&> < y do.
 else.
   (STRINGTTOKPFX;ALERTTOKPFX) replacetoks y
 end.
+)
+
+NB. expand start/end indexes in wrap table: 1 0 1 wraplix >2 5;7 8;13 27
+wraplix=:[: ; (0 { "1 #) +&.> [: i.&.> [: >: [: -/"1 [: |."1 #
+
+
+wraprgidx=:3 : 0
+
+NB.*wraprgidx v-- start/end indexes of wrapped line regions.
+NB.
+NB. monad:  it =. wraprgidx pl
+
+b=. firstones y
+r=. 0 -.&.>~ (b <;.1 y) *&.> b <;.1 i.#y
+(<:@{.&> r) ,. {:&> r
 )
 
 

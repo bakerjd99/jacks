@@ -25,7 +25,4 @@ by trolling over the version history of this file.
 
 3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
 
-4. `<_3cr9eik0lqvj2zqaq6kiywsmm_>` Adjacent wrapped quoted strings and comments may not color properly. Inserting a blank line
-   between such lines fixes the coloring for now.
-
 `[end-todo]`
