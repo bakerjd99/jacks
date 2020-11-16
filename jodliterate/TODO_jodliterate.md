@@ -1,6 +1,6 @@
 
-![jodliteratelion](inclusions/jodliteratelionlittle.png)`jodliterate` TODO
-==========================================================================
+![jod literate lion](inclusions/jodliteratelionlittle.png)`jodliterate` TODO
+============================================================================
 
 Pending and considered changes for `jodliterate`.
 
@@ -24,5 +24,20 @@ by trolling over the version history of this file.
    don't use underbar characters in group names.
 
 3. `<_25mbz8vnu3mx3i55ox97flbuf_>` Consider improving line break markers - match what Jupyter does when breaking code lines.
+
+4. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
+   ~~~
+      'quoted string' ; (? 20 20$100) ; ;:'quoted strings with numerics'
+   ~~~
+
+5. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
+   ~~~
+      NB. ISBN-13 checksum
+         _80 ]\ disp 'i13cd'
+      i13cd=:'098765432109876543210987654321098765432109876543210
+      98765432109876543210987654321098765432109876543210987654321098765432109876543210
+      98765432109876543210987654321098765432109876543210987654321098765432109876543210
+      987654' { ~ 1 3 1 3 1 3 1 3 1 3 1 3 +/ .* '0123456789' i. ]
+   ~~~
 
 `[end-todo]`
