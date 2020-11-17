@@ -39,5 +39,8 @@ by trolling over the version history of this file.
       98765432109876543210987654321098765432109876543210987654321098765432109876543210
       987654' { ~ 1 3 1 3 1 3 1 3 1 3 1 3 +/ .* '0123456789' i. ]
    ~~~
+   NOTE: Fixing wrapped nonstring forms with wrapped embedded strings requires a more
+   general patch algorithm. Two approaches scan the starts and ends of strings in the form
+   and adjust/insert string tokens or give up and color the entire block something else.
 
 `[end-todo]`
