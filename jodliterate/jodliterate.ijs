@@ -484,7 +484,7 @@ NB. regex matching pandoc LaTeX token commands
 PANDOCTOKPAT=:'\\[[:alpha:]]*Tok{'
 
 NB. root words for (jodliterate) group
-ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit sbtokens setjodliterate wordlit'
+ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit setjodliterate wordlit'
 
 NB. pandoc LaTeX string token prefix
 STRINGTTOKPFX=:'\StringTok{'
@@ -507,7 +507,7 @@ WRAPLIMIT=:110
 NB. invalid j string starting wrapped line - exclude '=:' - trailing blank matters
 WRAPPREFIX=:')=.)=. '
 
-NB.  pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
+NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. retains string after first occurrence of (x)
@@ -685,38 +685,6 @@ dbquote=:'"'&,@(,&'"')@(#~ >:@(=&'"'))
 
 NB. quote unquoted strings containing blanks: dbquoteuq 'c:\blanks in\paths bitch'
 dbquoteuq=:]`dbquote@.(([: -. '""'&-:@({: , {.)) *. ' ' e. ])
-
-
-decomm=:3 : 0
-                                                                 
-NB.*decomm v--  removes comments  from j words. The (x) argument
-NB. specifies whether all blank lines are removed or retained.   
-NB.                                                              
-NB. monad:  decomm ctWord                                        
-NB.                                                              
-NB.   decomm jcr 'decomm'  NB. decomment self                    
-NB.                                                              
-NB. dyad:  pa decomm ctWord                                      
-NB.                                                              
-NB.   1 decomm jcr 'decomm'  NB. remove blanks (default)         
-NB.   0 decomm jcr 'decomm'  NB. retain all blank lines          
-                                                                 
-1 decomm y                                                      
-:
-NB. mask of unquoted comment starts                              
-c=. ($y)$'NB.' E. ,y                                           
-c=. +./\"1 c > ~:/\"1 y e. ''''     
-
-NB. ,, work around for j8.05 bug - remove when fixed                           
-NB. y=. ,,y                                                     
-                                                                 
-NB. blank out comments                                           
-y=. ' ' (I. ,c)} ,y                                     
-y=. y $~ $c                                                    
-                                                                 
-NB. remove blank lines - default                                 
-if. x do. y #~ y +./ . ~: ' ' end.                            
-)
 
 NB. boxes UTF8 names
 fboxname=:([: < 8 u: >) ::]
@@ -1382,9 +1350,6 @@ if. 0=#idx do. y else. ;(0{x) (idx #~ (1{x) ~: idx{strs)} strs end.
 
 NB. trim right (trailing) blanks
 rtrim=:] #~ [: -. [: *./\. ' '"_ = ]
-
-NB. blcl of nonempty noncomment J cl tokens
-sbtokens=:a: -.~ (<13 10 9{a.) -.&.>~ [: alltrim&.> [: wfl [: ctl [: decomm [: ];._1 (10{a.) , (13{a.) -.~ ]
 
 
 setifacelinks=:4 : 0
