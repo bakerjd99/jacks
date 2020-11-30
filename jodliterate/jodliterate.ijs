@@ -1316,7 +1316,10 @@ if. ALERTTOKWRAP +./@E. y do.
     if. *./cm  do. ;rlns return. end. 
   end.
 
-  NB. quoted text
+  NB. quoted text - works for simple forms
+  NB. a general solution requires re-pandoc'ing
+  NB. line breaking nouns - especially complex 
+  NB. boxed arrays that mix strings and other types
   if. +./qm=.0 (I. cm)} qm do.
     qx=. qm wraplix wrgx
     y=. ;(wrapQtlatex&.> qx{rlns) qx} rlns

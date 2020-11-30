@@ -42,5 +42,9 @@ by trolling over the version history of this file.
    NOTE: Fixing wrapped nonstring forms with wrapped embedded strings requires a more
    general patch algorithm. Two approaches scan the starts and ends of strings in the form
    and adjust/insert string tokens or give up and color the entire block something else.
+   NOTE MORE: Long lines are wrapped before going to pandoc. This can lead to pandoc
+   assigning inaccurate tokens that cannot be patched afterwards. Sending such
+   lines directly to pandoc gets proper tokens but then would require wrapping
+   without breaking the tokens.
 
 `[end-todo]`
