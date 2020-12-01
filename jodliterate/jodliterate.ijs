@@ -15,6 +15,7 @@ NB.  grplit         - make latex for group (y)
 NB.  ifacesection   - interface section summary string
 NB.  ifc            - format interface comment text
 NB.  setjodliterate - prepare LaTeX processing - sets out directory writes preamble
+NB.  uwlatexfrwords - unwrapped latex from words
 NB.  wordlit        - make latex from word list (y)
 NB.  
 NB. author:  John D. Baker
@@ -35,6 +36,7 @@ NB. 20nov01 added graphics and inclusions subdirectory to preamble
 NB. 20nov01 \begin{document} moved to root file for OverLeaf.com
 NB. 20nov04 (setjodliterate) cleaner script, author(s), email added
 NB. 20nov12 (ppcodelatex) added to adjust coloring of wrapped lines
+NB. 20dec01 (uwlatexfrwords) added 
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -433,7 +435,7 @@ NB. interface word list name prefix
 IFACEWORDSPFX=:'IFACEWORDS'
 
 NB. interface words for (jodliterate) group
-IFACEWORDSjodliterate=:<;._1 ' THISPANDOC formifacetex grplit ifacesection ifc setjodliterate wordlit'
+IFACEWORDSjodliterate=:<;._1 ' THISPANDOC formifacetex grplit ifacesection ifc setjodliterate uwlatexfrwords wordlit'
 
 NB. interface words \pageref \label prefix
 IFCPFX=:'ifc:'
@@ -509,6 +511,9 @@ WRAPPREFIX=:')=.)=. '
 
 NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
+
+NB. jodliterate version make and date
+jodliterateVMD=:'0.9.98';2;'01 Dec 2020 10:27:44 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1160,14 +1165,20 @@ NB.   markdfrwords ;:'go ahead mark us up'
 NB.
 NB.   NB. markdown text from JOD group words
 NB.   mtxt=. markdfrwords }. grp 'jod'
+NB.
+NB. dyad: clMarkdown =. paWrap markdfrwords blclWords
+NB.
+NB.   mtxt=. 0 markdfrwords }. grp 'jod'  NB. suppress wrapping
 
+1 markdfrwords y 
+:
 NB. require 'jod' !(*)=. WORD_ajod_ NVTABLE_ajod_ badrc_ajod_ get wttext__MK__JODobj
 if. badrc_ajod_ src=. (WORD_ajod_,NVTABLE_ajod_) get y do. src return. end.
 
 NB. commented source code (name,source) table.
 if. badrc_ajod_ src=. 0 0 1 wttext__MK__JODobj >1{src do. src
 else.
-  src=. markgassign&.> {:"1 >1{src
+  src=. x&markgassign&.> {:"1 >1{src
   NB. similar to (markdj) but faster here
   utf8 ; (<LF,MARKDOWNHEAD,LF) ,&.> src ,&.> <LF,MARKDOWNTAIL,LF
 end.
@@ -1199,9 +1210,15 @@ NB. monad:  cl =. markgassign clJcode
 NB.
 NB.  jcode=. 'markgassign=:' , 5!:5 <'markgassign'
 NB.  markgassign jcode
+NB.
+NB. dyad: cl =. paWrap markgassign clJcode
+NB. 
+NB.  0 markgassign jcode NB. suppress long line wrapping   
 
+1 markgassign y
+:
 if. 0=#jcode=. y -. CR do. y return. end.
-jcode=. WRAPLIMIT wrapvrblong jcode
+if. 1-:x do. jcode=. WRAPLIMIT wrapvrblong jcode end.
 jtokens=. jtokenize jcode
 
 NB. only interested in global assignment lines
@@ -1502,6 +1519,9 @@ tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
 NB. character list to UTF-8
 utf8=:8&u:
 
+NB. unwrapped latex from words
+uwlatexfrwords=:[: latexfrmarkd 0 markdfrwords ]
+
 NB. standardizes path delimiter to windows back \ slash
 winpathsep=:'\'&(('/' I.@:= ])} )
 
@@ -1654,6 +1674,7 @@ end.
 NB. write file as list of bytes - throws unambiguous error on failure
 writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 
+
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
@@ -1665,6 +1686,7 @@ NB. grplit          NB. make latex for group (y)
 NB. ifacesection    NB. interface section summary string
 NB. ifc             NB. format interface comment text
 NB. setjodliterate  NB. prepare LaTeX processing - sets out directory writes preamble
+NB. uwlatexfrwords  NB. unwrapped latex from words
 NB. wordlit         NB. make latex from word list (y)
 )
 

@@ -47,4 +47,10 @@ by trolling over the version history of this file.
    lines directly to pandoc gets proper tokens but then would require wrapping
    without breaking the tokens.
 
+6. `<_5to7v1odwyjfq5iuryl66vq1g_>` To alleviate the color issues of wrapped heterogenous boxed arrays
+   consider adding a new verb to `jodliterate` that generates "unwrapped" pandoc
+   LaTeX.  When the need arises, (actually this occurs infrequently),
+   the few improperly colored objects can
+   be regenerated and the LaTeX can be manually adjusted.
+
 `[end-todo]`
