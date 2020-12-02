@@ -15,7 +15,7 @@ NB.  grplit         - make latex for group (y)
 NB.  ifacesection   - interface section summary string
 NB.  ifc            - format interface comment text
 NB.  setjodliterate - prepare LaTeX processing - sets out directory writes preamble
-NB.  uwlatexfrwords - unwrapped latex from words
+NB.  uwlatexfrwords - unwrapped latex from words: uwlatexfrwords ;:'we wrap ugly'
 NB.  wordlit        - make latex from word list (y)
 NB.  
 NB. author:  John D. Baker
@@ -513,7 +513,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'0.9.98';2;'01 Dec 2020 10:27:44 MT'
+jodliterateVMD=:'0.9.98';5;'02 Dec 2020 10:52:45 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1519,7 +1519,7 @@ tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
 NB. character list to UTF-8
 utf8=:8&u:
 
-NB. unwrapped latex from words
+NB. unwrapped latex from words: uwlatexfrwords ;:'we wrap ugly' 
 uwlatexfrwords=:[: latexfrmarkd 0 markdfrwords ]
 
 NB. standardizes path delimiter to windows back \ slash
@@ -1686,7 +1686,7 @@ NB. grplit          NB. make latex for group (y)
 NB. ifacesection    NB. interface section summary string
 NB. ifc             NB. format interface comment text
 NB. setjodliterate  NB. prepare LaTeX processing - sets out directory writes preamble
-NB. uwlatexfrwords  NB. unwrapped latex from words
+NB. uwlatexfrwords  NB. unwrapped latex from words: uwlatexfrwords ;:'we wrap ugly'
 NB. wordlit         NB. make latex from word list (y)
 )
 
