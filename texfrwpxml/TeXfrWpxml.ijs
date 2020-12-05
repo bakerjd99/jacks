@@ -1116,7 +1116,7 @@ NB. code used before J 8.06
 NB. hexadecimal list from integers
 NB. hdl=. [: , [: hfd2 a. i. ]        
 NB. standard profile !(*)=. dir
-NB.(jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
+NB. (jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
 
 (jfe&.> files) ,.~ sha1 @ read&.> files=. 1 dir jpathsep y 
 )

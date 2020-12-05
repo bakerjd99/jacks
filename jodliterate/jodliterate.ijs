@@ -513,7 +513,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'0.9.98';5;'02 Dec 2020 10:52:45 MT'
+jodliterateVMD=:'0.9.98';6;'02 Dec 2020 10:59:45 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
