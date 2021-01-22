@@ -23,7 +23,7 @@ by trolling over the version history of this file.
 2. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
    don't use underbar characters in group names.
 
-3. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. User `NB. space please`.
+3. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. Use `NB. space please`.
 
 4. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
    ~~~

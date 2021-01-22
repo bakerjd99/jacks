@@ -1,5 +1,5 @@
-`TeXfrWpxml` TODO
-==================
+![WP to latex logo](wp2latexlogo.png)`TeXfrWpxml` TODO
+======================================================
 
 Pending and considered changes for `TeXfrWpxml`.
 
