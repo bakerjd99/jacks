@@ -19,18 +19,27 @@ by trolling over the version history of this file.
    that are delimited by `{{` `}}`. The digraphs are an exception to J's
    inflection scheme and will ripple through all J code parsing tools including
    `jodliterate`.
+   
+2. Color text nouns defined by direct definiton forms like:
+  ~~~
+    text=: {{)n
+    all this stuff is
+    text make it the same color 
+    as other texts
+    }}
+  ~~~
 
-2. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
+3. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
    don't use underbar characters in group names.
 
-3. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. Use `NB. space please`.
+4. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. Use `NB. space please`.
 
-4. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
+5. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
    ~~~
       'quoted string' ; (? 20 20$100) ; ;:'quoted strings with numerics'
    ~~~
 
-5. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
+6. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
    ~~~
       NB. ISBN-13 checksum
          _80 ]\ disp 'i13cd'
