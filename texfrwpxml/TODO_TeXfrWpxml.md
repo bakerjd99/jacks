@@ -17,9 +17,13 @@ by trolling over the version history of this file.
 
 `[begin-todo]`
 
-1. `<_33xb34nbtb2xqf46lit3e6oaq_>` Test graphics downloading. Graphics
+1. `<_1d2ynsw2ozr7a2llcbs824opu_>` Changes to WordPress's *block editor* have invalidated some of
+   the assumptions in the code of `TeXfrWpxml`. In particular it no longer
+   extracts source code blocks reliably. Update for the block editor.
+
+2. `<_33xb34nbtb2xqf46lit3e6oaq_>` Test graphics downloading. Graphics
    downloading fails to fetch WordPress.com images see `WGETCMD`.
 
-2. `<_e5puo4u676b0tn461z945jm7o_>` Consider swapping `curl` for `wget`.
+3. `<_e5puo4u676b0tn461z945jm7o_>` Consider swapping `curl` for `wget`.
 
 `[end-todo]`
