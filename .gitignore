@@ -3,4 +3,6 @@ Thumbs.db
 ## jacks files to ignore
 jserver/Backup/
 jserver/obj/Debug/
+.DS_Store
+configs/.DS_Store
 *.suo
