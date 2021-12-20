@@ -37,6 +37,7 @@ NB. 20nov01 \begin{document} moved to root file for OverLeaf.com
 NB. 20nov04 (setjodliterate) cleaner script, author(s), email added
 NB. 20nov12 (ppcodelatex) added to adjust coloring of wrapped lines
 NB. 20dec01 (uwlatexfrwords) added 
+NB. 21dec21 (JLCLEANTEXunix, JLBUILDTEXunix, JLSHELLEXT) added
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -44,7 +45,8 @@ coinsert 'ijod'
 NB.*dependents
 NB. declared global here to avoid confusing LaTeX names with J names
 NB. (*)=: JLTITLETEX JLOVIEWTEX JLBUILDTEX JLGRPLITTEX JLWORDLITTEX 
-NB. (*)=: JODLiteratePreamble JLCLEANTEX 
+NB. (*)=: JODLiteratePreamble JLCLEANTEX JLSHELLEXT JLBUILDTEXunix
+NB. (*)=: JLCLEANTEXunix JLBUILDTEXwin JLCLEANTEXwin 
 
 NB. Roger Hui's word formation state machine - similiar to ;: but
 NB. parses text with LFs, retains whitespace and handles open quotes.
@@ -90,6 +92,8 @@ wfl=: (0;sfl;mfl) & ;:
 
 JLDIRECTORY=: ''
 
+JLSHELLEXT=: ;IFWIN{;:'sh bat'
+
 NB. wrapped line prefix
 WRAPLEAD=:'>..>'
 
@@ -97,12 +101,52 @@ NB. pandoc transformed wrapped line lead token
 ALERTTOKWRAP=: '\AlertTok{',WRAPLEAD,'}'
 NB.*enddependents
 
+NB. shell scripts that erase/build LaTeX files
 
-NB.<<~~~~ { . bat }
+NB.<<~~~~ { .sh }
+JLBUILDTEXunix=: 0 : 0
+# sequence of latex commands that generate PDF
+# assumes latex exes are on the working path
+lualatex  ~#~group~#~
+makeindex ~#~group~#~
+lualatex  ~#~group~#~
+lualatex  ~#~group~#~
+)
 
-NB. shell script that erases temporrary LaTeX files
-NB. NIMP: generalize for linux/macos 
-JLCLEANTEX=: 0 : 0
+JLCLEANTEXunix=: 0 : 0
+# remove latex/tex temp files
+rm *.aux
+rm *.bbl
+rm *.dvi
+rm *.ps
+rm *.idx
+rm *.out
+rm *.log
+rm *.toc
+rm *.lof
+rm *.lol
+rm *.lot
+rm *.ind
+rm *.ilg
+rm *.blg
+rm *.gz
+)
+NB.>>~~~~
+
+NB.<<~~~~ { .bat }
+JLBUILDTEXwin=: 0 : 0
+rem sequence of latex commands that generate PDF
+rem assumes latex exes are on the working path
+setlocal
+cd /d %~dp0
+lualatex  ~#~group~#~
+makeindex ~#~group~#~
+lualatex  ~#~group~#~
+lualatex  ~#~group~#~
+endlocal
+)
+
+JLCLEANTEXwin=: 0 : 0
 rem remove latex/tex temp files
 del *.aux
 del *.bbl
@@ -123,6 +167,17 @@ del *.gz(busy)
 )
 NB.>>~~~~
 
+(3 : 0)''
+if.     IFWIN  do.
+  JLCLEANTEX=: JLCLEANTEXwin
+  JLBUILDTEX=: JLBUILDTEXwin  
+elseif. IFUNIX do.
+  JLCLEANTEX=: JLCLEANTEXunix
+  JLBUILDTEX=: JLBUILDTEXunix 
+elseif.do.
+  smoutput 'JLCLEANTEX/JLBUILDTEX scripts not set'
+end.
+)
 
 NB.<<~~~~ { .latex }
 
@@ -141,19 +196,6 @@ NB. group overview header
 JLOVIEWTEX=: 0 : 0
 % this jodliterate overview
 \section{\texttt{~#~group~#~} Overview}
-)
-
-NB. latex group build script 
-JLBUILDTEX=: 0 : 0
-rem sequence of latex commands that generate PDF
-rem assumes latex exes are on the working path
-setlocal
-cd /d %~dp0
-lualatex  ~#~group~#~
-makeindex ~#~group~#~
-lualatex  ~#~group~#~
-lualatex  ~#~group~#~
-endlocal
 )
 
 NB. group root tex - columns may need adjusting
@@ -486,7 +528,7 @@ NB. regex matching pandoc LaTeX token commands
 PANDOCTOKPAT=:'\\[[:alpha:]]*Tok{'
 
 NB. root words for (jodliterate) group
-ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate ROOTWORDSjodliterate grplit setjodliterate wordlit'
+ROOTWORDSjodliterate=:<;._1 ' DEFAULTPANDOC IFACEWORDSjodliterate JLBUILDTEXunix JLBUILDTEXwin JLCLEANTEXunix JLCLEANTEXwin ROOTWORDSjodliterate grplit jodliterateVMD setjodliterate uwlatexfrwords wordlit'
 
 NB. pandoc LaTeX string token prefix
 STRINGTTOKPFX=:'\StringTok{'
@@ -513,7 +555,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'0.9.98';6;'02 Dec 2020 10:59:45 MT'
+jodliterateVMD=:'0.9.98';14;'20 Dec 2021 15:45:48 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -906,7 +948,7 @@ ohd=. ohd,LF,gdoc
 
 NB. group build batch script - latex utils that compile generated files
 jlbuildtex=. ('/~#~group~#~/',alltrim y) changestr JLBUILDTEX
-(toJ jlbuildtex) writeas jlbuildbat=. wdir,group,'.bat'
+(toJ jlbuildtex) writeas jlbuildbat=. wdir,group,'.',JLSHELLEXT
 
 NB. group source code .tex - return file names
 gltx=. grouplatex group
@@ -1434,11 +1476,11 @@ NB.*setjodliterate v-- prepare LaTeX processing - sets out directory writes prea
 NB.
 NB. monad:  (paRc ; clDir) =. setjodliterate clWorkingDir | zl
 NB.
-NB.   setjodliterate 'c:\temp'           NB. windows
-NB.   setjodliterate '/home/john/temp'   NB. linux 
-NB.
 NB.   NB. use the current JOD put dictionary document directory
 NB.   setjodliterate ''
+NB.
+NB.   setjodliterate 'c:\temp'           NB. windows
+NB.   setjodliterate '/home/john/temp'   NB. linux 
 NB.
 NB. dyad: (paRc ; clDir) =. clAuthor setjodliterate clWorkingDir | zl
 NB.
@@ -1464,7 +1506,7 @@ JLDIRECTORY_ajodliterate_=: jpathsep`winpathsep@.(IFWIN) tslash2 y
 
 NB. write main latex preamble and cleaner iff missing
 preamble=. 'JODLiteratePreamble.tex'  
-cleaner=.  '00cleantex.bat'           NB. NIMP: linux/mac scripts
+cleaner=.  '00cleantex.',JLSHELLEXT
 if. -.fexist JLDIRECTORY,preamble do.
   (toJ JODLiteratePreamble) writeas JLDIRECTORY,preamble
 end.
@@ -1580,7 +1622,7 @@ end.
 
 NB. group build batch script - latex utils that compile generated files
 jlbuildtex=. ('/~#~group~#~/',texname) changestr JLBUILDTEX
-(toJ jlbuildtex) writeas jlbuildbat=. wdir,texname,'.bat'
+(toJ jlbuildtex) writeas jlbuildbat=. wdir,texname,'.',JLSHELLEXT
 
 NB. source code .tex - return file names
 wltx=. ppcodelatex wltx
