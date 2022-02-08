@@ -15,31 +15,20 @@ by trolling over the version history of this file.
 
 `[begin-todo]`
 
-1. `<_5y5lb5gvigvz7xvtv2b0u3003_>` Revise and test for direct definition. J 9.02 introduced direct definitions
-   that are delimited by `{{` `}}`. The digraphs are an exception to J's
-   inflection scheme and will ripple through all J code parsing tools including
-   `jodliterate`.
+1. `<_2r3hv91c891s7n1qqjajqdqak_>` Consider allowing original word order for `wordlit`. Currently the words
+   are sorted by JODs `wttext` conventions.
 
-2. `<_41l6qomzdfwpfbn864qdrlu5w_>` Color text nouns defined by direct definition forms like:
-  ~~~
-    text=: {{)n
-    all this stuff is
-    text make it the same color
-    as other texts
-    }}
-  ~~~
-
-3. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why under-bar characters  `_` in JOD group names break LaTeX processing. For now just
+2. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
    don't use underbar characters in group names.
 
-4. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. Use `NB. space please`.
+3. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. User `NB. space please`.
 
-5. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogeneous arrays may not be correct.
+4. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
    ~~~
       'quoted string' ; (? 20 20$100) ; ;:'quoted strings with numerics'
    ~~~
 
-6. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
+5. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
    ~~~
       NB. ISBN-13 checksum
          _80 ]\ disp 'i13cd'
