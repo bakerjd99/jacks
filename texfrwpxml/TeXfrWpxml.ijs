@@ -31,6 +31,7 @@ NB. 17may13 (LATEXFIGURETEMPLATES) added
 NB. 17sep29 use J 8.06 sha hash functions - removes need for external dll
 NB. 20jul11 (BlogHashes) adjusted to track xhtml version
 NB. 20sep12 (mdfootnotes) added to prefix markdown footnotes with post number
+NB. 22mar29 (filenamesFrtid) adjusted to extract titles from new <!CDATA['s
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -711,8 +712,16 @@ NB.   wpxml=. read 'c:/pd/blog/wordpress/analyzethedatanotthedrivel.wordpress.xm
 NB.   posts=. ptableFrwpxml wpxml
 NB.   filenamesFrtid 0 1 {"1 posts
 
+NB. NOTE: there's been a change in WordPress (22mar29) XML that
+NB. encloses blog post titles in <![CDATA['s cdatatext extracts
+NB. the titles - will fail if there are no <![CDATA['s
+
+NB. NOTE: this algorithm for forming file names has proven very
+NB. stable over years of use. The generated names are readable,
+NB. portable and unique. Sometimes you get things right.
+
 NB. remove all but upper and lowercase alpha and lower case remainder
-fn=. (0 {"1 y) tolower@-.&.> <a.-.((65+i.26),97+i.26){a.
+fn=. (cdatatext&.> 0 {"1 y) tolower@-.&.> <a.-.((65+i.26),97+i.26){a.
 
 NB. take at most FILETITLELEN chars and append unique post id
 ((FILETITLELEN <. #&> fn) {.&.> fn) ,&.> 1 {"1 y
@@ -1398,7 +1407,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20220129j123110
+NB. (TeXfrWpxml) interface word(s): 20220331j132443
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
