@@ -61,12 +61,9 @@ settings=. settings #~ -. +./"1 (0 1 3 4{"1 settings) e. unknown
 settings=. settings #~ (2 {"1 settings) e. unknown
 
 NB. strict row sequence adverb
-srsm=.  1 : '*./"1 u/&> 2 <\"1 y'
+srsm=. {{ *./"1 u/&> 2 <\"1 y }} 
 
 NB. retain strictly increasing and strictly decreasing rows
 grade=. order i. settings
 settings #~ ((< srsm)"1 grade) +. (> srsm)"1 grade
 )
-
-NB. table of all permutations of list items
-tapl=:([: (i.@! A. i.) #) { ]
