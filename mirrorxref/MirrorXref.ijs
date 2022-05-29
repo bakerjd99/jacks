@@ -14,6 +14,7 @@ NB. https://github.com/bakerjd99/smugpyter
 NB.
 NB. interface word(s):
 NB. ------------------------------------------------------------------------------
+NB.  BogusRealDates        - images from single real date file with bogus dates
 NB.  BuildMirror           - backup/create/load mirror
 NB.  CheckRealDates        - check real dates
 NB.  DumpLocalImageNatural - dump (LocalImage) as TAB delimited text
@@ -38,7 +39,8 @@ NB. 19aug16 upload summary rate report code added
 NB. 19oct03 added (Divisible)
 NB. 20nov03 fix typos (Album, LocalImage) foreign keys
 NB. 20nov21 add (UnClickHereImages_sql)
-NB. 22may27 add (CheckRealDates)
+NB. 22may27 added (CheckRealDates)
+NB. 22may29 added (BogusRealDates)
 
 require 'data/sqlite'
 
@@ -165,7 +167,7 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSMirrorXref) group
-IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates DumpLocalImageNatural LocalFromDir MirrorStatReport MissingImagesReport SuspiciousPairReport'
+IFACEWORDSMirrorXref=:<;._1 ' BogusRealDates BuildMirror CheckRealDates DumpLocalImageNatural LocalFromDir MirrorStatReport MissingImagesReport SuspiciousPairReport'
 
 NB. line feed character
 LF=:10{a.
@@ -195,7 +197,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.5';56;'27 May 2022 15:42:26'
+MIRRORVMD=:'0.9.6';57;'29 May 2022 12:17:39'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -204,7 +206,7 @@ NB. fully qualified sqlite primary thumbs database file name
 PRIMARYTHUMBS=:'c:/thumbsdbs/primary2018.tpdb8s'
 
 NB. root words (ROOTWORDSMirrorXref) group
-ROOTWORDSMirrorXref=:<;._1 ' BuildMirror Divisible IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref UnClickHereImages_sql'
+ROOTWORDSMirrorXref=:<;._1 ' BogusRealDates BuildMirror Divisible IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref UnClickHereImages_sql'
 
 NB. name of suspect image pairs report
 SUSPECTPAIRS=:'suspects.txt'
@@ -316,6 +318,31 @@ catch.
   rc=. 0
 end.
 rc
+)
+
+
+BogusRealDates=:3 : 0
+
+NB.*BogusRealDates v--  images from  single  real date file  with
+NB. bogus dates.
+NB.
+NB. monad:  btcl =. BogusRealDates clFileRealDates
+NB.
+NB.   p=. 'c:/smugmirror/mirror/Other/DirectCellUploads/'
+NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
+NB.   BogusRealDates f
+NB.
+NB.   NB. bogus dates over many galleries
+NB.   BogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
+
+if. 1 = #t=. readtd2 y do. (0,>:}.$t)$'' NB. only header
+else.
+  p=. tslash justdrvpath winpathsep y
+  t=. }. t [ h=. 0{t  NB. table file header
+  c=. h i. <'RealDate'
+  b=. (intfrdate BOGUSMARKDATE) = 0&". (-.&'-')@('T'&beforestr) &> c {"1 t
+  (h,<'MirrorPath'),b#t ,. <p NB. only bogus dates
+end.
 )
 
 
@@ -1617,6 +1644,12 @@ cl=. sqlcols__x tab
 sqlinsert__x tab;(0{dat);< <"1 |: }.dat
 )
 
+NB. YYYY MM DD lists to YYYYMMDD integers
+intfrdate=:0 100 100&#.@:<.
+
+NB. extract drive and path from qualified file names
+justdrvpath=:[: }: ] #~ [: +./\. '\'&=
+
 NB. extracts the extension from qualified file names
 justext=:''"_`(] #~ [: -. [: +./\. '.'&=)@.('.'&e.)
 
@@ -1802,6 +1835,9 @@ x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
 ($y) $ ((x{n) { (97+i.26){a.) x}t
 )
 
+NB. appends trailing \ character if necessary
+tslash=:] , ('\'"_ = {:) }. '\'"_
+
 NB. appends trailing / iff last character is not \ or /
 tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
 
@@ -1865,6 +1901,9 @@ end.
 NB. gives number of weeks in year - see long document
 weeksinyear=:52 + [: +./"1 [: [ 4 = [: weekday (2 2$1 1 12 31) ,"0 1/~ ]
 
+NB. standardizes path delimiter to windows back \ slash
+winpathsep=:'\'&(('/' I.@:= ])} )
+
 NB. writes a list of bytes to file
 write=:1!:2 ]`<@.(32&>@(3!:0))
 
@@ -1891,8 +1930,9 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220527j154226
+NB. (MirrorXref) interface word(s): 20220529j121739
 NB. -------------------------------
+NB. BogusRealDates         NB. images from single real date file with bogus dates
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
 NB. DumpLocalImageNatural  NB. dump (LocalImage) as TAB delimited text
