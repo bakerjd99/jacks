@@ -167,7 +167,7 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSMirrorXref) group
-IFACEWORDSMirrorXref=:<;._1 ' BogusRealDates BuildMirror CheckRealDates DumpLocalImageNatural LocalFromDir MirrorStatReport MissingImagesReport SuspiciousPairReport'
+IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates DumpLocalImageNatural LocalFromDir MirrorStatReport MissingImagesReport SetBogusRealDates SuspiciousPairReport'
 
 NB. line feed character
 LF=:10{a.
@@ -197,7 +197,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.6';57;'29 May 2022 12:17:39'
+MIRRORVMD=:'0.9.65';64;'02 Jun 2022 12:03:01'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -562,6 +562,20 @@ NB. %/;(#&> > 1{sqlread__dt 'select distinct ImageKey from LocalImage');sqlsize_
 
 NB. record count; unique match percentage; file
 (#td);(100 * utd%oc);dmp
+)
+
+
+IsotimeFromThumbID=:3 : 0
+
+NB.*IsotimeFromThumbID v-- iso taken times from thumbs ids.
+NB.
+NB. monad:  bl =. IsotimeFromThumbID ilThumbID
+
+NB. sqlite addon !(*)=. sqlopen_psqlite_ sqlread__db sqlclose__db 
+db=. sqlopen_psqlite_ PRIMARYTHUMBS
+k=. '(',(}. ,',' ,. ":,.y) ,')'
+t=. sqlread__db 'select idThumb, taken_time_iso from Thumbnail where idThumb in ',k
+t [ sqlclose__db ''
 )
 
 
@@ -1315,6 +1329,48 @@ paths ,&.> 'realdate-'&,&.> (#'manifest-') }.&.> '/'&afterlaststr&.> y
 )
 
 
+SetBogusRealDates=:3 : 0
+
+NB.*SetBogusRealDates v-- set bogus real dates  in one real dates
+NB. file.
+NB.
+NB. This verb sets bogus  real  dates to corresponding iso  times
+NB. fetched  from  the  local  primary ThumbsPlus  database.  The
+NB. changes are written to a corresponding (fix) file in the same
+NB. directory.
+NB.
+NB. monad:  clFixFile =. SetBogusRealDates clFileRealDates
+NB.
+NB.   p=. 'c:/smugmirror/mirror/Other/DirectCellUploads/'
+NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
+NB.   SetBogusRealDates f
+NB.
+NB.   NB. set bogus dates over many galleries
+NB.   SetBogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
+
+if. #t=. ThumbsRealDates y do.
+
+  NB. fetch real date file
+  d=. readtd2 y
+  c=. (0{d) i. ;:'ImageKey RealDate'
+  k=. (0{c) {"1 d
+
+  NB. positions of iso times
+  p=. k i. 0 {"1 t
+
+  NB. merge iso times
+  s=. (1 {"1 t) (<p;1{c)} d
+
+  NB. write date insertions to renamed file
+  f=. ('.txt'&beforestr y),'.fix'
+  f [ (toHOST fmttd s) write f
+
+else.
+  '' [ smoutput 'no bogus dates ->';y
+end.
+)
+
+
 SuspiciousPairReport=:3 : 0
 
 NB.*SuspiciousPairReport v--  suspicious  local  and  online file
@@ -1375,6 +1431,72 @@ NB. require 'data/sqlite' !(*)=. sqlclose__dt sqlopen_psqlite_ sqlsize__dt sqlta
 dt=. sqlopen_psqlite_ y
 if. #tabs=. sqltables__dt '' do. cnts=. tabs ,: sqlsize__dt&.> tabs else. cnts=. 0 0$a: end.
 cnts [ sqlclose__dt ''
+)
+
+
+ThumbIDFromImageKey=:3 : 0
+
+NB.*ThumbIDFromImageKey  v--  fetch  thumbsplus  image  ids  from
+NB. smugmug image keys.
+NB.
+NB. monad:  bl =. ThumbIDFromImageKey clImageKeys
+
+NB. sql image keys
+sk=. '(',(}. ; ','&,&.> dblquote y),')'
+
+NB. fetch thumb ids !(*)=. sqlopen_psqlite_ sqlread__db sqlclose__db
+db=. sqlopen_psqlite_ MIRRORDBPATH,MIRRORDB
+t=. sqlread__db 'select LocalThumbID, ImageKey from LocalImage where ImageKey in ',sk
+t [ sqlclose__db ''
+)
+
+
+ThumbsRealDates=:3 : 0
+
+NB.*ThumbsRealDates  v-- thumbsplus  real  dates  for bogus  real
+NB. dates.
+NB.
+NB. This verb  finds  thumbsplus iso times for bogus real  dates.
+NB. The thumbsplus dates  will typically match online image dates
+NB. as online real  dates are derived from local images. However,
+NB. not all images will have database iso times. Such images will
+NB. be flagged and will require manual edits.
+NB.
+NB. monad:  ThumbsRealDates clFileRealDates
+NB.
+NB.   p=. 'c:/smugmirror/mirror/Other/DirectCellUploads/'
+NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
+NB.   ThumbsRealDates f
+
+nodates=. 0 2$a:
+
+if. #t=. BogusRealDates y do.
+
+  NB. image keys !(*)=. LocalThumbID ImageKey
+  (;{.ti)=. ;{:ti=. ThumbIDFromImageKey }. ((0{t) i. <'ImageKey') {"1 t
+
+  NB. thumbsplus times !(*)=. idThumb taken_time_iso
+  (;{.iso)=. ;{:iso=. IsotimeFromThumbID LocalThumbID
+
+  if. b=. 0 e. #&> taken_time_iso do.
+    smoutput 'WARNING: missing thumbsplus taken times ->';y
+    if. (#taken_time_iso) = +/b do.
+      smoutput 'WARNING: all thumbsplus taken times missing ->';y 
+      nodates return.
+    end.
+  end.
+  
+  NB. image keys and real dates formatted for real date file
+  p=. idThumb i. LocalThumbID
+  d=. ImageKey ,. '.'&beforestr&.> p{taken_time_iso
+
+  NB. images with thumbsplus taken times
+  d=. (;:'ImageKey RealDate') , d #~ 0 < #&> 1 {"1 d
+
+else.
+  smoutput 'no bogus dates ->';y
+  nodates
+end.
 )
 
 
@@ -1589,6 +1711,9 @@ ctl=:}.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@]))
 NB. YYYYMMDD to YYYY MM DD - see long document
 datefrnum=:0 100 100&#:@<.
 
+NB. enclose all character lists in blcl in " quotes
+dblquote=:'"'&,@:(,&'"')&.>
+
 NB. deviation about mean
 dev=:-"_1 _ mean
 
@@ -1624,6 +1749,9 @@ ferase=:1!:55 ::(_1:)@(fboxname&>)@boxopen
 
 NB. 1 if file exists 0 otherwise
 fexist=:1:@(1!:4) ::0:@(fboxname&>)@boxopen
+
+NB. format tables as TAB delimited LF terminated text - see long document
+fmttd=:[: (] , ((10{a.)"_ = {:) }. (10{a.)"_) [: }.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@])) [: }."1 [: ;"1 (a.{~9)&,@":&.>
 
 
 insqltd=:4 : 0
@@ -1930,15 +2058,15 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220529j121739
+NB. (MirrorXref) interface word(s): 20220602j120301
 NB. -------------------------------
-NB. BogusRealDates         NB. images from single real date file with bogus dates
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
 NB. DumpLocalImageNatural  NB. dump (LocalImage) as TAB delimited text
 NB. LocalFromDir           NB. local files with directory match (y) and file match (x)
 NB. MirrorStatReport       NB. mirror database upload summary report
 NB. MissingImagesReport    NB. missing local images report
+NB. SetBogusRealDates      NB. set bogus real dates in one real dates file
 NB. SuspiciousPairReport   NB. suspicious local and online file pairings
 )
 

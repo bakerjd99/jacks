@@ -2,6 +2,16 @@
 mirror - change history
 ============================
 
+### June 2, 2022
+
+* Added `SetBogusRealDates` to group. This verb fetches
+  real dates from the local primary thumbsplus database
+  and inserts them in `.fix` real date files. I will still
+  need to handle dates that are not in the local database
+  and inspect the `.fix` files before mirror building
+  but this verb will greatly ease the burden of patching
+  these dates.
+
 ### May 27, 2022
 
 * Added `CheckRealDates` to group. The python function that
