@@ -2,6 +2,11 @@
 mirror - change history
 ============================
 
+### June 4, 2022
+
+* `BuildMirror` modified to generate a `mirror_temp.db` to resolve
+  forward references when fixing bogus real dates.
+
 ### June 2, 2022
 
 * Added `SetBogusRealDates` to group. This verb fetches

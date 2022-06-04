@@ -41,6 +41,7 @@ NB. 20nov03 fix typos (Album, LocalImage) foreign keys
 NB. 20nov21 add (UnClickHereImages_sql)
 NB. 22may27 added (CheckRealDates)
 NB. 22may29 added (BogusRealDates)
+NB. 22jun04 modified (BuildMirror) to build mirror_temb.db
 
 require 'data/sqlite'
 
@@ -190,6 +191,9 @@ MIRRORDB=:'mirror.db'
 NB. mirror database path
 MIRRORDBPATH=:'c:/smugmirror/documents/xrefdb/'
 
+NB. alternate datbase names - used to resolve forward references
+MIRRORDBTEMP=:'mirror_temp.db'
+
 NB. head of path - change for os
 MIRRORHEAD=:'c:/'
 
@@ -197,7 +201,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.65';64;'02 Jun 2022 12:03:01'
+MIRRORVMD=:'0.9.65';74;'04 Jun 2022 14:31:39'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -306,6 +310,13 @@ try.
     if. 0 > ferase source,MIRRORDB do.
         rc [ smoutput 'unable to erase ',MIRRORDB return.
     end.
+  
+  elseif. x -: 2 do. 
+
+    NB. remove any temporary forward reference db
+    if. 0 > ferase source,MIRRORDBTEMP do.
+        rc [ smoutput 'unable to erase ',MIRRORDBTEMP return.
+    end.
 
   elseif.do.
 
@@ -381,12 +392,17 @@ NB. monad:  BuildMirror iaBackup
 NB.
 NB.   BuildMirror 0   NB. skip backup and build
 NB.   BuildMirror 1   NB. backup and build
+NB.   BuildMirror 2   NB. build allowing bogus real dates
 
 smoutput 9!:14 '' NB. display J version
 
 sdr=. MIRRORPATH        NB. mirror directory
 mrd=. MIRRORDBPATH      NB. mirror database directory
 trg=. mrd,MIRRORDB      NB. mirror db
+
+NB. use another name for bogus real date forward references
+if. 2 -: y do. trg=. mrd,MIRRORDBTEMP end.
+
 bak=. mrd,'backup'      NB. mirror backup directory
 dmp=. mrd,LOCOXREF      NB. online local pairs
 mcf=. mrd,MANLOCOXREF   NB. manual online local corrections
@@ -397,16 +413,21 @@ urp=. mrd,UPRATESUM     NB. upload rate summary report
 
 NB. check real dates for bogus or invalid dates
 NB. all such dates should be fixed before building
-if. #bf=. CheckRealDates '/real*.txt' do.
-  smoutput 'invalid or bogus real dates'
-  smoutput 'fix dates in following files and rerun'
-  smoutput bf
-  return. 
+if. 2 -: y do. smoutput 'build allowing bogus dates'
+else.
+  if. #bf=. CheckRealDates '/real*.txt' do.
+    smoutput 'invalid or bogus real dates'
+    smoutput 'fix dates in following files and rerun'
+    smoutput bf
+    return. 
+  end.
 end.
 
 if. y BackUpMirrorXrefDb mrd;bak do.
   smoutput LoadMirrorXrefDb sdr;src;trg;dmp;mcf;mli;ssp;urp
-else.
+elseif. y -: 2 do.
+  smoutput LoadMirrorXrefDb sdr;src;trg;dmp;mcf;mli;ssp;urp  
+elseif.do.
   smoutput 'no ',MIRRORDB,' build - backup issue(s)!'
 end.
 )
@@ -737,7 +758,7 @@ NB.   LoadMirrorXrefDb sdr;src;trg;dmp;mcf;mli;ssp;urp
 NB. thumbs db must exist
 if. 0 e. fexist src do. smoutput 'thumbs db missing' return. end.
 
-smoutput 'Creating mirror.db ...'
+smoutput 'Creating ',trg,' ...'
 tabs=. CreateMirrorXrefDb trg
 
 smoutput 'Loading path and albums ...'
@@ -1445,7 +1466,7 @@ NB. sql image keys
 sk=. '(',(}. ; ','&,&.> dblquote y),')'
 
 NB. fetch thumb ids !(*)=. sqlopen_psqlite_ sqlread__db sqlclose__db
-db=. sqlopen_psqlite_ MIRRORDBPATH,MIRRORDB
+db=. sqlopen_psqlite_ MIRRORDBPATH,MIRRORDBTEMP
 t=. sqlread__db 'select LocalThumbID, ImageKey from LocalImage where ImageKey in ',sk
 t [ sqlclose__db ''
 )
@@ -2058,7 +2079,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220602j120301
+NB. (MirrorXref) interface word(s): 20220604j143139
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
