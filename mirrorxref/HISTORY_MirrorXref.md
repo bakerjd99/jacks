@@ -1,6 +1,12 @@
 
-mirror - change history
+[`MirrorXref`](https://github.com/bakerjd99/jacks/blob/master/mirrorxref/MirrorXref.ijs) - change history
 ============================
+
+### June 5, 2022
+
+* Added `TODO_MirrorXref.md` to distribution and renamed `mirror_history.md` to
+  `HISTORY_MirrorXref.md`. It's about time I standardized my
+  haphazard notes and plans for frequently used complex scripts.
 
 ### June 4, 2022
 
