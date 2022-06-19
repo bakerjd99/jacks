@@ -1,24 +1,74 @@
-NB.*gpxutils  s--  generate  gpx  waypoint   files  from  various
+NB.*gpxutils  s--   generate  gpx  waypoint  files  from  various
 NB. sources.
 NB.
-NB. This group formats Garmin  style waypoint  gpx files from CSV
-NB. files and my  SmugMug sqlite  mirror database.  The resulting
-NB. gpx  files can be loaded into the Motion-GPS  iPhone  app and
-NB. other GPS devices that import gpx data.
+NB. This  group formats  Garmin style waypoint gpx files from CSV
+NB. files, my SmugMug sqlite mirror database, and Google map KML.
+NB. The resulting gpx files  can be loaded  into  the  Motion-GPS
+NB. iPhone app and other GPS devices that import gpx data.
 NB.
 NB. verbatim: interface words
 NB.
 NB.  allrecent   - all recent images from last waypoint generation
+NB.  csvfrwpt    - poi CSV text from waypoint text file
+NB.  gpxfrmapkml - gpx from Google maps kml
 NB.  gpxfrmirror - extracts geotagged images from mirror_db and generates gpx
 NB.  gpxfrpoicsv - converts poi csv files to gpx
 NB.  gpxfrrecent - gpx from recent waypoints
 NB.
-NB. created: 2019Dec11
+NB. created: 2019dec11
 NB. changes: -----------------------------------------------------
 NB. 19dec18 added (allrecent)
+NB. 22jun18 merged (gpxfrmapkml) and dependents
 
-require 'data/sqlite'
+require 'data/sqlite regex'
 coclass 'gpxutils'
+
+NB.*dependents
+NB. (*)=: GPXFRKMLHEADER GPXHEADER GPXSMUGPLACEMARK GPXTRAILER
+NB.*enddependents
+
+GPXFRKMLHEADER=: (0 : 0)
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<gpx version="1.1"
+ creator="J GPX from Google Maps KML script"
+ xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+ xmlns="https://www.topografix.com/GPX/1/1"
+ xsi:schemaLocation="https://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
+<name>{{headername}}</name>
+<desc>{{headerdescription}}</desc>
+<link href="https://analyzethedatanotthedrivel.org/">
+<text>Analyze the Data not the Drivel</text>
+</link>
+</metadata>
+)
+
+GPXHEADER=: (0 : 0)
+<gpx xmlns="https://www.topografix.com/GPX/1/1"
+ xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+ creator="J Waypoints"
+ version="1.1"
+ xsi:schemaLocation="https://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
+<link href="https://www.jsoftware.com">
+<text>J (gpxutils) last waypoint = {{date}}</text>
+</link>
+
+</metadata>
+)
+
+GPXSMUGPLACEMARK=: (0 : 0)
+<wpt lat="{{latitude}}" lon="{{longitude}}">
+<ele>0</ele>
+<name>{{phototitle}}</name>
+</wpt>
+)
+
+GPXTRAILER=: (0 : 0)
+<extensions>
+</extensions>
+</gpx>
+)
 NB.*end-header
 
 NB. get all images from mirror - select columns
@@ -27,17 +77,17 @@ AllMirror_sql=:'select Latitude, Longitude, RealDate, UploadDate, OnlineImageFil
 NB. carriage return character
 CR=:13{a.
 
-NB. header template for gpx xml
-GPXHEADER=:60 103 112 120 32 120 109 108 110 115 61 34 104 116 116 112 58 47 47 119 119 119 46 116 111 112 111 103 114 97 102 105 120 46 99 111 109 47 71 80 88 47 49 47 49 34 32 120 109 108 110 115 58 120 115 105 61 34 104 116 116 112 58 47 47 119 119 119 46 119 51 46 111 114 103 47 50 48 48 49 47 88 77 76 83 99 104 101 109 97 45 105 110 115 116 97 110 99 101 34 32 99 114 101 97 116 111 114 61 34 74 32 87 97 121 112 111 105 110 116 115 34 32 118 101 114 115 105 111 110 61 34 49 46 49 34 32 120 115 105 58 115 99 104 101 109 97 76 111 99 97 116 105 111 110 61 34 104 116 116 112 58 47 47 119 119 119 46 116 111 112 111 103 114 97 102 105 120 46 99 111 109 47 71 80 88 47 49 47 49 32 104 116 116 112 58 47 47 119 119 119 46 116 111 112 111 103 114 97 102 105 120 46 99 111 109 47 71 80 88 47 49 47 49 47 103 112 120 46 120 115 100 34 62 13 10 13 10 60 109 101 116 97 100 97 116 97 62 13 10 60 108 105 110 107 32 104 114 101 102 61 34 104 116 116 112 58 47 47 119 119 119 46 106 115 111 102 116 119 97 114 101 46 99 111 109 34 62 13 10 60 116 101 120 116 62 74 32 40 103 112 120 117 116 105 108 115 41 32 108 97 115 116 32 119 97 121 112 111 105 110 116 32 61 32 123 123 100 97 116 101 125 125 60 47 116 101 120 116 62 13 10 60 47 108 105 110 107 62 13 10 13 10 60 47 109 101 116 97 100 97 116 97 62 13 10{a.
-
 NB. valid gpx name characters
 GPXNAMECHARS=:' -()0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 NB. get geotagged images from mirror - rows in desc upload date
 GpxGeotaggedMirror_sql=:'select Latitude, Longitude, RealDate, UploadDate, OnlineImageFile from OnlineImage where Keywords like "%geotagged%"'
 
+NB. regular expression matching placeholder variables in html lists
+HTMLVARBPATTERN=:'{{[a-z]*}}'
+
 NB. interface words (IFACEWORDSgpxutils) group
-IFACEWORDSgpxutils=:<;._1 ' allrecent gpxfrmirror gpxfrpoicsv gpxfrrecent'
+IFACEWORDSgpxutils=:<;._1 ' allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
 
 NB. line feed character
 LF=:10{a.
@@ -46,10 +96,16 @@ NB. gpx file written by (gpxutils)
 MIRRORGPXFILE=:'c:/pd/coords/gpx/geotagged smugmug images.gpx'
 
 NB. root words (ROOTWORDSgpxutils) group      
-ROOTWORDSgpxutils=:<;._1 ' AllMirror_sql GpxGeotaggedMirror_sql IFACEWORDSgpxutils ROOTWORDSgpxutils allrecent gpxfrmirror gpxfrpoicsv gpxfrrecent write'
+ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
+
+NB. version, make count, and date
+VMDgpxutils=:'0.9.0';7;'18 Jun 2022 18:39:13'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
+
+NB. retains string after first occurrence of (x)
+afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
 
 
 allrecent=:3 : 0
@@ -86,6 +142,26 @@ assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
 NB. retains string before first occurrence of (x)
 beforestr=:] {.~ 1&(i.~)@([ E. ])
 
+
+betweenstrs=:4 : 0
+
+NB.*betweenstrs v-- select sublists between  nonnested delimiters
+NB. discarding delimiters.
+NB.
+NB. dyad:  blcl =. (clStart;clEnd) betweenstrs cl
+NB.        blnl =. (nlStart;nlEnd) betweenstrs nl
+NB.
+NB.   ('start';'end') betweenstrs 'start yada yada end boo hoo start ahh end'
+NB.
+NB.   NB. also applies to numeric delimiters
+NB.   (1 1;2 2) betweenstrs 1 1 66 666 2 2 7 87 1 1 0 2 2
+
+'s e'=. x
+llst=. ((-#s) (|.!.0) s E. y) +. e E. y
+mask=. ~:/\ llst
+(mask#llst) <;.1 mask#y
+)
+
 NB. boxes open nouns
 boxopen=:<^:(L. = 0:)
 
@@ -120,6 +196,38 @@ while. lim > cnt=.>:cnt do.         NB. process each change pair
   end.
 end. y                              NB. altered string
 )
+
+
+csvfrwpt=:3 : 0
+
+NB.*csvfrwpt v-- poi CSV text from waypoint text file.
+NB.
+NB. monad:  cl =. csvfrwpt clFile
+NB.
+NB.   f=. 'C:\Users\baker\iCloudDrive\oznztrip\gps_oz_nz_2022.txt'
+NB.   p=. '.'&beforestr f 
+NB.   t=. csvfrwpt f
+NB.   (toHOST t) write p,'.csv'
+NB.   g=. gpxfrpoicsv p,'.csv'
+NB.   (toHOST g) write p,'.gpx'
+
+NB. lines from text
+ct=. <;._2 tlf (read y) -. CR
+
+NB. waypoint names
+wn=. ':'&beforestr&.> ct
+
+NB. extract longitude and latitude
+lb=. |."1 <;._1"1 ',' ,&> -.&' '&.> (':'&afterstr)@(';'&beforestr)&.> ct
+
+NB. format comma delimted
+em=. 1 0 1 0 1
+lb=. alltrim&.> lb ,. wn
+tlf ctl ;"1 (<',') (<a:;I. -.em)} em (#^:_1)"1 lb
+)
+
+NB. character table to newline delimited list
+ctl=:}.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@]))
 
 NB. enclose all character lists in blcl in " quotes
 dblquote=:'"'&,@:(,&'"')&.>
@@ -212,6 +320,47 @@ NB.   sql fst trg
 
 NB. require 'data/sqlite' !(*)=. sqlclose__db sqlreads__db sqlopen_psqlite_
 d [ sqlclose__db '' [ d=. sqlreads__db x [ db=. sqlopen_psqlite_ y
+)
+
+NB. get pure element text
+geteletext=:] betweenstrs~ [: tags [: alltrim [
+
+
+gpxfrmapkml=:3 : 0
+
+NB.*gpxfrmapkml v-- gpx from Google maps kml.
+NB.
+NB. monad:  clGpx =. gpxfrmapkml clKml
+NB.
+NB.   NB. download Google map waypoints as kml
+NB.   kml=. read 'c:/temp/arizona annular eclipse.kml'
+NB.
+NB.   NB. convert to gpx and save
+NB.   gpx=. gpxfrmapkml kml
+NB.   gpx write 'c:/temp/arizona annular eclipse.gpx'  
+
+NB. parse kml form waypoint table
+dname=. ;'name' geteletext '<Placemark>' beforestr y
+wpt=.   ;'Placemark' geteletext y
+wpt=.   ('name' geteletext wpt) ,. <;._1&> ','&,&.> 'coordinates' geteletext wpt
+hdr=.   ;:'phototitle longitude latitude'
+
+NB. format gpx header 
+gpxstamp=. 'Waypoints: ',(":#wpt),' GPX generated: ',timestamp''
+gpxheader=. ('/{{headername}}/',dname,'/{{headerdescription}}/',gpxstamp) changestr GPXFRKMLHEADER
+gpxtrailer=. GPXTRAILER
+
+'idx pkml'=. HTMLVARBPATTERN patpartstr GPXSMUGPLACEMARK
+rvarbs=. idx htmlvarbs pkml
+
+msg=. 'all row varibles must exist in data header'
+msg assert *./ rvarbs e. hdr
+rows=. (#wpt) # ,: pkml
+rows=. ((hdr i. <'phototitle'){"1 wpt) (<a:;(rvarbs i. <'phototitle'){idx)} rows
+rows=. ((hdr i. <'latitude'){"1 wpt) (<a:;(rvarbs i. <'latitude'){idx)} rows
+rows=. ((hdr i. <'longitude'){"1 wpt) (<a:;(rvarbs i. <'longitude'){idx)} rows
+
+gpxheader,(;rows),gpxtrailer
 )
 
 
@@ -340,6 +489,9 @@ d=. '0' (I. d=' ')} d
 'Z' ,"1~ (r,c) $ d
 )
 
+NB. extract html placeholder variable names
+htmlvarbs=:{  -.&.> (<'{}')"_
+
 NB. file name from fully qualified file names
 justfile=:(] #~ [: -. [: +./\ '.'&=)@(] #~ [: -. [: +./\. e.&':\')
 
@@ -370,11 +522,67 @@ NB. use masks to cut lines
 b <;._1"1 y
 )
 
+
+patpartstr=:4 : 0
+
+NB.*patpartstr v-- split list into sublists of pattern and non-pattern.
+NB.
+NB. dyad:  (ilIdx ;< blcl) =. clPattern patpartstr clStr
+NB.
+NB.   'hoo' patpartstr 'hoohoohoo'  
+NB.   'ab.c' patpartstr   'abhc yada yada abNcabuc boo freaking hoo'
+NB.   'nada' patpartstr 'nothing to match'
+NB.
+NB.   NB. result pattern indexes and split list
+NB.   'idx substrs'=. 'yo[a-z]*'  patpartstr 'yo yohomeboy no no yoman'
+NB.   idx{substrs  NB. patterns
+
+NB. require 'regex' !(*)=. rxmatches
+if. #pat=. ,"2 x rxmatches y do.
+  mask=. (#y)#0
+  starts=. 0 {"1 pat
+  ends=. starts + <: 1 {"1 pat
+  m1=. 1 (0,starts)} mask 
+  m2=. _1 (|.!. 0) 1 ends} mask 
+  m2=. m1 +. m2 
+  mask=. 1 starts} mask
+  idx=. (m2 {.;.1 mask) # i. +/m2       
+  idx;< m2 <;.1 y
+else.
+  (i.0);<<y
+end.
+)
+
 NB. reads a file as a list of bytes
 read=:1!:1&(]`<@.(32&>@(3!:0)))
 
 NB. xml BEGIN and END tags
 tags=:'<'&,@,&'>' ; '</'&,@,&'>'
+
+
+timestamp=:3 : 0
+
+NB.*timestamp v-- formats timestamp as dd mmm yyyy hr:mn:sc
+NB.
+NB. monad:  cl =. timestamp zu | nlTime
+NB. 
+NB.   timestamp ''              NB. empty now
+NB.   timestamp 2007 9 16       NB. fills missing
+NB.   timestamp 1953 7 2 12 33   
+
+if. 0 = #y do. w=. 6!:0'' else. w=. y end.
+r=. }: $ w
+t=. 2 1 0 3 4 5 {"1 [ _6 [\ , 6 {."1 <. w
+d=. '+++::' 2 6 11 14 17 }"1 [ 2 4 5 3 3 3 ": t
+mth=. _3[\'   JanFebMarAprMayJunJulAugSepOctNovDec'
+d=. ,((1 {"1 t) { mth) 3 4 5 }"1 d
+d=. '0' (I. d=' ') } d
+d=. ' ' (I. d='+') } d
+(r,20) $ d
+)
+
+NB. appends trailing line feed character if necessary
+tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
 NB. extract waypoint date from gpx metadata header
 waystmp=:[: alltrim '=' afterlaststr '</text>' beforestr ]
@@ -385,9 +593,11 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s):
+NB. (gpxutils) interface word(s): 20220618j183913
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
+NB. csvfrwpt     NB. poi CSV text from waypoint text file
+NB. gpxfrmapkml  NB. gpx from Google maps kml
 NB. gpxfrmirror  NB. extracts geotagged images from mirror_db and generates gpx
 NB. gpxfrpoicsv  NB. converts poi csv files to gpx
 NB. gpxfrrecent  NB. gpx from recent waypoints
