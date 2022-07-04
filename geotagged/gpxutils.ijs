@@ -99,7 +99,7 @@ NB. root words (ROOTWORDSgpxutils) group
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';7;'18 Jun 2022 18:39:13'
+VMDgpxutils=:'0.9.0';8;'04 Jul 2022 11:17:21'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -117,7 +117,7 @@ NB.
 NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
 NB.   allrecent trg
 NB.
-NB. dyad:  bt =. clGpxFile gpxfrrecent clMirrorDb
+NB. dyad:  bt =. clGpxFile allrecent clMirrorDb
 NB.
 NB.   lastgpx=. 'c:/pd/coords/gpx/geotagged test images.gpx'
 NB.   lastgpx allrecent trg
@@ -593,7 +593,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20220618j183913
+NB. (gpxutils) interface word(s): 20220704j111721
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
 NB. csvfrwpt     NB. poi CSV text from waypoint text file
