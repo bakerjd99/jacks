@@ -1,6 +1,6 @@
 
 [`MirrorXref`](https://github.com/bakerjd99/jacks/blob/master/mirrorxref/MirrorXref.ijs) - change history
-============================
+=========================================================================================================
 
 ### June 5, 2022
 
@@ -26,7 +26,7 @@
 ### May 27, 2022
 
 * Added `CheckRealDates` to group. The python function that
-  fetches read dates from SmugMug stopped working. For now
+  fetches real dates from SmugMug stopped working. For now
   I am returning a bogus real date that I fix manually. `CheckRealDates`
   makes sure these bogus dates not do get stored in `mirror.db`.
 

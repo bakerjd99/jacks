@@ -201,7 +201,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.75';78;'05 Jun 2022 10:46:54'
+MIRRORVMD=:'0.9.75';79;'10 Jul 2022 17:08:28'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -227,12 +227,11 @@ AlbumImageCount=:3 : 0
 NB.*AlbumImageCount v-- execute (AlbumImageCount_sql) query.
 NB.
 NB. monad:  bt =. AlbumImageCount clMirrorDb
+NB.
+NB.   AlbumImageCount ALTMIRRORDBPATH,MIRRORDB
 
-NB. require 'data/sqlite' !(*)=. sqlopen_psqlite_ sqldict__dt sqlclose__dt
 NB. get album image counts and names
-dt=. sqlopen_psqlite_ y
-d=. sqldict__dt AlbumImageCount_sql
-d [ sqlclose__dt ''
+AlbumImageCount_sql fsd y
 )
 
 
@@ -1302,14 +1301,14 @@ dstat ImageCnt [ sqlclose__dt ''
 
 NotDivisible=:3 : 0
 
-NB.*NotDivisible v-- list albums with  image counts that are  not
-NB. divisible by three and five.
+NB.*NotDivisible  v--  albums with  image  counts  that  are  not
+NB. divisible by 3 and 5.
 NB.
-NB. This  verb  finds  albums  with  image counts  that  are  not
-NB. divisibe by  three  and  five.  This  weird  requirement  was
-NB. motivated by  how the SmugMug iPhone  App displays galleries.
-NB. It breaks the images into rows of three or five. I don't like
-NB. incomplete terminal rows.
+NB. This  verb  finds  albums  with  image  counts that  are  not
+NB. divisibe by  3 and 5. This weird requirement was motivated by
+NB. how the SmugMug iPhone App displays galleries. It breaks  the
+NB. images into rows  of three or five. I  don't  like incomplete
+NB. terminal rows.
 NB.
 NB. monad:  bt =. NotDivisible clMirrorDb
 NB.
@@ -2079,7 +2078,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220605j104654
+NB. (MirrorXref) interface word(s): 20220710j170828
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
