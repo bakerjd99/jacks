@@ -201,7 +201,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.75';79;'10 Jul 2022 17:08:28'
+MIRRORVMD=:'0.9.75';80;'11 Jul 2022 13:09:56'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -1774,6 +1774,21 @@ NB. format tables as TAB delimited LF terminated text - see long document
 fmttd=:[: (] , ((10{a.)"_ = {:) }. (10{a.)"_) [: }.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@])) [: }."1 [: ;"1 (a.{~9)&,@":&.>
 
 
+fsd=:4 : 0
+
+NB.*fsd v-- fetch sqlite dictionary array.
+NB.
+NB. dyad:  clSql fsd clDb
+NB.
+NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   sql=. 'select ImageKey, OriginalWidth, OriginalHeight, OnlineImageFile, Keywords from OnlineImage'
+NB.   sql fsd trg
+
+NB. require 'data/sqlite' !(*)=. sqlclose__db sqldict__db sqlopen_psqlite_
+d [ sqlclose__db '' [ d=. sqldict__db x [ db=. sqlopen_psqlite_ y
+)
+
+
 insqltd=:4 : 0
 
 NB.*insqltd v-- insert btcl table into sqlite table.
@@ -2078,7 +2093,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220710j170828
+NB. (MirrorXref) interface word(s): 20220711j130956
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
