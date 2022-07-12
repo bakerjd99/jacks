@@ -57,7 +57,7 @@ NB. root words (ROOTWORDSmirrorstats) group
 ROOTWORDSmirrorstats=:<;._1 ' IFACEWORDSmirrorstats NotDivisible ROOTWORDSmirrorstats VMDmirrorstats albdist albextent dstat freq fsd fst histogram2 itYMDhms ofreq portchars read'
 
 NB. version, make count and date
-VMDmirrorstats=:'0.5.0';12;'10 Jul 2022 16:52:50'
+VMDmirrorstats=:'0.5.0';12;'12 Jul 2022 12:21:26'
 
 
 AlbumImageCount=:3 : 0
@@ -449,7 +449,7 @@ var=:ssdev % <:@#
 NB.POST_mirrorstats post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (mirrorstats) interface word(s): 20220710j165250
+NB. (mirrorstats) interface word(s): 20220712j122126
 NB. -------------------------------
 NB. NotDivisible  NB. albums with image counts that are not divisible by 3 and 5
 NB. albdist       NB. all mean album distances km from position (x)
