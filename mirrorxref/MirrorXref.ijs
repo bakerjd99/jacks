@@ -201,7 +201,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.75';80;'11 Jul 2022 13:09:56'
+MIRRORVMD=:'0.9.75';79;'14 Jul 2022 09:39:13'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -447,7 +447,7 @@ NB.
 NB. monad:  bt =. CheckRealDates clPfx
 NB.
 NB.   NB. empty table result indicates dates ok
-NB.   bf=. CheckRealDates '/real*.txt'
+NB.   ,. CheckRealDates '/real*.txt'
 NB.
 NB. dyad:  bt =. ilYYYYMMDD CheckRealDates clPfx
 
@@ -1366,7 +1366,7 @@ NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
 NB.   SetBogusRealDates f
 NB.
 NB.   NB. set bogus dates over many galleries
-NB.   SetBogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
+NB.   ,. SetBogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
 
 if. #t=. ThumbsRealDates y do.
 
@@ -1774,21 +1774,6 @@ NB. format tables as TAB delimited LF terminated text - see long document
 fmttd=:[: (] , ((10{a.)"_ = {:) }. (10{a.)"_) [: }.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@])) [: }."1 [: ;"1 (a.{~9)&,@":&.>
 
 
-fsd=:4 : 0
-
-NB.*fsd v-- fetch sqlite dictionary array.
-NB.
-NB. dyad:  clSql fsd clDb
-NB.
-NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
-NB.   sql=. 'select ImageKey, OriginalWidth, OriginalHeight, OnlineImageFile, Keywords from OnlineImage'
-NB.   sql fsd trg
-
-NB. require 'data/sqlite' !(*)=. sqlclose__db sqldict__db sqlopen_psqlite_
-d [ sqlclose__db '' [ d=. sqldict__db x [ db=. sqlopen_psqlite_ y
-)
-
-
 insqltd=:4 : 0
 
 NB.*insqltd v-- insert btcl table into sqlite table.
@@ -2093,7 +2078,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220711j130956
+NB. (MirrorXref) interface word(s): 20220714j93913
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
