@@ -17,7 +17,7 @@ NB. 22jul16 (audbrandxmp) renamed (audbranddir) to match (titbranddir)
 coclass 'brandxmp'
 
 NB.*dependents
-NB. (*)=: shabrand wrecho XMPBRDEL XMPTITLEFRAG
+NB. (*)=: shabrand wrecho RAWFILETYPES XMPBRDEL XMPTITLEFRAG
 NB.*enddependents
 
 NB. xmp brand delimiter character
@@ -28,6 +28,9 @@ shabrand=: (XMPBRDEL ,~ justfileext@winpathsep) , sha256@read
 
 NB. write bytes (x) and return file (y)
 wrecho=: {{ y [ x (write :: _1:) y }}
+
+NB. image types considered raw - adjust if necessary
+RAWFILETYPES=: <;._1 ' jpg tif tiff nef dng png jpeg heic'
 
 XMPTITLEFRAG=: (0 : 0)
 <dc:title>
@@ -47,14 +50,11 @@ IFACEWORDSbrandxmp=:<;._1 ' audbranddir sidecars titbranddir titbrandxmp'
 NB. line feed character
 LF=:10{a.
 
-NB. image types considered raw
-RAWFILETYPES=:<;._1 ' jpg tif tiff nef dng png jpeg heic'
-
 NB. root words (ROOTWORDSbrandxmp) group      
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.6.0';3;'16 Jul 2022 17:00:05'
+VMDbrandxmp=:'0.6.0';5;'17 Jul 2022 11:54:02'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -447,7 +447,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20220716j170005
+NB. (brandxmp) interface word(s): 20220717j115402
 NB. -----------------------------
 NB.  audbranddir - audit xmp/raw image directories
 NB.  sidecars    - image raws with corresponding sidecar xmp files
