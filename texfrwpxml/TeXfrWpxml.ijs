@@ -11,11 +11,12 @@ NB. https://github.com/bakerjd99/jacks/blob/master/texfrwpxml/wordpresstolatexwi
 NB.
 NB. interface word(s): 
 NB. ------------------------------------------------------------------------------
-NB. BlogHashes       - update blog hashes
-NB. FixBaddown       - attempt to convert *.baddown files to *.markddown
-NB. LatexFrWordpress - experimental conversion of Wordpress XML to LaTeX
-NB. MainMarkdown     - assembles all *.markdown files in a master file
-NB. MarkdownFrLatex  - converts edited LaTeX post files to image free markdown
+NB.  BlogHashes       - update blog hashes
+NB.  FixBaddown       - attempt to convert *.baddown files to *.markddown
+NB.  LatexFrWordpress - experimental conversion of Wordpress XML to LaTeX
+NB.  MainMarkdown     - assembles *.markdown files in EPUB directory in a master file
+NB.  MarkdownFrLatex  - converts edited LaTeX post files to image free markdown
+NB.  countYearposts   - adds post counts to table of content lines
 NB.                                                         
 NB. author:  John D. Baker
 NB. created: 2012feb10
@@ -32,6 +33,7 @@ NB. 17sep29 use J 8.06 sha hash functions - removes need for external dll
 NB. 20jul11 (BlogHashes) adjusted to track xhtml version
 NB. 20sep12 (mdfootnotes) added to prefix markdown footnotes with post number
 NB. 22mar29 (filenamesFrtid) adjusted to extract titles from new <!CDATA['s
+NB. 22jul19 (countYearposts) added
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -168,7 +170,7 @@ NB. HTML file extension
 HTMLEXT=:'.html'
 
 NB. interface words (IFACEWORDSTeXfrWpxml) group
-IFACEWORDSTeXfrWpxml=:<;._1 ' FixBaddown LatexFrWordpress MarkdownFrLatex MainMarkdown BlogHashes'
+IFACEWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown LatexFrWordpress MainMarkdown MarkdownFrLatex countYearposts'
 
 NB. substitute for WordPress $latex ... $ blocks - must be untouched by latex
 LATEXFRAGMARK=:'LLLATEXFRAGGG'
@@ -186,7 +188,7 @@ NB. pandoc shell command prefix
 PANDOCCMD=:'pandoc -o '
 
 NB. root words (ROOTWORDSTeXfrWpxml) group      
-ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs postfiles posttex showpass uedposts'
+ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs countYearposts postfiles posttex showpass uedposts'
 
 NB. placeholder substitute for WordPress source blocks - must be untouched by LaTeX
 SOURCEBLOCKMARK=:'SSSOURCEBLOCKEEE'
@@ -573,6 +575,35 @@ NB. dyad:  (clOutExt;clInExt) cleartemps clPathfile
 'outext inext'=. x
 (inext,' extension required') assert 1 e. inext E. y
 ferase y;('.'&beforelaststr y),outext
+)
+
+
+countYearposts=:3 : 0
+
+NB.*countYearposts v-- adds post counts to table of content lines.
+NB.
+NB. NOTE: this verb depends on the layout of (bm.tex).
+NB.
+NB. monad:  clTex =. countYearposts clFileTeX
+NB.
+NB.   NB. root latex file
+NB.   tex=. 'c:\pd\blog\wp2latex\bm.tex'
+NB.   (toHOST countYearposts tex) write tex
+
+NB. read and cut latex
+ctex=. tex <;.1~ 1 (0)}'\addcontentsline{toc}{section}' E. tex=. read y
+
+NB. post counts
+pcnts=. +/@('\input{'&E.)&.> }.ctex
+
+NB. add content lines 
+atocs=. ('---'&beforelaststr)@('}'&beforelaststr)@(LF&beforestr)&.> }.ctex
+
+NB. append counts
+atocs=. atocs ,&.> (<' --- ') ,&.> (":&.> pcnts) ,&.> <' posts}',CRLF
+
+NB. clip old content lines and append new
+;(0{ctex) , atocs ,&.> LF&afterstr&.> }.ctex 
 )
 
 NB. character table to newline delimited list
@@ -1407,13 +1438,14 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20220331j132443
+NB. (TeXfrWpxml) interface word(s): 20220719j123414
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
 NB. LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
-NB. MainMarkdown      NB. assembles all *.markdown files in a master file
+NB. MainMarkdown      NB. assembles *.markdown files in EPUB directory in a master file
 NB. MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
+NB. countYearposts    NB. adds post counts to table of content lines
 )
 
 SetTeXfrWpxmlPaths 0

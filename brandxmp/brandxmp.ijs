@@ -54,7 +54,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.6.0';5;'17 Jul 2022 11:54:02'
+VMDbrandxmp=:'0.6.0';8;'21 Jul 2022 09:46:30'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -105,7 +105,7 @@ NB.
 NB. 1. counts of raw types in directory
 NB. 2. raws without sidecar xmps
 NB. 3. raws with xmps missing titles
-NB. 4. titles of xmps - shows name;hash if branded
+NB. 4. titles of xmps - shows name|hash if branded
 NB.
 NB. monad:  clAuditFile =. audbranddir clDirectory
 NB.
@@ -150,7 +150,7 @@ if. #htxmp do.
 end.
 
 NB. write audit file
-afile [ (toHOST txt) write afile=. (tslash2 y),XMPAUDITFILE
+afile [ (toHOST tlf txt) write afile=. (tslash2 y),XMPAUDITFILE
 )
 
 NB. retains string before first occurrence of (x)
@@ -415,6 +415,9 @@ else.
 end.
 )
 
+NB. appends trailing line feed character if necessary
+tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
+
 NB. converts character strings to CRLF delimiter
 toCRLF=:2&}.@:;@:((13{a.)&,&.>@<;.1@((10{a.)&,)@toJ)
 
@@ -447,12 +450,12 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20220717j115402
+NB. (brandxmp) interface word(s): 20220721j94630
 NB. -----------------------------
-NB.  audbranddir - audit xmp/raw image directories
-NB.  sidecars    - image raws with corresponding sidecar xmp files
-NB.  titbranddir - brand eligible xmp files in directory
-NB.  titbrandxmp - brand xmp sidecar file with file name and hash of associated image
+NB. audbranddir  NB. audit xmp/raw image directories
+NB. sidecars     NB. image raws with corresponding sidecar xmp files
+NB. titbranddir  NB. brand eligible xmp files in directory
+NB. titbrandxmp  NB. brand xmp sidecar file with file name and hash of associated image
 )
 
 cocurrent 'base'
