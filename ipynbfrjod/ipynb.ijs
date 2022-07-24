@@ -84,7 +84,7 @@ NB. root words (ROOTWORDSipynb) group
 ROOTWORDSipynb=:<;._1 ' IFACEWORDSipynb PYESCAPECHRS ROOTWORDSipynb VMDipynb ipynbfrjod'
 
 NB. version, make count and date
-VMDipynb=:'0.8.0';5;'24 Jul 2022 13:25:21'
+VMDipynb=:'0.8.0';6;'24 Jul 2022 17:48:25'
 
 NB. retains string (y) before last occurrence of (x)
 beforelaststr=:] {.~ 1&(i:~)@([ E. ])
@@ -169,7 +169,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_ipynb ipynb post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (ipynb) interface word(s): 20220724j132521
+NB. (ipynb) interface word(s): 20220724j174825
 NB. --------------------------
 NB. ipynbfrjod  NB. extract J words from JOD and insert in blank jupyter notebook
 )
