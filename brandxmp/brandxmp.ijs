@@ -54,7 +54,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.6.0';9;'23 Jul 2022 08:35:24'
+VMDbrandxmp=:'0.6.5';01;'01 Aug 2022 11:44:02'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -75,8 +75,9 @@ NB.*allraws v-- list all raw image files in directory.
 NB.
 NB. monad:  blcl =. allraws clDirectory
 NB.
-NB.   rp=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d7500'
-NB.   allraws rp
+NB.   r0=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d7500'
+NB.   r1=. '/Users/johnbaker/Pictures/2022/Idaho/07_jul/d7500'
+NB.   allraws r0
 NB.
 NB. dyad:  blcl =. blclRawExt allraws clDirectory
 NB.
@@ -84,8 +85,12 @@ NB.   (;:'nef dng') allraws rp
 
 RAWFILETYPES allraws y
 :
-NB. j profile !(*)=. dir
-a: -.~ , ;1&dir&.> (<(tslash2 y) ,'*.') ,&.> x
+NB. j profile !(*)=. dir IFUNIX
+
+NB. file extension case matters on unix systems (sigh)
+if. IFUNIX do. ext=. x,toupper&.> x else. ext=x end.
+
+a: -.~ , ;1&dir&.> (<(tslash2 y) ,'*.') ,&.> ext
 )
 
 NB. trims all leading and trailing blanks
@@ -111,6 +116,7 @@ NB. monad:  clAuditFile =. audbranddir clDirectory
 NB.
 NB.   r0=. 'c:/pictures/2022/Washington/04_apr/d7500'
 NB.   r1=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d7500'
+NB.   r2=. '/Users/johnbaker/Pictures/2022/Idaho/07_jul/d7500' 
 NB.   audbranddir r0
 
 NB. if no raws return empty and do not write audit file
@@ -316,6 +322,7 @@ NB.   sidecars p0
 NB.
 NB. dyad:  btcl =. blcl sidecars clDirectory
 NB.
+NB.   p0=. '/Users/johnbaker/Pictures/2022/Idaho/07_jul/d7500' 
 NB.   p1=. 'C:\pictures\2022\North Rim Monument Valley\06_jun\d7500'
 NB.   (;:'nef dng') sidecars p1  NB. only real raws
 
@@ -366,8 +373,9 @@ NB. number of images in a directory.
 NB.
 NB. monad:  blcl =. titbranddir clDirectory
 NB.
-NB.   rp=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d5100'
-NB.   titbranddir rp
+NB.   r0=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d5100'
+NB.   r1=. '/Users/johnbaker/Pictures/2022/Idaho/07_jul/d7500'
+NB.   titbranddir r0  
 
 NB. "raws" with sidecar xmp
 if. #ds=. sidecars y do.
@@ -450,7 +458,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20220723j83524
+NB. (brandxmp) interface word(s): 20220801j114402
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files

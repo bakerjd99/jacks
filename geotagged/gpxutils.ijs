@@ -99,7 +99,7 @@ NB. root words (ROOTWORDSgpxutils) group
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';8;'04 Jul 2022 11:17:21'
+VMDgpxutils=:'0.9.0';18;'31 Jul 2022 18:04:18'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -114,7 +114,7 @@ NB.*allrecent v-- all recent images from last waypoint generation.
 NB.
 NB. monad:  bt =. allrecent clMirrorDb
 NB.
-NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   trg=. jpath '~addons/jacks/testdata/small_mirror.db'
 NB.   allrecent trg
 NB.
 NB. dyad:  bt =. clGpxFile allrecent clMirrorDb
@@ -204,8 +204,8 @@ NB.*csvfrwpt v-- poi CSV text from waypoint text file.
 NB.
 NB. monad:  cl =. csvfrwpt clFile
 NB.
-NB.   f=. 'C:\Users\baker\iCloudDrive\oznztrip\gps_oz_nz_2022.txt'
-NB.   p=. '.'&beforestr f 
+NB.   f=. jpath '~addons/jacks/testdata/gps_oz_nz_2022.txt'
+NB.   p=. jpath '~temp/gps_oz_nz'
 NB.   t=. csvfrwpt f
 NB.   (toHOST t) write p,'.csv'
 NB.   g=. gpxfrpoicsv p,'.csv'
@@ -333,11 +333,11 @@ NB.
 NB. monad:  clGpx =. gpxfrmapkml clKml
 NB.
 NB.   NB. download Google map waypoints as kml
-NB.   kml=. read 'c:/temp/arizona annular eclipse.kml'
+NB.   kml=. read jpath '~addons/jacks/testdata/small_mirror.kml'
 NB.
 NB.   NB. convert to gpx and save
 NB.   gpx=. gpxfrmapkml kml
-NB.   gpx write 'c:/temp/arizona annular eclipse.gpx'  
+NB.   (toHOST gpx) write jpath '~temp/small_kml.gpx'  
 
 NB. parse kml form waypoint table
 dname=. ;'name' geteletext '<Placemark>' beforestr y
@@ -370,9 +370,9 @@ NB.*gpxfrmirror v-- extracts geotagged images from mirror_db and generates gpx.
 NB.
 NB. monad:  clGpx =. gpxfrmirror clMirrorDb
 NB.
-NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   trg=. jpath '~addons/jacks/testdata/small_mirror.db'
 NB.   gpx=. gpxfrmirror trg
-NB.   (toHOST gpx) write 'c:/pd/coords/gpx/geotagged smugmug images.gpx'
+NB.   (toHOST gpx) write jpath '~temp/geotagged_images.gpx'
 NB. 
 NB. dyad:  clGpx =. iaN gpxfrmirror clMirrorDb
 NB.
@@ -398,7 +398,9 @@ NB. http://www.poi-factory.com/poifiles
 NB.
 NB. monad:  clGpx =. gpxfrpoicsv clCsvfile
 NB.
-NB.   gpx=. gpxfrpoicsv 'c:\pd\coords\poicsv\ca_park_m.csv'
+NB.   csv=. jpath '~addons/jacks/testdata/10_best_us_star_gazing.csv'
+NB.   gpx=. gpxfrpoicsv csv
+NB.   (toHOST gpx) write jpath '~temp/star_gazing.gpx'
 NB.
 NB. dyad:  clGpx =. iaRows gpxfrpoicsv clCsvfile
 NB.
@@ -449,13 +451,13 @@ NB.*gpxfrrecent v-- gpx from recent waypoints.
 NB.
 NB. monad:  clGpx =. gpxfrrecent clMirrorDb
 NB.
-NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   trg=. jpath '~addons/jacks/testdata/small_mirror.db'
 NB.   gpx=. gpxfrrecent trg
-NB.   (toHOST gpx) write 'c:/pd/coords/gpx/recent geotagged images.gpx'
+NB.   (toHOST gpx) write jpath '~temp/recent_geotagged.gpx'
 NB.
 NB. dyad:  clGpx =. clGpxFile gpxfrrecent clMirrorDb
 NB.
-NB.   lastgpx=. 'c:/pd/coords/gpx/geotagged test images.gpx'
+NB.   lastgpx=. jpath '~temp/geotagged_images.gpx'
 NB.   lastgpx gpxfrrecent trg
 
 MIRRORGPXFILE gpxfrrecent y
@@ -593,7 +595,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20220704j111721
+NB. (gpxutils) interface word(s): 20220731j180418
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
 NB. csvfrwpt     NB. poi CSV text from waypoint text file
