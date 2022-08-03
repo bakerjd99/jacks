@@ -54,7 +54,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.6.5';01;'01 Aug 2022 11:44:02'
+VMDbrandxmp=:'0.6.5';3;'02 Aug 2022 13:57:31'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -88,7 +88,7 @@ RAWFILETYPES allraws y
 NB. j profile !(*)=. dir IFUNIX
 
 NB. file extension case matters on unix systems (sigh)
-if. IFUNIX do. ext=. x,toupper&.> x else. ext=x end.
+if. IFUNIX do. ext=. x,toupper&.> x else. ext=. x end.
 
 a: -.~ , ;1&dir&.> (<(tslash2 y) ,'*.') ,&.> ext
 )
@@ -458,7 +458,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20220801j114402
+NB. (brandxmp) interface word(s): 20220802j135731
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
