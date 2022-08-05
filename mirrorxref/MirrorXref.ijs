@@ -11,16 +11,20 @@ NB. verbatim:
 NB.
 NB. https://conceptcontrol.smugmug.com/
 NB. https://github.com/bakerjd99/smugpyter
+NB. https://github.com/bakerjd99/jacks/tree/master/mirrorxref
 NB.
 NB. interface word(s):
 NB. ------------------------------------------------------------------------------
-NB.  BogusRealDates        - images from single real date file with bogus dates
 NB.  BuildMirror           - backup/create/load mirror
 NB.  CheckRealDates        - check real dates
+NB.  CreateMirror_sql      - schema of mirror_db database - parsed on ';' character
 NB.  DumpLocalImageNatural - dump (LocalImage) as TAB delimited text
+NB.  LoadMirrorXrefDb      - loads new mirror cross reference database
 NB.  LocalFromDir          - local files with directory match (y) and file match (x)
 NB.  MirrorStatReport      - mirror database upload summary report
 NB.  MissingImagesReport   - missing local images report
+NB.  SampleMirror          - samples mirror_db
+NB.  SetBogusRealDates     - set bogus real dates in one real dates file
 NB.  SuspiciousPairReport  - suspicious local and online file pairings
 NB.
 NB. created: 2018jun06
@@ -42,6 +46,8 @@ NB. 20nov21 add (UnClickHereImages_sql)
 NB. 22may27 added (CheckRealDates)
 NB. 22may29 added (BogusRealDates)
 NB. 22jun04 modified (BuildMirror) to build mirror_temb.db
+NB. 22jul29 (RenameRealDates) added
+NB. 22jul31 (SampleMirror) added
 
 require 'data/sqlite'
 
@@ -168,7 +174,7 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSMirrorXref) group
-IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates DumpLocalImageNatural LocalFromDir MirrorStatReport MissingImagesReport SetBogusRealDates SuspiciousPairReport'
+IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates CreateMirror_sql DumpLocalImageNatural LoadMirrorXrefDb LocalFromDir MirrorStatReport MissingImagesReport SampleMirror SetBogusRealDates SuspiciousPairReport'
 
 NB. line feed character
 LF=:10{a.
@@ -201,7 +207,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.75';79;'14 Jul 2022 09:39:13'
+MIRRORVMD=:'0.9.79';13;'05 Aug 2022 10:39:51'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -210,7 +216,7 @@ NB. fully qualified sqlite primary thumbs database file name
 PRIMARYTHUMBS=:'c:/thumbsdbs/primary2018.tpdb8s'
 
 NB. root words (ROOTWORDSMirrorXref) group
-ROOTWORDSMirrorXref=:<;._1 ' BogusRealDates BuildMirror Divisible IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref UnClickHereImages_sql'
+ROOTWORDSMirrorXref=:<;._1 ' BuildMirror Divisible IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref SampleMirror SetBogusRealDates UnClickHereImages_sql'
 
 NB. name of suspect image pairs report
 SUSPECTPAIRS=:'suspects.txt'
@@ -1349,6 +1355,70 @@ paths ,&.> 'realdate-'&,&.> (#'manifest-') }.&.> '/'&afterlaststr&.> y
 )
 
 
+RenameRealDates=:3 : 0
+
+NB.*RenameRealDates v-- renames fix/old/txt realdate files.
+NB.
+NB. monad:  clFile =. RenameRealDates clFullPathFixFile
+
+NB. j profile !(*)=. dir
+NB. erase files with old extension 
+old=. 1 dir '*.old' ,~ tslash2 jpathsep justpath winpathsep y
+ferase old
+
+NB. rename current real date file to old
+rdf=. '.txt' ,~ (-#'.fix') }. y
+('missing real date file - > ',rdf) assert fexist rdf
+(read rdf) write '.old' ,~ (-#'.fix') }. y
+ferase rdf
+
+NB. rename fix file to txt
+(read y) write rdf
+ferase y
+('missing real date file - > ',rdf) assert fexist rdf
+rdf
+)
+
+
+SampleMirror=:3 : 0
+
+NB.*SampleMirror v-- samples mirror_db.
+NB.
+NB. monad:  SampleMirror clMirrorCopy
+NB.
+NB.   NB. copy mirror.db to small_mirror.db
+NB.   df=. jpath '~addons/jacks/testdata/small_mirror.db'
+NB.   SampleMirror df
+NB. 
+NB. dyad:  iaN SampleMirror clMirrorCopy
+
+500 SampleMirror y
+:
+NB. require 'data/sqlite' !(*)=. sqlopen_psqlite_ sqlread__db sqlclose__db
+db=. sqlopen_psqlite_ y
+
+NB. randomly select (x) images !(*)=. ImageKey
+(;{. r)=. ;{:r=. sqlread__db 'select ImageKey from OnlineImage'
+if. x < #ImageKey do.
+  sk=. ImageKey {~ x ? #ImageKey
+  sk=. '(' ,(}. ;',' ,&.> dblquote sk),')'
+
+  NB. remove all but sample images from related tables - deletion order matters
+  msg=. 'deletion error -> '
+  (msg,'LocalImage') assert -.sqlcmd__db 'delete from LocalImage where ImageKey not in ',sk
+  (msg,'ImageKeywordXr') assert -.sqlcmd__db 'delete from ImageKeywordXr where ImageKey not in ',sk
+  (msg,'ImageAlbumXr') assert -.sqlcmd__db 'delete from ImageAlbumXr where ImageKey not in ',sk
+  (msg,'OnlineImage') assert -.sqlcmd__db 'delete from OnlineImage where ImageKey not in ',sk
+
+  NB. recover space
+  'vacuum error' assert -.sqlcmd__db 'vacuum'
+else.
+  smoutput 'sample size to large for db'
+end.
+sqlclose__db ''
+)
+
+
 SetBogusRealDates=:3 : 0
 
 NB.*SetBogusRealDates v-- set bogus real dates  in one real dates
@@ -1359,7 +1429,7 @@ NB. fetched  from  the  local  primary ThumbsPlus  database.  The
 NB. changes are written to a corresponding (fix) file in the same
 NB. directory.
 NB.
-NB. monad:  clFixFile =. SetBogusRealDates clFileRealDates
+NB. monad:  clFile =. SetBogusRealDates clFileRealDates
 NB.
 NB.   p=. 'c:/smugmirror/mirror/Other/DirectCellUploads/'
 NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
@@ -1367,8 +1437,13 @@ NB.   SetBogusRealDates f
 NB.
 NB.   NB. set bogus dates over many galleries
 NB.   ,. SetBogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
+NB.
+NB.   NB. 1 if all dates properly set
+NB.   0 = #CheckRealDates '/real*.txt'
 
-if. #t=. ThumbsRealDates y do.
+'okdt t'=. ThumbsRealDates y
+
+if. #t do.
 
   NB. fetch real date file
   d=. readtd2 y
@@ -1383,8 +1458,14 @@ if. #t=. ThumbsRealDates y do.
 
   NB. write date insertions to renamed file
   f=. ('.txt'&beforestr y),'.fix'
-  f [ (toHOST fmttd s) write f
+  (toHOST fmttd s) write f
 
+  NB. rename realdates files when no date issues
+  if. okdt do. RenameRealDates f 
+  else.
+    f [ smoutput 'date issues inspect ->';y
+  end.
+  
 else.
   '' [ smoutput 'no bogus dates ->';y
 end.
@@ -1482,13 +1563,14 @@ NB. as online real  dates are derived from local images. However,
 NB. not all images will have database iso times. Such images will
 NB. be flagged and will require manual edits.
 NB.
-NB. monad:  ThumbsRealDates clFileRealDates
+NB. monad:  (paOkdate ; btcl) =. ThumbsRealDates clFileRealDates
 NB.
 NB.   p=. 'c:/smugmirror/mirror/Other/DirectCellUploads/'
 NB.   f=. p,'realdate-DirectCellUploads-RMWQ6K-1p.txt'
 NB.   ThumbsRealDates f
 
-nodates=. 0 2$a:
+NB. assume dates ok
+nodates=. 0 2$a: [ okdt=.1
 
 if. #t=. BogusRealDates y do.
 
@@ -1499,10 +1581,11 @@ if. #t=. BogusRealDates y do.
   (;{.iso)=. ;{:iso=. IsotimeFromThumbID LocalThumbID
 
   if. b=. 0 e. #&> taken_time_iso do.
+    okdt=. 0  NB. date problems
     smoutput 'WARNING: missing thumbsplus taken times ->';y
     if. (#taken_time_iso) = +/b do.
       smoutput 'WARNING: all thumbsplus taken times missing ->';y 
-      nodates return.
+      okdt;<nodates return.
     end.
   end.
   
@@ -1511,11 +1594,10 @@ if. #t=. BogusRealDates y do.
   d=. ImageKey ,. '.'&beforestr&.> p{taken_time_iso
 
   NB. images with thumbsplus taken times
-  d=. (;:'ImageKey RealDate') , d #~ 0 < #&> 1 {"1 d
-
+  d=. d #~ 0 < #&> 1 {"1 d
+  if. #d do. okdt;<(;:'ImageKey RealDate') , d else. okdt;<nodates end.
 else.
-  smoutput 'no bogus dates ->';y
-  nodates
+  okdt;<nodates
 end.
 )
 
@@ -1774,6 +1856,21 @@ NB. format tables as TAB delimited LF terminated text - see long document
 fmttd=:[: (] , ((10{a.)"_ = {:) }. (10{a.)"_) [: }.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@])) [: }."1 [: ;"1 (a.{~9)&,@":&.>
 
 
+fsd=:4 : 0
+
+NB.*fsd v-- fetch sqlite dictionary array.
+NB.
+NB. dyad:  clSql fsd clDb
+NB.
+NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   sql=. 'select ImageKey, OriginalWidth, OriginalHeight, OnlineImageFile, Keywords from OnlineImage'
+NB.   sql fsd trg
+
+NB. require 'data/sqlite' !(*)=. sqlclose__db sqldict__db sqlopen_psqlite_
+d [ sqlclose__db '' [ d=. sqldict__db x [ db=. sqlopen_psqlite_ y
+)
+
+
 insqltd=:4 : 0
 
 NB.*insqltd v-- insert btcl table into sqlite table.
@@ -1795,6 +1892,9 @@ sqlinsert__x tab;(0{dat);< <"1 |: }.dat
 NB. YYYY MM DD lists to YYYYMMDD integers
 intfrdate=:0 100 100&#.@:<.
 
+NB. standarizes J path delimiter to unix/linux forward slash
+jpathsep=:'/'&(('\' I.@:= ])} )
+
 NB. extract drive and path from qualified file names
 justdrvpath=:[: }: ] #~ [: +./\. '\'&=
 
@@ -1803,6 +1903,9 @@ justext=:''"_`(] #~ [: -. [: +./\. '.'&=)@.('.'&e.)
 
 NB. file name from fully qualified file names
 justfile=:(] #~ [: -. [: +./\ '.'&=)@(] #~ [: -. [: +./\. e.&':\')
+
+NB. extracts only the path from qualified file names
+justpath=:[: }: ] #~ ([: -. [: +./\. ':'&=) *. [: +./\. '\'&=
 
 NB. kurtosis
 kurtosis=:# * +/@(^&4)@dev % *:@ssdev
@@ -2078,14 +2181,17 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220714j93913
+NB. (MirrorXref) interface word(s): 20220805j103951
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
+NB. CreateMirror_sql       NB. schema of mirror_db database - parsed on ';' character
 NB. DumpLocalImageNatural  NB. dump (LocalImage) as TAB delimited text
+NB. LoadMirrorXrefDb       NB. loads new mirror cross reference database
 NB. LocalFromDir           NB. local files with directory match (y) and file match (x)
 NB. MirrorStatReport       NB. mirror database upload summary report
 NB. MissingImagesReport    NB. missing local images report
+NB. SampleMirror           NB. samples mirror_db
 NB. SetBogusRealDates      NB. set bogus real dates in one real dates file
 NB. SuspiciousPairReport   NB. suspicious local and online file pairings
 )

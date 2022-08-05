@@ -15,20 +15,29 @@ by trolling over the version history of this file.
 
 `[begin-todo]`
 
-1. `<_2r3hv91c891s7n1qqjajqdqak_>` Consider allowing original word order for `wordlit`. Currently the words
+1. `<_b9g7eajovtfz49saualwur8ym_>` Generalize `setifacetargs` to set hyperlink targets for lists of hint words. Hint words will
+   come from JOD group associated lists like `IFACEWORDS*` and `ROOTWORDS*`. The idea is to point
+   out words in long source code listings that require special attention. Such hinted words will
+   appear in blocks like:
+   ~~~~
+      AlbumImageCount_sql    CreateMirror_sql       LocalFile_sql
+      UnClickHereImages_sql  UpdateLocalPresent_sql UploadRateCount_sql
+   ~~~~
+
+2. `<_2r3hv91c891s7n1qqjajqdqak_>` Consider allowing original word order for `wordlit`. Currently the words
    are sorted by JODs `wttext` conventions.
 
-2. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
+3. `<_73vgsq4u4yw3ammui15cdeazt_>` Investigate why underbar characters  `_` in JOD group names break LaTeX processing. For now just
    don't use underbar characters in group names.
 
-3. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. User `NB. space please`.
+4. `<_6tjcxi308slh372manqve7a8a_>` Comments without whitespace, e.g. `NB.no space ehh` may not color properly. User `NB. space please`.
 
-4. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
+5. `<_b5swcujvdy4wuyvthwk543fcl_>` Syntax coloring of wrapped boxed heterogenous arrays may not be correct.
    ~~~
       'quoted string' ; (? 20 20$100) ; ;:'quoted strings with numerics'
    ~~~
 
-5. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
+6. `<_lh1mo16u2ru3im4mv71jowbv_>` Similarly, wrapping nonnouns with long embedded quoted strings may not color properly:
    ~~~
       NB. ISBN-13 checksum
          _80 ]\ disp 'i13cd'
