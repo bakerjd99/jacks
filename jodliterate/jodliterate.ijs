@@ -473,6 +473,15 @@ ENDNOTJ=:'NB.>>~~~~'
 NB. 2 and 3 j (wfl) tokens - the trailing blank of (;1{FAKETOKENS) matters!
 FAKETOKENS=:<;._1 '|=::=::|=..=.. '
 
+NB. hint words \pageref \label prefix
+HINTPFX=:'hin:'
+
+NB. hint word list prefix
+HINTWORDSPFX=:'HINTWORDS'
+
+NB. LaTeX hyper link prefix
+HYPERLINKPFX=:'\hyperlink{'
+
 NB. interface word list name prefix
 IFACEWORDSPFX=:'IFACEWORDS'
 
@@ -490,6 +499,12 @@ JLCODEFILE=:'code.tex'
 
 NB. default LaTeX \author{ ... } text
 JLDEFAULTAUTHORS=:''
+
+NB. latex star subsubsection marking hint word block beginning
+JLHINTWORDTEXBEG=:'\subsubsection*{JLHintBlockRemoveBegin}'
+
+NB. latex star subsubsection marking hint word block end
+JLHINTWORDTEXEND=:'\subsubsection*{JLHintBlockRemoveEnd}'
 
 NB. markdown text string that marks where generated group interface inserted
 JLINSERTIFACEMD=:'`{~{insert_interface_md_}~}`'
@@ -524,6 +539,9 @@ MARKDOWNTAIL=:'~~~~'
 NB. temporary markdown file
 MARKDOWNTMP=:'jltemp.markdown'
 
+NB. pandoc LaTeX normal token prefix
+NORMALTOKPFX=:'\NormalTok{'
+
 NB. regex matching pandoc LaTeX token commands
 PANDOCTOKPAT=:'\\[[:alpha:]]*Tok{'
 
@@ -555,7 +573,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'0.9.99';22;'23 Jul 2022 09:14:28 MT'
+jodliterateVMD=:'1.0.0';3;'08 Aug 2022 13:05:05 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -923,6 +941,9 @@ if. badrc_ajod_ gdoc=. MACRO_ajod_ get group,JLOVIEWSUFFIX do.
     if. (+./ifstr E. gdoc) *. (<IFACEWORDSPFX,group) e. glist do. 
       gdoc=. iwords setifacelinks ifstr;gdoc
     end.
+    NB. set any word hint blocks
+    'idx hbks'=. (JLHINTWORDTEXBEG;JLHINTWORDTEXEND) cutnestidx gdoc
+    if. #idx do. gdoc=. ;(sethintblock&.> idx{hbks) idx} hbks end.
   end.
 else.
   NB. stored macro LaTeX - no adjustments
@@ -952,7 +973,13 @@ jlbuildtex=. ('/~#~group~#~/',alltrim y) changestr JLBUILDTEX
 
 NB. group source code .tex - return file names
 gltx=. grouplatex group
-gltx=. iwords setifacetargs gltx
+gltx=. iwords setifacetargs IFCPFX;gltx
+
+NB. set any hint word targets
+if. #hwrds=. HINTWORDSPFX ifacewords group do.
+  gltx=. hwrds setifacetargs HINTPFX;gltx
+end.
+
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
 ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
@@ -998,9 +1025,12 @@ NB. from  dictionary.  We  need  the  value   not   the   storage
 NB. representation so define it in the JOD scratch object.
 NB.
 NB. monad:  blcl =. ifacewords clGroupname
+NB. dyad: blcl =. clPfx ifacewords clGroupname
 
+IFACEWORDSPFX ifacewords y
+:
 NB. require 'jod' !(*)=. get
-iname=. (IFACEWORDSPFX,y) -. ' '
+iname=. (x,y) -. ' '
 (;SO__JODobj) get iname
 iname=. iname,'__SO__JODobj'
 words=. ". iname
@@ -1414,6 +1444,34 @@ NB. trim right (trailing) blanks
 rtrim=:] #~ [: -. [: *./\. ' '"_ = ]
 
 
+sethintblock=:3 : 0
+
+NB.*sethintblock v-- pandoc generated hint block LaTeX to hyperlinked form.
+NB.
+NB. monad:  clNewTex =. sethintblock clTex
+
+NB. mask of normal token lines
+b=. +./@(NORMALTOKPFX&E.)&> h=. <;._2 tlf y -. CR 
+
+NB. table of hint words
+t=. (NORMALTOKPFX&beforestr ; NORMALTOKPFX&afterstr)&> b#h
+
+NB. remove trailing delimiters
+t=. (0 {"1 t) ,. (1 {"1 t) -.&.> '}'
+
+NB. split into lines of normal white space preserving tokens 
+s=. s <;.1&.>~firstones@(' '&~:)&.> s=. 1 {"1 t
+r=. '}}' ,~ L: 0 ('{',NORMALTOKPFX) , L: 0 s 
+
+NB. form LaTeX hyperlinks handling troublesome underbar chars
+s=. (,&'}')@(HYPERLINKPFX&,)@('#\_#:'&changestr)@(-.&' ') L: 0 s
+s=. <"1 ;"1 (0 {"1 t) ,. ;&.> s , L: 0 r
+
+NB. reassemble hint block dropping block markers
+;(}: }. s (I. b)} h) ,&.> LF
+)
+
+
 setifacelinks=:4 : 0
 
 NB.*setifacelinks  v--  set  hyperref   links  in   any  overview
@@ -1450,7 +1508,9 @@ setifacetargs=:4 : 0
 
 NB.*setifacetargs v-- set hyperlink targets in group latex.
 NB.
-NB. dyad:  cl =. blclIwords setifacetargs clTex
+NB. dyad:  cl =. blclIwords setifacetargs (clTarg ; clTex)
+
+'trg tex'=. y
 
 NB. replace troublesome _ in names
 hlwords=. UBARSUB&charsub&.> x
@@ -1459,14 +1519,14 @@ NB. any _ chars are expanded to \_ at this stage
 wnames=. '#_#\_'&changestr &.> x
 targs=. (<'\NormalTok{') ,&.> wnames ,&.> <'}\AlertTok{=:}\index'
 
-labels=. (<'}}\AlertTok{=:}\phantomsection\label{',IFCPFX),&.> hlwords ,&.> <'}\index'
+labels=. (<'}}\AlertTok{=:}\phantomsection\label{',trg),&.> hlwords ,&.> <'}\index'
 rstrs=. (<'\hypertarget{') ,&.> hlwords ,&.> (<'}{\NormalTok{') ,&.> wnames ,&.> labels
 
 NB. delimter character cannot be in text
 assert. -.'#' e. ;targs,rstrs
 
 chgs=. ;'#' ,&.> targs ,. rstrs
-chgs changestr y
+chgs changestr tex
 )
 
 
@@ -1720,7 +1780,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20220723j91428
+NB. (jodliterate) interface word(s): 20220808j130505
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words

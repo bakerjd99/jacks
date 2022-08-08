@@ -155,7 +155,7 @@ group by c.AlbumName
 order by MissingCnt asc
 )
 
-UnClickHereImages_sql =: (0 : 0)
+UnClickHereImages_sql=: (0 : 0)
 select ImageKey, OnlineImageFile, Caption from OnlineImage where Caption like "%href=%" 
 and ImageKey not in (select ImageKey from OnlineImage where Caption like "%(click here)%")
 )
@@ -207,7 +207,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.79';13;'05 Aug 2022 10:39:51'
+MIRRORVMD=:'0.9.79';16;'08 Aug 2022 12:04:00'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -2181,7 +2181,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220805j103951
+NB. (MirrorXref) interface word(s): 20220808j120400
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
