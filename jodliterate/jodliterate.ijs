@@ -38,6 +38,7 @@ NB. 20nov04 (setjodliterate) cleaner script, author(s), email added
 NB. 20nov12 (ppcodelatex) added to adjust coloring of wrapped lines
 NB. 20dec01 (uwlatexfrwords) added 
 NB. 21dec21 (JLCLEANTEXunix, JLBUILDTEXunix, JLSHELLEXT) added
+NB. 22aug08 (sethintblock) added to (grplit)
 
 coclass  'ajodliterate'
 coinsert 'ijod'
@@ -280,7 +281,7 @@ JODLiteratePreamble=: 0 : 0
 \usepackage{fixltx2e} 
 
 % graphics inclusions
-\usepackage{graphicx,subfigure}
+\usepackage{graphicx,subfigure,sidecap}
 \graphicspath{{./inclusions/}}
 
 % use microtype if available
@@ -573,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'1.0.0';3;'08 Aug 2022 13:05:05 MT'
+jodliterateVMD=:'1.0.0';4;'08 Aug 2022 13:26:52 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1780,7 +1781,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20220808j130505
+NB. (jodliterate) interface word(s): 20220808j132652
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words
