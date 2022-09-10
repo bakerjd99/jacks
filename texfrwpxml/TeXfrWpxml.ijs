@@ -223,6 +223,7 @@ hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir texpath,'*.tex'
 mdpath=. 'c:/pd/blog/wp2epub/'
 hash=. ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.epub'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.azw3'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.markdown'
 (toJ hash) write mdpath,'bmepubsha1.txt'
 
@@ -230,6 +231,7 @@ xhtmlpath=. 'c:/pd/blog/wp2epub/xhtml/'
 hash=. ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.xhtml'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.css'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.ncx'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.jpg'
 (toJ hash) write xhtmlpath,'bmexhtmlsha1.txt'
 )
 
@@ -1438,7 +1440,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20220821j93256
+NB. (TeXfrWpxml) interface word(s): 20220823j94007
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
