@@ -99,7 +99,7 @@ NB. root words (ROOTWORDSgpxutils) group
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';18;'31 Jul 2022 18:04:18'
+VMDgpxutils=:'0.9.0';19;'16 Sep 2022 14:17:36'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -409,7 +409,7 @@ NB.   gpx=. 10 gpxfrpoicsv 'c:\pd\coords\poicsv\ca_park_m.csv'
 0 gpxfrpoicsv y NB. format all waypoints default
 :
 NB. read csv file
-csv=. parsecsv read y
+csv=. parsecsv tlf read y
 
 if. 0<x do. csv=. (x<.#csv) {. csv end.
 
@@ -595,7 +595,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20220731j180418
+NB. (gpxutils) interface word(s): 20220916j141736
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
 NB. csvfrwpt     NB. poi CSV text from waypoint text file
