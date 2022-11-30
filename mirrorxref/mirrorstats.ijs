@@ -59,7 +59,7 @@ NB. root words (ROOTWORDSmirrorstats) group
 ROOTWORDSmirrorstats=:<;._1 ' IFACEWORDSmirrorstats NotDivisible ROOTWORDSmirrorstats VMDmirrorstats albdist albextent dstat freq fsd fst histogram2 itYMDhms ofreq portchars read'
 
 NB. version, make count and date
-VMDmirrorstats=:'0.5.0';15;'29 Nov 2022 17:21:08'
+VMDmirrorstats=:'0.5.0';16;'30 Nov 2022 11:40:20'
 
 
 AlbumImageCount=:3 : 0
@@ -312,28 +312,27 @@ NB.*gpsextremesgallery v-- list images with gps extremes.
 NB.
 NB. monad:  gpsextremesgallery clDb
 NB.
-NB. trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
-NB. gpsextremesgallery trg
+NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB.   gpsextremesgallery trg
 NB.
 NB. dyad:  iaN gpsextremesgallery clDb
 
 4 gpsextremesgallery y
 :
-NB. overide mixed assignments (<:)=:
 sql=. 'select ImageKey, OnlineImageFile, Latitude, Longitude, Altitude from OnlineImage'
-({."1 r)= {:"1 r=. sql fsd y 
+({."1 r)=. {:"1 r=. sql fsd y 
 
 NB. geotagged images !(*)=. Altitude ImageKey Latitude Longitude OnlineImageFile
 bgt=. (0 ~: Longitude) +. 0 ~: Latitude
 lba=. bgt #  Latitude ,. Longitude ,. Altitude 
 gti=. (bgt # ImageKey ,. OnlineImageFile) ,. <"1 lba
 
-NB. distance from lb origin 0 0
+NB. distance from lb origin 0 0 - adjusted for meeus 
 dst=. 0 0 earthdist |: 1 _1  (*"1) 0 1 {"1 lba
 gti=. gti ,. <"0 dst
 
 NB. images near and far from origin
-nf=. ,/ (x,-x) {.&> < gti {~ /: dst
+oi=. ,/ (x,-x) {.&> < gti {~ /: dst
 
 NB. highest elevations - altitudes in db do not indicate
 NB. above or below sea level - not collected in metadata 
@@ -348,8 +347,24 @@ NB. images near and far prime meridian
 ord=. /: | 1 {"1 lba 
 pm=. (x {. ord{gti) , (-x) {. ord{gti
 
+NB. most northern images
+ord=. \: | (0 {"1 lba) * 0 < 0 {"1 lba
+mn=. x {. ord{gti
+
+NB. most southern images
+ord=. \: | (0 {"1 lba) * 0 > 0 {"1 lba
+ms=. x {. ord{gti
+
+NB. most eastern images
+ord=. \: | (1 {"1 lba) * 0 < 1 {"1 lba 
+me=. x {. ord{gti
+
+NB. most western images
+ord=. \: | (1 {"1 lba) * 0 > 1 {"1 lba 
+mw=. x {. ord{gti
+
 NB. unique images by origin distance
-gti=. ~. nf,he,ei,pm
+gti=. ~. oi,he,ei,pm,mn,ms,me,mw
 gti {~ /: 3 {"1 gti
 )
 
@@ -499,7 +514,7 @@ var=:ssdev % <:@#
 NB.POST_mirrorstats post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (mirrorstats) interface word(s): 20221129j172108
+NB. (mirrorstats) interface word(s): 20221130j114020
 NB. -------------------------------
 NB. NotDivisible        NB. albums with image counts that are not divisible by 3 and 5
 NB. albdist             NB. all mean album distances km from position (x)
