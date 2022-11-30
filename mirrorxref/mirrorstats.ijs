@@ -4,14 +4,16 @@ NB. verbatim:
 NB.
 NB. interface word(s):
 NB. ------------------------------------------------------------------------------
-NB.  NotDivisible - albums with image counts that are not divisible by 3 and 5
-NB.  albdist      - all mean album distances km from position (x)
-NB.  fsd          - fetch sqlite dictionary array
-NB.  fst          - fetch sqlite reads table
-NB.  meanalbdist  - mean km distance of geotagged album images from (x)
+NB.  NotDivisible       - albums with image counts that are not divisible by 3 and 5
+NB.  albdist            - all mean album distances km from position (x)
+NB.  fsd                - fetch sqlite dictionary array
+NB.  fst                - fetch sqlite reads table
+NB.  gpsextremesgallery - list images with gps extremes
+NB.  meanalbdist        - mean km distance of geotagged album images from (x)
 NB.
 NB. created: 2022jul07
 NB. ------------------------------------------------------------------------------
+NB. 2022nov29 (gpsextremesgallery) added
 
 require 'data/sqlite'
 
@@ -42,7 +44,7 @@ NB.*end-header
 ALTMIRRORDBPATH=:'c:/SmugMirror/Documents/XrefDb/'
 
 NB. interface words (IFACEWORDSmirrorstats) group
-IFACEWORDSmirrorstats=:<;._1 ' NotDivisible albdist fsd fst meanalbdist'
+IFACEWORDSmirrorstats=:<;._1 ' NotDivisible albdist fsd fst gpsextremesgallery meanalbdist'
 
 NB. sqlite mirror database file name
 MIRRORDB=:'mirror.db'
@@ -57,7 +59,7 @@ NB. root words (ROOTWORDSmirrorstats) group
 ROOTWORDSmirrorstats=:<;._1 ' IFACEWORDSmirrorstats NotDivisible ROOTWORDSmirrorstats VMDmirrorstats albdist albextent dstat freq fsd fst histogram2 itYMDhms ofreq portchars read'
 
 NB. version, make count and date
-VMDmirrorstats=:'0.5.0';12;'12 Jul 2022 12:21:26'
+VMDmirrorstats=:'0.5.0';15;'29 Nov 2022 17:21:08'
 
 
 AlbumImageCount=:3 : 0
@@ -303,6 +305,54 @@ NB. require 'data/sqlite' !(*)=. sqlclose__db sqlreads__db sqlopen_psqlite_
 d [ sqlclose__db '' [ d=. sqlreads__db x [ db=. sqlopen_psqlite_ y
 )
 
+
+gpsextremesgallery=:3 : 0
+
+NB.*gpsextremesgallery v-- list images with gps extremes.
+NB.
+NB. monad:  gpsextremesgallery clDb
+NB.
+NB. trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
+NB. gpsextremesgallery trg
+NB.
+NB. dyad:  iaN gpsextremesgallery clDb
+
+4 gpsextremesgallery y
+:
+NB. overide mixed assignments (<:)=:
+sql=. 'select ImageKey, OnlineImageFile, Latitude, Longitude, Altitude from OnlineImage'
+({."1 r)= {:"1 r=. sql fsd y 
+
+NB. geotagged images !(*)=. Altitude ImageKey Latitude Longitude OnlineImageFile
+bgt=. (0 ~: Longitude) +. 0 ~: Latitude
+lba=. bgt #  Latitude ,. Longitude ,. Altitude 
+gti=. (bgt # ImageKey ,. OnlineImageFile) ,. <"1 lba
+
+NB. distance from lb origin 0 0
+dst=. 0 0 earthdist |: 1 _1  (*"1) 0 1 {"1 lba
+gti=. gti ,. <"0 dst
+
+NB. images near and far from origin
+nf=. ,/ (x,-x) {.&> < gti {~ /: dst
+
+NB. highest elevations - altitudes in db do not indicate
+NB. above or below sea level - not collected in metadata 
+NB. rare below sea level images manually managed for now
+he=. x {. gti {~ \: {:"1 lba
+
+NB. images near and far equator
+ord=. /: | 0 {"1 lba 
+ei=. (x {. ord{gti) , (-x) {. ord{gti
+
+NB. images near and far prime meridian
+ord=. /: | 1 {"1 lba 
+pm=. (x {. ord{gti) , (-x) {. ord{gti
+
+NB. unique images by origin distance
+gti=. ~. nf,he,ei,pm
+gti {~ /: 3 {"1 gti
+)
+
 NB. variation on (histogram) uses left open intervals (xi, xi+1]
 histogram2=:<:@(#/.~)@(i.@>:@#@[ , |.@[ (#@[ - I.) ])
 
@@ -449,13 +499,14 @@ var=:ssdev % <:@#
 NB.POST_mirrorstats post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (mirrorstats) interface word(s): 20220712j122126
+NB. (mirrorstats) interface word(s): 20221129j172108
 NB. -------------------------------
-NB. NotDivisible  NB. albums with image counts that are not divisible by 3 and 5
-NB. albdist       NB. all mean album distances km from position (x)
-NB. fsd           NB. fetch sqlite dictionary array
-NB. fst           NB. fetch sqlite reads table
-NB. meanalbdist   NB. mean km distance of geotagged album images from (x)
+NB. NotDivisible        NB. albums with image counts that are not divisible by 3 and 5
+NB. albdist             NB. all mean album distances km from position (x)
+NB. fsd                 NB. fetch sqlite dictionary array
+NB. fst                 NB. fetch sqlite reads table
+NB. gpsextremesgallery  NB. list images with gps extremes
+NB. meanalbdist         NB. mean km distance of geotagged album images from (x)
 )
 
 cocurrent 'base'
