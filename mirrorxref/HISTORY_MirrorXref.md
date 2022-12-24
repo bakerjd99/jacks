@@ -2,6 +2,10 @@
 [`MirrorXref`](https://github.com/bakerjd99/jacks/blob/master/mirrorxref/MirrorXref.ijs) - change history
 =========================================================================================================
 
+### December 24, 2022
+
+* Added `FixBogusDates` to streamline bogus date patching.
+
 ### June 5, 2022
 
 * Added `TODO_MirrorXref.md` to distribution and renamed `mirror_history.md` to

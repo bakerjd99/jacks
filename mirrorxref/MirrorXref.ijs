@@ -19,6 +19,7 @@ NB.  BuildMirror           - backup/create/load mirror
 NB.  CheckRealDates        - check real dates
 NB.  CreateMirror_sql      - schema of mirror_db database - parsed on ';' character
 NB.  DumpLocalImageNatural - dump (LocalImage) as TAB delimited text
+NB.  FixBogusDates         - patch bogus dates from ThumbsPlus database
 NB.  LoadMirrorXrefDb      - loads new mirror cross reference database
 NB.  LocalFromDir          - local files with directory match (y) and file match (x)
 NB.  MirrorStatReport      - mirror database upload summary report
@@ -48,6 +49,7 @@ NB. 22may29 added (BogusRealDates)
 NB. 22jun04 modified (BuildMirror) to build mirror_temb.db
 NB. 22jul29 (RenameRealDates) added
 NB. 22jul31 (SampleMirror) added
+NB. 22dec24 (FixBogusDates) added
 
 require 'data/sqlite'
 
@@ -174,7 +176,7 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSMirrorXref) group
-IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates CreateMirror_sql DumpLocalImageNatural LoadMirrorXrefDb LocalFromDir MirrorStatReport MissingImagesReport SampleMirror SetBogusRealDates SuspiciousPairReport'
+IFACEWORDSMirrorXref=:<;._1 ' BuildMirror CheckRealDates CreateMirror_sql DumpLocalImageNatural FixBogusDates LoadMirrorXrefDb LocalFromDir MirrorStatReport MissingImagesReport SampleMirror SetBogusRealDates SuspiciousPairReport'
 
 NB. line feed character
 LF=:10{a.
@@ -207,7 +209,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.79';16;'08 Aug 2022 12:04:00'
+MIRRORVMD=:'0.9.79';22;'24 Dec 2022 14:43:55'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -216,7 +218,7 @@ NB. fully qualified sqlite primary thumbs database file name
 PRIMARYTHUMBS=:'c:/thumbsdbs/primary2018.tpdb8s'
 
 NB. root words (ROOTWORDSMirrorXref) group
-ROOTWORDSMirrorXref=:<;._1 ' BuildMirror Divisible IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref SampleMirror SetBogusRealDates UnClickHereImages_sql'
+ROOTWORDSMirrorXref=:<;._1 ' Divisible FixBogusDates IFACEWORDSMirrorXref LocalFromDir MACROSMirrorXref MIRRORVMD ROOTWORDSMirrorXref SampleMirror UnClickHereImages_sql'
 
 NB. name of suspect image pairs report
 SUSPECTPAIRS=:'suspects.txt'
@@ -588,6 +590,17 @@ NB. %/;(#&> > 1{sqlread__dt 'select distinct ImageKey from LocalImage');sqlsize_
 
 NB. record count; unique match percentage; file
 (#td);(100 * utd%oc);dmp
+)
+
+
+FixBogusDates=:3 : 0
+
+NB.*FixBogusDates v-- patch bogus dates from ThumbsPlus database.
+NB.
+NB. monad:  FixBogusDates uuIgnore
+
+BuildMirror 2
+,. SetBogusRealDates&.> 0 {"1 CheckRealDates '/real*.txt'
 )
 
 
@@ -2181,12 +2194,13 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20220808j120400
+NB. (MirrorXref) interface word(s): 20221224j144355
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
 NB. CreateMirror_sql       NB. schema of mirror_db database - parsed on ';' character
 NB. DumpLocalImageNatural  NB. dump (LocalImage) as TAB delimited text
+NB. FixBogusDates          NB. patch bogus dates from ThumbsPlus database
 NB. LoadMirrorXrefDb       NB. loads new mirror cross reference database
 NB. LocalFromDir           NB. local files with directory match (y) and file match (x)
 NB. MirrorStatReport       NB. mirror database upload summary report
@@ -2194,6 +2208,8 @@ NB. MissingImagesReport    NB. missing local images report
 NB. SampleMirror           NB. samples mirror_db
 NB. SetBogusRealDates      NB. set bogus real dates in one real dates file
 NB. SuspiciousPairReport   NB. suspicious local and online file pairings
+
+    FixBogusDates 0 NB. run to patch dates
 )
 
 cocurrent 'base'
