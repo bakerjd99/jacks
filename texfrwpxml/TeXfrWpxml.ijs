@@ -222,8 +222,8 @@ hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir texpath,'*.tex'
 
 mdpath=. 'c:/pd/blog/wp2epub/'
 hash=. ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.epub'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.azw3'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.markdown'
 (toJ hash) write mdpath,'bmepubsha1.txt'
 
@@ -400,6 +400,10 @@ NB. dyad:  bl =. blcl MarkdownFrLatex clPathFileXML
 
 NB. read wordpress xml - defines post order
 if. fexist y do. xml=. read y else. 0;'missing or invalid XML export file' return. end.
+
+NB. require 'regex' !(*)=. rxutf8
+NB. turn off utf8 for regex - required for J 9.04
+rxp=. rxutf8 0
 
 NB. posts without markdown versions
 if. #newposts=. (epubdir;MARKDOWNEXT) prunePtable ptableFrwpxml xml do.
@@ -911,8 +915,11 @@ NB.
 NB.   md=. read 'c:/pd/blog/wp2epub/oscarsnowasmeaningle6975.markdown'
 NB.   'oscarsnowasmeaningle6975' mdfootnotes md
 
-NB. require 'regex' !(*)=. rxall rxmatches rxmerge
+NB. require 'regex' !(*)=. rxall rxmatches rxmerge rxutf8
 
+NB. turn off utf8 for regex - required for J 9.04
+rxp=. rxutf8 0
+     
 fp=. '\[\^[0-9]\]'  NB. pandoc footnotes
 
 if. #fn=. >fp rxall y do. 
@@ -1440,7 +1447,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20220823j94007
+NB. (TeXfrWpxml) interface word(s): 20230117j224414
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
