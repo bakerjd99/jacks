@@ -574,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'1.0.0';4;'08 Aug 2022 13:26:52 MT'
+jodliterateVMD=:'1.0.0';8;'24 Jan 2023 09:36:31 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -895,7 +895,11 @@ NB.   0 grouplatex 'jod' NB. do not replace marks with index
 NB. require 'jod' !(*)=. badrc_ajod_ grp jderr_ajod_
 if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
+NB. require 'regex' !(*)=. rxutf8
+rg0=. rxutf8 0
+
 ltx=. x indexwraplatex (gheadlatex ; gbodylatex ; gpostlatex) y
+rg1=. rxutf8 rg0
 ppcodelatex '\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
 )
 
@@ -915,6 +919,10 @@ NB.   0 grplit 'jodliterate'
 
 1 grplit y 
 :
+NB. turn off unicode support for PCRE2 - may cause issues.
+NB. require 'regex' !(*)=. rxutf8
+rg0=. rxutf8 0
+
 NB. require 'jod' !(*)=. badrc_ajod_ get grp jderr_ajod_ ok_ajod_
 try.
 
@@ -982,9 +990,11 @@ if. #hwrds=. HINTWORDSPFX ifacewords group do.
 end.
 
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
+rg1=. rxutf8 rg0
 ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
 catchd.
+  rg1=. rxutf8 rg0
   0;'!error: (grplit) failure - last J error ->';13!:12 ''
 end.
 )
@@ -1382,6 +1392,9 @@ NB. and wrapped comment lines.
 NB.
 NB. monad:  clNewTeX =. ppcodelatex clTex
 
+NB. require 'regex' !(*)=. rxutf8
+rg0=. rxutf8 0
+
 NB. adjust any 0 : 0 text
 'idx strs'=. (LONGCHRBEGPAT;LONGCHRENDPAT) cutpatidx y
 if. #idx do.
@@ -1416,7 +1429,7 @@ if. ALERTTOKWRAP +./@E. y do.
   end.
 
 end.
-
+rg1=. rxutf8 rg0
 y  NB. adjusted latex
 )
 
@@ -1658,6 +1671,10 @@ NB.   0 wordlit 'jodliterate'
 
 1 wordlit y 
 :
+NB. turn off unicode support for PCRE2 - may cause issues for some documents.
+NB. require 'regex'  - inherits from JOD !(*)=. rxutf8
+rg0=. rxutf8 0
+
 NB. require 'jod' !(*)=. badrc_ajod_ badcl_ajod_ checknames_ajod_ 
 try.
 
@@ -1688,9 +1705,11 @@ jlbuildtex=. ('/~#~group~#~/',texname) changestr JLBUILDTEX
 NB. source code .tex - return file names
 wltx=. ppcodelatex wltx
 (toJ wltx) writeas jlcode=. wdir,texname,JLCODEFILE
+rg1=. rxutf8 rg0
 ok_ajod_ (-.chroot) }. jlroot;jlcode;jlbuildbat
 
 catchd.
+  rg1=. rxutf8 rg0
   0;'!error: (wordlit) failure - last J error ->';13!:12 ''
 end.
 )
@@ -1781,7 +1800,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20220808j132652
+NB. (jodliterate) interface word(s): 20230124j93631
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words
