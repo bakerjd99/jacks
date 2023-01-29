@@ -17,9 +17,7 @@ by trolling over the version history of this file.
 
 `[begin-todo]`
 
-1. `<_9ozblb93fs634bgh27r4kqcqr_>` Changes to PCRE2 in J 9.04 require turning off unicode for some regex verbs
-   to work properly. Go through the code and insert `rgp=. rxutf8 0` in appropriate
-   spots.
+1. `<_a7oj485zhjesdbgecyjvtfqvc_>` Add verb to `TeXfrWpxml.ijs` to insert yearly post count in `bm.tex`.
 
 2. `<_1d2ynsw2ozr7a2llcbs824opu_>` Changes to WordPress's *block editor* have invalidated some of
    the assumptions in the code of `TeXfrWpxml`. In particular it no longer
