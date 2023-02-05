@@ -574,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'1.0.0';9;'27 Jan 2023 10:36:06 MT'
+jodliterateVMD=:'1.0.0';13;'05 Feb 2023 10:29:28 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -896,10 +896,10 @@ NB. require 'jod' !(*)=. badrc_ajod_ grp jderr_ajod_
 if. badrc_ajod_ gnames=. grp y do. gnames return. end.
 
 NB. require 'regex' !(*)=. rxutf8
-rg0=. rxutf8 0
+NB. rg0=. rxutf8 0
 
 ltx=. x indexwraplatex (gheadlatex ; gbodylatex ; gpostlatex) y
-rg1=. rxutf8 rg0
+NB. rg1=. rxutf8 rg0
 ppcodelatex '\section{\texttt{',(alltrim y),'} Source Code}',LF,LF,ltx
 )
 
@@ -921,7 +921,7 @@ NB.   0 grplit 'jodliterate'
 :
 NB. turn off unicode support for PCRE2 - may cause issues.
 NB. require 'regex' !(*)=. rxutf8
-rg0=. rxutf8 0
+NB. rg0=. rxutf8 0
 
 NB. require 'jod' !(*)=. badrc_ajod_ get grp jderr_ajod_ ok_ajod_
 try.
@@ -990,11 +990,11 @@ if. #hwrds=. HINTWORDSPFX ifacewords group do.
 end.
 
 (toJ gltx) writeas jlcode=. wdir,group,JLCODEFILE
-rg1=. rxutf8 rg0
+NB. rg1=. rxutf8 rg0
 ok_ajod_ (-.chroot) }. jlroot;jltitle;jloview;jlcode;jlbuildbat
 
 catchd.
-  rg1=. rxutf8 rg0
+  NB. rg1=. rxutf8 rg0
   0;'!error: (grplit) failure - last J error ->';13!:12 ''
 end.
 )
@@ -1393,7 +1393,7 @@ NB.
 NB. monad:  clNewTeX =. ppcodelatex clTex
 
 NB. require 'regex' !(*)=. rxutf8
-rg0=. rxutf8 0
+NB. rg0=. rxutf8 0
 
 NB. adjust any 0 : 0 text
 'idx strs'=. (LONGCHRBEGPAT;LONGCHRENDPAT) cutpatidx y
@@ -1429,7 +1429,7 @@ if. ALERTTOKWRAP +./@E. y do.
   end.
 
 end.
-rg1=. rxutf8 rg0
+NB. rg1=. rxutf8 rg0
 y  NB. adjusted latex
 )
 
@@ -1523,6 +1523,10 @@ setifacetargs=:4 : 0
 NB.*setifacetargs v-- set hyperlink targets in group latex.
 NB.
 NB. dyad:  cl =. blclIwords setifacetargs (clTarg ; clTex)
+NB.
+NB.   NB. the target string refers back to interface
+NB.   NB. section words see macro (buildjodlatex)
+NB.   words setifacetargs 'ifc:';tex
 
 'trg tex'=. y
 
@@ -1673,7 +1677,7 @@ NB.   0 wordlit 'jodliterate'
 :
 NB. turn off unicode support for PCRE2 - may cause issues for some documents.
 NB. require 'regex'  - inherits from JOD !(*)=. rxutf8
-rg0=. rxutf8 0
+NB. rg0=. rxutf8 0
 
 NB. require 'jod' !(*)=. badrc_ajod_ badcl_ajod_ checknames_ajod_ 
 try.
@@ -1705,11 +1709,11 @@ jlbuildtex=. ('/~#~group~#~/',texname) changestr JLBUILDTEX
 NB. source code .tex - return file names
 wltx=. ppcodelatex wltx
 (toJ wltx) writeas jlcode=. wdir,texname,JLCODEFILE
-rg1=. rxutf8 rg0
+NB. rg1=. rxutf8 rg0
 ok_ajod_ (-.chroot) }. jlroot;jlcode;jlbuildbat
 
 catchd.
-  rg1=. rxutf8 rg0
+  NB. rg1=. rxutf8 rg0
   0;'!error: (wordlit) failure - last J error ->';13!:12 ''
 end.
 )
@@ -1800,7 +1804,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20230127j103606
+NB. (jodliterate) interface word(s): 20230205j102928
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words
