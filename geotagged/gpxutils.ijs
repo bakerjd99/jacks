@@ -99,7 +99,7 @@ NB. root words (ROOTWORDSgpxutils) group
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';19;'16 Sep 2022 14:17:36'
+VMDgpxutils=:'0.9.0';21;'08 Apr 2023 10:49:24'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -595,7 +595,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20220916j141736
+NB. (gpxutils) interface word(s): 20230408j104924
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
 NB. csvfrwpt     NB. poi CSV text from waypoint text file
