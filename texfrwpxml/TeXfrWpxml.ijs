@@ -34,6 +34,7 @@ NB. 20jul11 (BlogHashes) adjusted to track xhtml version
 NB. 20sep12 (mdfootnotes) added to prefix markdown footnotes with post number
 NB. 22mar29 (filenamesFrtid) adjusted to extract titles from new <!CDATA['s
 NB. 22jul19 (countYearposts) added
+NB. 23apr10 switch (BlogHashes) to sha-256
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -216,23 +217,28 @@ NB.
 NB. monad:  BlogHashes uuIgnore
 
 texpath=. 'c:/pd/blog/wp2latex/'
-hash=. ctl ;"1 ' ' ,&.> sha1dir texpath,'*.pdf'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir texpath,'*.tex'
-(toJ hash) write texpath,'bmpdfsha1.txt'
+hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.tex'
+NB. hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.pdf'
+(toJ hash) write texpath,'bmpdfsha256.txt'
 
 mdpath=. 'c:/pd/blog/wp2epub/'
-hash=. ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.epub'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.azw3'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.mobi'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir mdpath,'*.markdown'
-(toJ hash) write mdpath,'bmepubsha1.txt'
+hash=. ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.epub'
+NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.azw3'
+NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.mobi'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.markdown'
+(toJ hash) write mdpath,'bmepubsha256.txt'
 
 xhtmlpath=. 'c:/pd/blog/wp2epub/xhtml/'
-hash=. ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.xhtml'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.css'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.ncx'
-hash=. hash, LF, ctl ;"1 ' ' ,&.> sha1dir xhtmlpath,'*.jpg'
-(toJ hash) write xhtmlpath,'bmexhtmlsha1.txt'
+hash=. ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.xhtml'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.css'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.ncx'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.jpg'
+(toJ hash) write xhtmlpath,'bmexhtmlsha256.txt'
+
+onedrvpath=. 'C:/Users/baker/OneDrive/Public/pdocs/'
+hash=. ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.pdf'
+hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.epub'
+(toJ hash) write onedrvpath,'bmsha256.txt'
 )
 
 
@@ -1131,33 +1137,17 @@ NB. clear any remaining caption setup pandoc passes them to .markdown
 tex=. ;rp ix} cs
 )
 
+NB. sha-256 hash from bytes: sha256 'hash me again'
+sha256=:3&(128!:6)
 
-sha1=:3 : 0
 
-NB.*sha1 v-- sha1 hexadecimal hash.
+sha256dir=:3 : 0
+
+NB.*sha256dir v-- compute sha256 hashes for files matching pattern in directory.
 NB.
-NB. monad:  clHash =. sha1 cl
+NB. monad:  btcl =. sha256dir clPathRoot
 NB.
-NB.   sha1 'this is a fine mess'
-NB.
-NB.   sha1 10000 $ 'a bigger mess '
-
-NB. code before J 8.06
-NB. sslsha1 (y);(# y);hash=. 20#' '
-NB. hash
-
-NB. use J sha foreign available after J 8.06
-1&(128!:6) y
-)
-
-
-sha1dir=:3 : 0
-
-NB.*sha1dir v-- compute sha1 hashes for files matching pattern in directory.
-NB.
-NB. monad:  btcl =. sha1dir clPathRoot
-NB.
-NB.    sha1dir 'c:/pd/blog/wp2latex/*.tex'
+NB.    sha256dir 'c:/pd/blog/wp2latex/*.tex'
 
 jfe=. ] #~ [: -. [: +./\. '/'&=   NB. just file extension 
 
@@ -1167,7 +1157,7 @@ NB. hdl=. [: , [: hfd2 a. i. ]
 NB. standard profile !(*)=. dir
 NB. (jfe&.> files) ,.~ hdl @ sha1 @ read&.> files=. 1 dir jpathsep y 
 
-(jfe&.> files) ,.~ sha1 @ read&.> files=. 1 dir jpathsep y 
+(jfe&.> files) ,.~ sha256 @ read&.> files=. 1 dir jpathsep y 
 )
 
 NB. show and then pass noun
@@ -1447,7 +1437,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20230408j101602
+NB. (TeXfrWpxml) interface word(s): 20230410j143000
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
