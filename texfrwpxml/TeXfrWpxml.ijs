@@ -216,26 +216,26 @@ NB.*BlogHashes v-- update blog hashes.
 NB.
 NB. monad:  BlogHashes uuIgnore
 
-texpath=. 'c:/pd/blog/wp2latex/'
+texpath=. jpath '~BLOGTEX/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.tex'
 NB. hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.pdf'
 (toJ hash) write texpath,'bmpdfsha256.txt'
 
-mdpath=. 'c:/pd/blog/wp2epub/'
+mdpath=. jpath '~BLOGMD/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.epub'
 NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.azw3'
 NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.mobi'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.markdown'
 (toJ hash) write mdpath,'bmepubsha256.txt'
 
-xhtmlpath=. 'c:/pd/blog/wp2epub/xhtml/'
+xhtmlpath=. jpath '~BLOGMD/xhtml/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.xhtml'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.css'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.ncx'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.jpg'
 (toJ hash) write xhtmlpath,'bmexhtmlsha256.txt'
 
-onedrvpath=. 'C:/Users/baker/OneDrive/Public/pdocs/'
+onedrvpath=. jpath '~BLOG1DR/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.pdf'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.epub'
 (toJ hash) write onedrvpath,'bmsha256.txt'
@@ -1437,7 +1437,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20230410j143000
+NB. (TeXfrWpxml) interface word(s): 20230411j140935
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
