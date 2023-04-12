@@ -35,6 +35,7 @@ NB. 20sep12 (mdfootnotes) added to prefix markdown footnotes with post number
 NB. 22mar29 (filenamesFrtid) adjusted to extract titles from new <!CDATA['s
 NB. 22jul19 (countYearposts) added
 NB. 23apr10 switch (BlogHashes) to sha-256
+NB. 23apr12 use configured folders ~BLOGTEX, ~BLOGMD if defined
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -215,6 +216,9 @@ BlogHashes=:3 : 0
 NB.*BlogHashes v-- update blog hashes.
 NB.
 NB. monad:  BlogHashes uuIgnore
+
+NB. system word !(*)=. jpath
+'blog folders not set' assert 0 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX';'~BLOG1DR'
 
 texpath=. jpath '~BLOGTEX/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.tex'
@@ -456,8 +460,12 @@ NB. to match your locations.
 NB.
 NB. monad:  SetTeXfrWpxmlPaths uuIgnore
 
-NB. system nouns !(*)=. IFWIN IFUNIX
-if.     IFWIN  do. 
+NB. system words !(*)=. IFWIN IFUNIX jpath
+if. 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX' do.
+  NB. use configured folders if both exist
+  TEXFRWPDIR=:  jpath '~BLOGTEX/'
+  EPUBFRWPDIR=: jpath '~BLOGMD/'
+elseif. IFWIN  do. 
   TEXFRWPDIR=: 'c:/pd/blog/wp2latex/'
   EPUBFRWPDIR=:'c:/pd/blog/wp2epub/'
 elseif. IFUNIX do. 
@@ -1437,7 +1445,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20230411j140935
+NB. (TeXfrWpxml) interface word(s): 20230412j94604
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
