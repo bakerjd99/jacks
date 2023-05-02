@@ -36,6 +36,7 @@ NB. 22mar29 (filenamesFrtid) adjusted to extract titles from new <!CDATA['s
 NB. 22jul19 (countYearposts) added
 NB. 23apr10 switch (BlogHashes) to sha-256
 NB. 23apr12 use configured folders ~BLOGTEX, ~BLOGMD if defined
+NB. 23may02 add timestamp to (BlogHashes)
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -220,29 +221,31 @@ NB. monad:  BlogHashes uuIgnore
 NB. system word !(*)=. jpath
 'blog folders not set' assert 0 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX';'~BLOG1DR'
 
+hstamp=. ' Last hash: ',(timestamp ''),LF
+
 texpath=. jpath '~BLOGTEX/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.tex'
 NB. hash=. ctl ;"1 ' ' ,&.> sha256dir texpath,'*.pdf'
-(toJ hash) write texpath,'bmpdfsha256.txt'
+(toJ hstamp,hash) write texpath,'bmpdfsha256.txt'
 
 mdpath=. jpath '~BLOGMD/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.epub'
 NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.azw3'
 NB. hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.mobi'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir mdpath,'*.markdown'
-(toJ hash) write mdpath,'bmepubsha256.txt'
+(toJ hstamp,hash) write mdpath,'bmepubsha256.txt'
 
 xhtmlpath=. jpath '~BLOGMD/xhtml/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.xhtml'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.css'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.ncx'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.jpg'
-(toJ hash) write xhtmlpath,'bmexhtmlsha256.txt'
+(toJ hstamp,hash) write xhtmlpath,'bmexhtmlsha256.txt'
 
 onedrvpath=. jpath '~BLOG1DR/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.pdf'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.epub'
-(toJ hash) write onedrvpath,'bmsha256.txt'
+(toJ hstamp,hash) write onedrvpath,'bmsha256.txt'
 )
 
 
@@ -1445,7 +1448,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20230412j94604
+NB. (TeXfrWpxml) interface word(s): 20230502j134718
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
