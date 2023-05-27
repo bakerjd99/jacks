@@ -50,6 +50,7 @@ NB. 22jun04 modified (BuildMirror) to build mirror_temb.db
 NB. 22jul29 (RenameRealDates) added
 NB. 22jul31 (SampleMirror) added
 NB. 22dec24 (FixBogusDates) added
+NB. 23may27 (CreateMirrorXrefDb) (for_create.) to (for_crtsql.) 9.5 beta clash
 
 require 'data/sqlite'
 
@@ -209,7 +210,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.79';24;'08 Feb 2023 12:03:04'
+MIRRORVMD=:'0.9.8';9;'27 May 2023 12:00:36'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -503,12 +504,12 @@ NB. parse schema sql - assumes ordered create statements delimited by ';'
 sql=. reb&.> <;._1 ';', (LF,' ') charsub CreateMirror_sql -. CR
 
 NB. create new empty database
-dt=. sqlcreate_psqlite_ y
+dt=. sqlcreate_psqlite_ y [ ferase y [ sqlreset_psqlite_ ''
 
-NB. create tables
-for_create. sql do.
-  create=. ;create
-  ('unable to create table ->',create) assert 0 = sqlcmd__dt create
+NB. create tables - NOTE: cannot use (create) in for_create. j 9.5 beta
+for_crtsql. sql do.
+  crtsql=. ;crtsql
+  ('unable to create table ->',crtsql) assert 0 = sqlcmd__dt crtsql
 end.
 
 tabs=. sqltables__dt ''
@@ -2194,7 +2195,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20230208j120304
+NB. (MirrorXref) interface word(s): 20230527j120036
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
