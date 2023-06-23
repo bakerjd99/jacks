@@ -31,13 +31,16 @@ NB. line feed character
 LF=:10{a.
 
 NB. root words (ROOTWORDSeucgvuts) group      
-ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts ROOTWORDSeucgvuts eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucsortBgv eucsortgv gvclustoff gvcluston'
+ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts ROOTWORDSeucgvuts VMDeucgvuts eucgvuts_hashdateurl eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucsortBgv eucsortgv gvclustoff gvcluston'
+
+NB. 13 Euclids Elements books in Roman numerals
+RomanElementsBooks=:<;._1 ' I II III IV V VI VII VIII IX X XI XII XIII'
 
 NB. tab character
 TAB=:a.{~9
 
-
-VMDeucgvuts=:'0.5.0';3;'23 Jun 2023 10:46:48'
+NB. version, make count and date
+VMDeucgvuts=:'0.5.0';7;'23 Jun 2023 13:28:22'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -51,8 +54,10 @@ eucSTARTBOOKDEPS=:'//===start-book-deps'
 NB. mark start of node attributes
 eucSTARTNODEATTRS=:'//===start-node-attributes'
 
+NB. eucgvuts group script hash, build date, github url
+eucgvuts_hashdateurl=:<;._1 '|51ba5128d414ae202be11304520ca5751c18dedf8ad13069470a7a3acaddbf97|23 Jun 2023 11:49:28|https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs'
 
-eucgvuts_hashdateurl=:<;._1 '|32a604e10944e464610e55d3e85825c7a378bdfc39a82756e851e417e890234a|23 Jun 2023 10:46:37|https://github.com/bakerjd99/jackshacks/blob/main/riseset.ijs'
+
 ncolorDEFINITION=:'greenyellow'
 ncolorNOTION=:'darksalmon'
 ncolorPOSTULATE=:'lightblue'
@@ -397,6 +402,46 @@ end.
 )
 
 
+eucnctsparse=:3 : 0
+
+NB.*eucnctsparse v-- parses euclid digraph gv code.
+NB.
+NB. Splits digraph  code into  preamble,  postamble and a  unique
+NB. table of sorted connections.
+NB.
+NB. monad:  bl =. eucnctsparse clGv
+NB.
+NB.   NB. dot digraph code in (futs)
+NB.   gv=. read dotgv_ijod_=. getbyte 'euclid_joyce_1_6_b_gv'
+NB.   eucnctsparse gv
+
+bI=. eucSTARTBOOKDEPS [ eI=. eucENDBOOKDEPS
+nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
+'node connection delimiters' assert (1 = +/bI E. y) *. 1 = +/eI E. y
+'node attribute delimiters' assert (1 = +/nbI E. y) *. 1 = +/neI E. y
+
+NB. preamble and postamble
+pr=. bI beforestr y [ po=. allwhitetrim eI,eI afterstr y
+
+NB. remove old node attributes
+pr=. allwhitetrim nbI beforestr pr
+
+NB. book nodes
+c=. CR -.~ tlf eI beforestr bI afterstr y
+c=. (<'"; ') -.&.>~ ('->'&beforestr ; '->'&afterstr);._1 tlf c -.CR
+c=. c #~ *./"1 ] 0 < #&> c
+
+NB. sort by Euclid book and numeric proposition
+NB. number and make connections unique
+s=. >('.'&beforestr ; '.'&afterstr )&.> 1 {"1 c
+c=. ~. c {~ /: (RomanElementsBooks i. 0 {"1 s) ,. ".&> 1 {"1 s
+'node self loop(s)' assert 0 = +/ =/"1 c
+
+NB. preamble, postamble, connections
+pr;po;<c
+)
+
+
 eucsortBgv=:3 : 0
 
 NB.*eucsortBgv v-- second sort and format euclid book digraphs.
@@ -415,25 +460,8 @@ NB.   graphview dotgv_ijod_
 
 bI=. eucSTARTBOOKDEPS [ eI=. eucENDBOOKDEPS
 nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
-'node connection delimiters' assert (1 = +/bI E. y) *. 1 = +/eI E. y
-'node attribute delimiters' assert (1 = +/nbI E. y) *. 1 = +/neI E. y
 
-NB. preamble and postamble
-pr=. bI beforestr y [ po=. allwhitetrim eI,eI afterstr y
-
-NB. remove old node attributes
-pr=. allwhitetrim nbI beforestr pr
-
-NB. book nodes
-c=. CR -.~ tlf eI beforestr bI afterstr y
-c=. (<'"; ') -.&.>~ ('->'&beforestr ; '->'&afterstr);._1 tlf c -.CR
-c=. c #~ *./"1 ] 0 < #&> c
-
-NB. sort by Euclid book and numeric proposition 
-NB. number and make connections unique
-s=. >('.'&beforestr ; '.'&afterstr )&.> 1 {"1 c
-c=. ~. c {~ /: ((;:'I II III IV V VI') i. 0 {"1 s) ,. ".&> 1 {"1 s
-'node self loop(s)' assert 0 = +/ =/"1 c
+'pr po c'=. eucnctsparse y
 
 NB. main site url
 urh=. 'https://mathcs.clarku.edu/~djoyce/elements/book'
@@ -616,7 +644,7 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 NB.POST_eucgvuts post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230623j104648
+NB. (eucgvuts) interface word(s): 20230623j132822
 NB. --------------------------
 NB. eucjoycebkdeps  NB. all justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
