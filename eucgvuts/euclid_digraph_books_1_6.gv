@@ -7,6 +7,11 @@
 // First six books selected because they are the only
 // books found in Oliver Byrne’s 1847 illustrated Elements
 // https://www.c82.net/euclid/
+//
+// Generate graphviz svg with J addon by:
+//
+//   NB. assume configured J folder JACKS
+//   graphview jpath '~JACKS/eucgvuts/euclid_digraph_books_1_6.gv'
 // 
 // See the J verbs (eucjoycecncts, eucsortBgv) in (futs)
 //

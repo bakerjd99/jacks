@@ -2,7 +2,7 @@ NB.*eucgvuts t-- various Euclid graphviz digraph utils.
 NB.
 NB. verbatim: interface word(s):
 NB. ------------------------------------------------------------------------------
-NB.  eucjoycebkdeps - all justifications from Joyce book html files
+NB.  eucjoycebkdeps - justifications from Joyce book html files
 NB.  eucjoycecncts  - format Joyce node connections
 NB.  eucjoycedeps   - extract noted book dependencies from Joyce html
 NB.  eucjoycehtml   - html from David Joyce's online Elements
@@ -14,6 +14,10 @@ NB.  gvcluston      - dot code marked cluster(s) on
 NB.
 NB. created: 2023jun23
 NB. changes: -----------------------------------------------------
+
+NB. addons used by this ad-hoc-ky code
+load 'addons/graphics/graphviz/graphview.ijs'
+load 'web/gethttp'
 
 coclass 'eucgvuts'
 NB.*end-header
@@ -40,7 +44,7 @@ NB. tab character
 TAB=:a.{~9
 
 NB. version, make count and date
-VMDeucgvuts=:'0.5.0';7;'23 Jun 2023 13:28:22'
+VMDeucgvuts=:'0.5.0';11;'27 Jun 2023 10:14:40'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -53,9 +57,6 @@ eucSTARTBOOKDEPS=:'//===start-book-deps'
 
 NB. mark start of node attributes
 eucSTARTNODEATTRS=:'//===start-node-attributes'
-
-NB. eucgvuts group script hash, build date, github url
-eucgvuts_hashdateurl=:<;._1 '|51ba5128d414ae202be11304520ca5751c18dedf8ad13069470a7a3acaddbf97|23 Jun 2023 11:49:28|https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs'
 
 
 ncolorDEFINITION=:'greenyellow'
@@ -241,12 +242,13 @@ dblquote=:'"'&,@:(,&'"')&.>
 
 eucjoycebkdeps=:3 : 0
 
-NB.*eucjoycebkdeps v-- all justifications from Joyce book html files.
+NB.*eucjoycebkdeps v-- justifications from Joyce book html files.
+NB.
+NB. NOTE: use (wget) or (curl) to download the files at:
+NB.
+NB. https://mathcs.clarku.edu/~djoyce/elements/
 NB.
 NB. monad:  btcl =. eucjoycebkdeps blclHtmlFiles
-NB.
-NB.   bk1=. 1 dir '~temp/bookI/propI*.html'
-NB.   eucjoycebkdeps bk1
 NB.
 NB.   NB. justifications in first three books
 NB.   bks=. 'bookI/propI*html';'bookII/propII*.html';'bookIII/propIII*.html'
@@ -354,13 +356,13 @@ NB.*eucjoycejust v-- extract justifications from Joyce proposition html.
 NB.
 NB. monad:  blcl =. eucjoycejust clHtml
 NB.
-NB.   htm0=. gethttp 'https://mathcs.clarku.edu/~djoyce/elements/bookI/propI1.html'
-NB.   htm1=. gethttp 'https://mathcs.clarku.edu/~djoyce/elements/bookIII/propIII16.html'
+NB.   hdr=. 'https://mathcs.clarku.edu/~djoyce/elements/' 
+NB.   htm0=. gethttp hdr,'bookI/propI47.html'
 NB.   eucjoycejust htm0
-NB.   eucjoycejust htm1
 
-NB. justifications in text
-(,'a'&geteleattrtext"1 (] '</div>'&beforestr;.1~ '<div class="just">' E. ]) y -. CR,LF,TAB) -. a:
+NB. justifications in html
+cc=. CR,LF,TAB
+(,'a'&geteleattrtext"1 (] '</div>'&beforestr;.1~ '<div class="just">' E. ]) y -. cc) -. a:
 )
 
 
@@ -644,9 +646,9 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 NB.POST_eucgvuts post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230623j132822
+NB. (eucgvuts) interface word(s): 20230627j101440
 NB. --------------------------
-NB. eucjoycebkdeps  NB. all justifications from Joyce book html files
+NB. eucjoycebkdeps  NB. justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
 NB. eucjoycedeps    NB. extract noted book dependencies from Joyce html
 NB. eucjoycehtml    NB. html from David Joyce's online Elements
