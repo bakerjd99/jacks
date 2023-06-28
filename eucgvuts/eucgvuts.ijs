@@ -14,12 +14,77 @@ NB.  gvcluston      - dot code marked cluster(s) on
 NB.
 NB. created: 2023jun23
 NB. changes: -----------------------------------------------------
+NB. 23jun28 (PostCNDefLinks) added
 
 NB. addons used by this ad-hoc-ky code
 load 'addons/graphics/graphviz/graphview.ijs'
 load 'web/gethttp'
 
 coclass 'eucgvuts'
+
+NB.*dependents 
+NB. (*)=: PostCNDefLinks
+NB.*enddependents
+
+PostCNDefLinks=: (0 : 0)
+
+// definition links are not one-to-one and must be set manually
+"I.Def.15" [fillcolor={~{color}~}, URL="{~{url}~}bookI/defI15.html"];
+"I.Def.20" [fillcolor={~{color}~} URL="{~{url}~}bookI/defI20.html"];
+"I.Def.10" [fillcolor={~{color}~}, URL="{~{url}~}bookI/defI10.html"];
+"I.Def.16" [fillcolor={~{color}~} URL="{~{url}~}bookI/defI15.html"];
+"I.Def.23" [fillcolor={~{color}~} URL="{~{url}~}bookI/defI23.html"];
+"I.Def.22" [fillcolor={~{color}~} URL="{~{url}~}bookI/defI22.html"];
+"II.Def.1" [fillcolor={~{color}~}, URL="{~{url}~}bookII/defII.html"];
+"II.Def.2" [fillcolor={~{color}~}, URL="{~{url}~}bookII/defII.html"];
+"I.Def.18" [fillcolor={~{color}~} URL="{~{url}~}bookI/defI15.html"];
+"III.Def.3" [fillcolor={~{color}~}, URL="{~{url}~}bookIII/defIII2.html"];
+"III.Def.4" [fillcolor={~{color}~} URL="{~{url}~}bookIII/defIII4.html"];
+"III.Def.5" [fillcolor={~{color}~}, URL="{~{url}~}bookIII/defIII4.html"];
+"III.Def.11" [fillcolor={~{color}~} URL="{~{url}~}bookIII/defIII11.html"];
+"IV.Def.7" [fillcolor={~{color}~} URL="{~{url}~}bookIV/defIV.html"];
+"IV.Def.2" [fillcolor={~{color}~}  URL="{~{url}~}bookIV/defIV.html"];
+"IV.Def.4" [fillcolor={~{color}~}  URL="{~{url}~}bookIV/defIV.html"];
+"IV.Def.5" [fillcolor={~{color}~}  URL="{~{url}~}bookIV/defIV.html"];
+"IV.Def.6" [fillcolor={~{color}~}  URL="{~{url}~}bookIV/defIV.html"];
+"V.Def.2" [fillcolor={~{color}~} URL="{~{url}~}bookV/defV1.html"];
+"V.Def.5" [fillcolor={~{color}~} URL="{~{url}~}bookV/defV5.html"];
+"V.Def.4" [fillcolor={~{color}~} URL="{~{url}~}bookV/defV4.html"];
+"V.Def.7" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV7.html"];
+"V.Def.12" [fillcolor={~{color}~} URL="{~{url}~}bookV/defV11.html"];
+"V.Def.14" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV14.html"];
+"V.Def.15" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV14.html"];
+"V.Def.16" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV14.html"];
+"V.Def.18" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV17.html"];
+"V.Def.17" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV17.html"];
+"VI.Def.1" [fillcolor={~{color}~} URL="{~{url}~}bookVI/defVI1.html"];
+"V.Def.11" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV11.html"];
+"V.Def.9" [fillcolor={~{color}~}, URL="{~{url}~}bookV/defV8.html"];
+"VI.Def.3" [fillcolor={~{color}~}, URL="{~{url}~}bookVI/defVI3.html"];
+
+// postulates
+"Post.1" [fillcolor={~{color}~}, URL="{~{url}~}bookI/post1.html"];
+"Post.2" [fillcolor={~{color}~}, URL="{~{url}~}bookI/post2.html"];
+"Post.3" [fillcolor={~{color}~}, URL="{~{url}~}bookI/post3.html"];
+"Post.4" [fillcolor={~{color}~}, URL="{~{url}~}bookI/post4.html"];
+"Post.5" [fillcolor={~{color}~}, URL="{~{url}~}bookI/post5.html"];
+
+// common notions
+"C.N" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+"C.N.1" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+"C.N.2" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+"C.N.3" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+"C.N.4" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+"C.N.5" [fillcolor={~{color}~}, URL="{~{url}~}bookI/cn.html"];
+
+// corollary links
+"III.1.Cor" [URL="{~{url}~}bookIII/propIII1.html"];
+"III.16.Cor" [URL="{~{url}~}bookIII/propIII16.html"];
+"V.7.Cor" [URL="{~{url}~}bookIV/propIV7.html"];
+"VI.8.Cor" [URL="{~{url}~}bookVI/propVI8.html"];
+"V.19.Cor" [URL="{~{url}~}bookV/propV19.html"];
+"VI.19.Cor" [URL="{~{url}~}bookVI/propVI19.html"];
+)
 NB.*end-header
 
 NB. dot code off cluster marks
@@ -31,11 +96,14 @@ CR=:13{a.
 NB. interface words (IFACEWORDSeucgvuts) group
 IFACEWORDSeucgvuts=:<;._1 ' eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucsortBgv eucsortgv gvclustoff gvcluston'
 
+
+JoyceElementsUrl=:'https://mathcs.clarku.edu/~djoyce/elements/'
+
 NB. line feed character
 LF=:10{a.
 
 NB. root words (ROOTWORDSeucgvuts) group      
-ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts ROOTWORDSeucgvuts VMDeucgvuts eucgvuts_hashdateurl eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucsortBgv eucsortgv gvclustoff gvcluston'
+ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts PostCNDefLinks ROOTWORDSeucgvuts VMDeucgvuts eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucpropback eucsortBgv eucsortgv gvclustoff gvcluston'
 
 NB. 13 Euclids Elements books in Roman numerals
 RomanElementsBooks=:<;._1 ' I II III IV V VI VII VIII IX X XI XII XIII'
@@ -44,7 +112,7 @@ NB. tab character
 TAB=:a.{~9
 
 NB. version, make count and date
-VMDeucgvuts=:'0.5.0';11;'27 Jun 2023 10:14:40'
+VMDeucgvuts=:'0.5.0';24;'28 Jun 2023 14:17:07'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -444,6 +512,36 @@ pr;po;<c
 )
 
 
+eucpropback=:4 : 0
+
+NB.*eucpropback v-- generate reverse proposition digraph.
+NB.
+NB. dyad:  clNode eucpropback clGv
+NB.
+NB.   path=. jpath '~JACKS/eucgvuts/'
+NB.   gv=. read path,'euclid_digraph_books_1_6_dependencies.gv'
+NB.
+NB.   NB. typical use
+NB.   gt=. 'I.47' eucpropback gv
+NB.   (toHOST gt) write gf=. jpath '~temp/euclid_i_47_dependencies.gv'
+NB.   graphview gf
+
+gs=. s: gc [ 'gpr gpo gc'=. eucnctsparse y
+'no such node' assert (rn=. s: <x) e. 1 {"1 gs
+
+NB. work backwards in dependencies
+dn=. 0 2 $ s:<''
+whilst. #rn do.
+  sn=. gs #~ (1 {"1 gs) e. rn
+  dn=. dn , |."1 sn
+  rn=. (0 {"1 sn) -. 0 {"1 dn
+end.
+
+title=. 'Proposition ',x,' Dependencies'
+title fmteucgv gpr;gpo;<5 s: |."1 dn
+)
+
+
 eucsortBgv=:3 : 0
 
 NB.*eucsortBgv v-- second sort and format euclid book digraphs.
@@ -453,7 +551,7 @@ NB.
 NB. monad:  cl =. eucsortBgv clGv
 NB.
 NB.   NB. dot digraph code in (futs)
-NB.   gv=. read dotgv_ijod_=. getbyte 'euclid_joyce_1_6_b_gv'
+NB.   gv=. read dotgv_ijod_=. getbyte 'euclid_digraph_books_1_6_gv'
 NB.
 NB.   NB. typical use
 NB.   ngv=. eucsortBgv gv
@@ -463,50 +561,50 @@ NB.   graphview dotgv_ijod_
 bI=. eucSTARTBOOKDEPS [ eI=. eucENDBOOKDEPS
 nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
 
-'pr po c'=. eucnctsparse y
+'gpr gpo gc'=. eucnctsparse y
 
 NB. main site url
 urh=. 'https://mathcs.clarku.edu/~djoyce/elements/book'
 
 NB. terminal nodes - end of the trail cowboy
-t=. (~.,c) -. 0 {"1 c
+t=. (~.,gc) -. 0 {"1 gc
 t=. (dblquote t) ,&.> <' [fillcolor=',ncolorTERMINAL,'];'
 tends=. LF,('// terminal nodes',LF) , ;t ,&.> LF
 
 NB. postulate node attributes
-p=. c #~ +./@('Post.'&E.)&> 0 {"1 c
+p=. gc #~ +./@('Post.'&E.)&> 0 {"1 gc
 p=. /:~ p #~ ~: 0 {"1 p
 purl=. tolower&.> ((0 {"1 p) -.&.> '.') ,&.> <'.html"];'
 purl=. (<' [fillcolor=',ncolorPOSTULATE,', URL="',urh,'I/') ,&.> purl
-post=. (dblquote 0 {"1 p) ,&.> purl
-post=. LF,('// postulates',LF),ctl ;post ,&.> LF
+gpost=. (dblquote 0 {"1 p) ,&.> purl
+gpost=. LF,('// postulates',LF),ctl ;gpost ,&.> LF
 
 NB. common notions
 cnurl=. ' [fillcolor=',ncolorNOTION,', URL="',urh,'I/cn.html"];'
-cn=. c #~ +./@('C.N'&E.)&> 0 {"1 c
+cn=. gc #~ +./@('C.N'&E.)&> 0 {"1 gc
 cn=. /:~ cn #~ ~: 0 {"1 cn
 comn=. (dblquote 0 {"1 cn) ,&.> <cnurl
 comn=. LF,('// common notions',LF),ctl ;comn ,&.> LF
 
 NB. definition node attributes
-d=. c #~ +./@('.Def.'&E.)&> 0 {"1 c
+d=. gc #~ +./@('.Def.'&E.)&> 0 {"1 gc
 d=. d #~ ~: 0 {"1 d
 NB. NOTE: the links to definitions are not one-to-one
 def=. (dblquote 0 {"1 d) ,&.> <' [fillcolor=',ncolorDEFINITION,'];'
 def=. LF,('// definitions',LF),ctl ;def ,&.> LF
 
-NB. proposition node attributes
-prop=. ~. 1 {"1 c
-t=. (<'/prop') ,&.> (prop -.&.> '.') ,&.> <'.html"];'
-prurh=. <' [URL="',urh
-prop=. (dblquote prop) ,&.> prurh ,&.> ('.'&beforestr&.> prop) ,&.> t
-prop=. LF,('// propositions',LF),ctl ;prop ,&.> LF
+NB. progposition node attributes
+gprop=. ~. 1 {"1 gc
+t=. (<'/prop') ,&.> (gprop -.&.> '.') ,&.> <'.html"];'
+gprurh=. <' [URL="',urh
+gprop=. (dblquote gprop) ,&.> gprurh ,&.> ('.'&beforestr&.> gprop) ,&.> t
+gprop=. LF,('// propositions',LF),ctl ;gprop ,&.> LF
 
 NB. reassemble 
-natt=. nbI,(2#LF),(allwhitetrim tends,post,comn,def,prop),(2#LF),neI
-c=. 0 2 1 {"1 (dblquote c) ,"1 <' -> '
-c=. (0 1 {"1 c) ,. (2 {"1 c) ,&.> ';'
-pr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 c),LF,po
+natt=. nbI,(2#LF),(allwhitetrim tends,gpost,comn,def,gprop),(2#LF),neI
+gc=. 0 2 1 {"1 (dblquote gc) ,"1 <' -> '
+gc=. (0 1 {"1 gc) ,. (2 {"1 gc) ,&.> ';'
+gpr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 gc),LF,gpo
 )
 
 
@@ -559,6 +657,76 @@ NB. reassemble
 
 NB. 0's all but first 1 in runs of 1's - like (firstone) but differs for nulls
 firstones=:> (0: , }:)
+
+
+fmteucgv=:3 : 0
+
+NB.*fmteucgv v-- wordtext
+NB.
+NB. monad:  clGv =. fmteucgv bl
+NB. dyad: clGV =. clTitle fmteucgv bl
+
+'' fmteucgv y
+:
+'gpr gpo gc'=. y
+
+NB. set title
+if. #x do. gpr=. ((254{a.),'{~{title}~}',(254{a.),x) changestr gpr
+else.
+  gpr=. '#label=<<FONT COLOR#//label=<<FONT COLOR' changestr gpr
+end.
+
+bI=. eucSTARTBOOKDEPS [ eI=. eucENDBOOKDEPS
+nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
+
+NB. main site url
+urh=. JoyceElementsUrl,'book'
+
+NB. postulate, notion, definition links 
+pcd=. setpcdlinks PostCNDefLinks
+
+NB. terminal nodes - end of the trail cowboy
+t=. (~.,gc) -. 0 {"1 gc
+t=. (dblquote t) ,&.> <' [fillcolor=',ncolorTERMINAL,'];'
+tends=. LF,('// terminal nodes',LF) , ;t ,&.> LF
+
+NB. postulate node attributes
+p=. gc #~ +./@('Post.'&E.)&> 0 {"1 gc
+p=. /:~ p #~ ~: 0 {"1 p
+gpost=. (1 {"1 pcd) {~ (0 {"1 pcd) i. 0 {"1 p
+gpost=. LF,('// postulates',LF),ctl ;gpost ,&.> LF
+
+NB. common notions
+cn=. gc #~ +./@('C.N'&E.)&> 0 {"1 gc
+cn=. /:~ cn #~ ~: 0 {"1 cn
+comn=. (1 {"1 pcd) {~ (0 {"1 pcd) i. 0 {"1 cn
+comn=. LF,('// common notions',LF),ctl ;comn ,&.> LF
+
+NB. definition node attributes
+d=. gc #~ +./@('.Def.'&E.)&> 0 {"1 gc
+d=. d #~ ~: 0 {"1 d
+def=. (1 {"1 pcd) {~ (0 {"1 pcd) i. 0 {"1 d
+def=. LF,('// definitions',LF),ctl ;def ,&.> LF
+
+NB. corollaries
+cr=. gc #~ +./@('.Cor'&E.)&> 0 {"1 gc
+cr=. cr #~ ~: 0 {"1 cr
+cor=. (1 {"1 pcd) {~ (0 {"1 pcd) i. 0 {"1 cr
+cor=. LF,('// corollaries',LF),ctl ;cor ,&.> LF
+
+NB. proposition node attributes
+gprop=. ~. 1 {"1 gc
+t=. (<'/prop') ,&.> (gprop -.&.> '.') ,&.> <'.html"];'
+gprurh=. <' [URL="',urh
+gprop=. (dblquote gprop) ,&.> gprurh ,&.> ('.'&beforestr&.> gprop) ,&.> t
+gprop=. LF,('// propositions',LF),ctl ;gprop ,&.> LF
+
+NB. reassemble 
+natt=. nbI,(2#LF),(allwhitetrim gpost,comn,def,cor,gprop,tends),(2#LF),neI
+gc=. 0 2 1 {"1 (dblquote gc) ,"1 <' -> '
+gc=. (0 1 {"1 gc) ,. (2 {"1 gc) ,&.> ';'
+gpr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 gc),LF,gpo
+)
 
 NB. get element text following attributes
 geteleattrtext=:[: '>'&afterstr&.> ] betweenstrs~ [: atags [: alltrim [
@@ -626,6 +794,38 @@ rebc=:] #~ [: -. '  '&E.
 NB. deletes all blank rows from character table
 rebrow=:] #~ [: -. [: *./"1 ' '&=
 
+
+setpcdlinks=:3 : 0
+
+NB.*setpcdlinks v-- sets dot definition, postulate, notion code table.
+NB.
+NB. monad:  btcl =. setpcdlinks clLinks
+NB.
+NB.   setpcdlinks PostCNDefLinks    
+
+NB. set main url
+t=. ('!{~{url}~}!',JoyceElementsUrl) changestr y
+
+NB. form node attribute table
+t=. ljust rebrow ];._2 tlf t -. CR
+t=. t #~ -. '//' -:"1 ] 2 {."1 t
+p=. <@-.&' '"1 -.&'"'@('['&beforestr)"1 t
+t=. p ,. <"1 t
+
+NB. set node type colors
+ix=. I. +./@('.Def.'&E.)&> 0 {"1 t
+c=. ('!{~{color}~}!',ncolorDEFINITION)&changestr&.> ix { 1 {"1 t
+t=. c (<ix;1)} t
+
+ix=. I. +./@('C.N'&E.)&> 0 {"1 t
+c=. ('!{~{color}~}!',ncolorNOTION)&changestr&.> ix { 1 {"1 t
+t=. c (<ix;1)} t
+
+ix=. I. +./@('Post.'&E.)&> 0 {"1 t
+c=. ('!{~{color}~}!',ncolorPOSTULATE)&changestr&.> ix { 1 {"1 t
+t=. c (<ix;1)} t
+)
+
 NB. appends trailing line feed character if necessary
 tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
@@ -646,7 +846,7 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 NB.POST_eucgvuts post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230627j101440
+NB. (eucgvuts) interface word(s): 20230628j141707
 NB. --------------------------
 NB. eucjoycebkdeps  NB. justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
