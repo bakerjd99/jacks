@@ -1,20 +1,21 @@
-NB.*eucgvuts t-- various Euclid graphviz digraph utils.
+NB.*eucgvuts s-- various Euclid graphviz digraph utils.
 NB.
 NB. verbatim: interface word(s):
 NB. ------------------------------------------------------------------------------
 NB.  eucjoycebkdeps - justifications from Joyce book html files
 NB.  eucjoycecncts  - format Joyce node connections
-NB.  eucjoycedeps   - extract noted book dependencies from Joyce html
 NB.  eucjoycehtml   - html from David Joyce's online Elements
 NB.  eucjoycetabs   - extract dependency tables from Joyce html
+NB.  eucpropback    - generate reverse proposition digraph
+NB.  eucsixbookdeps - justifications from Euclid books I-VI
 NB.  eucsortBgv     - second sort and format euclid book digraphs
-NB.  eucsortgv      - sort euclid book digraphs
 NB.  gvclustoff     - dot code marked cluster(s) off
 NB.  gvcluston      - dot code marked cluster(s) on
 NB.
 NB. created: 2023jun23
 NB. changes: -----------------------------------------------------
 NB. 23jun28 (PostCNDefLinks) added
+NB. 23jun29 (SixBooksHeader) added
 
 NB. addons used by this ad-hoc-ky code
 load 'addons/graphics/graphviz/graphview.ijs'
@@ -23,7 +24,7 @@ load 'web/gethttp'
 coclass 'eucgvuts'
 
 NB.*dependents 
-NB. (*)=: PostCNDefLinks
+NB. (*)=: PostCNDefLinks SixBooksHeader
 NB.*enddependents
 
 PostCNDefLinks=: (0 : 0)
@@ -85,6 +86,59 @@ PostCNDefLinks=: (0 : 0)
 "V.19.Cor" [URL="{~{url}~}bookV/propV19.html"];
 "VI.19.Cor" [URL="{~{url}~}bookVI/propVI19.html"];
 )
+
+SixBooksHeader=: (0 : 0)
+// Elements Books I-VI proposition dependencies
+//
+// Graph connections generated from extracting 
+// justifications from David Joyce's online elements.
+// https://mathcs.clarku.edu/~djoyce/elements/elements.html
+//
+// First six books selected because they are the only
+// books found in Oliver Byrne’s 1847 illustrated Elements
+// https://www.c82.net/euclid/
+//
+// Generate graphviz svg with J addon by:
+//
+//   NB. assume configured J folder JACKS
+//   graphview jpath '~JACKS/eucgvuts/euclid_digraph_books_1_6.gv'
+// 
+// See: 
+// https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs
+//
+// 2023jun21 created
+// changed --------------------------------------
+// 23jun23 terminal nodes colored, definitions linked
+// 23jun29 attribute section removed - now regenerated
+
+digraph G {
+
+//newrank=true;
+//rank=same;
+
+rankdir=TB;  //top to bottom
+//B bottom  T top  L left R right
+
+labelloc="t"
+label=<<FONT COLOR="BLACK" POINT-SIZE="48.0">{~{title}~}</FONT>>;
+
+ordering=out;
+fontsize="16";
+
+node [shape=oval];
+node [style=filled, fillcolor=lightyellow];
+edge [color=green];
+
+//===start-node-attributes
+
+//===end=node-attributes
+
+//===start-book-deps
+
+//===end-book-deps
+
+}
+)
 NB.*end-header
 
 NB. dot code off cluster marks
@@ -94,7 +148,7 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSeucgvuts) group
-IFACEWORDSeucgvuts=:<;._1 ' eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucsortBgv eucsortgv gvclustoff gvcluston'
+IFACEWORDSeucgvuts=:<;._1 ' eucjoycebkdeps eucjoycecncts eucjoycehtml eucjoycetabs eucpropback eucsixbookdeps eucsortBgv gvclustoff gvcluston'
 
 
 JoyceElementsUrl=:'https://mathcs.clarku.edu/~djoyce/elements/'
@@ -103,7 +157,7 @@ NB. line feed character
 LF=:10{a.
 
 NB. root words (ROOTWORDSeucgvuts) group      
-ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts PostCNDefLinks ROOTWORDSeucgvuts VMDeucgvuts eucjoycebkdeps eucjoycecncts eucjoycedeps eucjoycehtml eucjoycetabs eucpropback eucsortBgv eucsortgv gvclustoff gvcluston'
+ROOTWORDSeucgvuts=:<;._1 ' IFACEWORDSeucgvuts ROOTWORDSeucgvuts VMDeucgvuts eucjoycedeps eucjoycehtml eucjoycetabs eucpropback eucsixbookdeps eucsortBgv eucsortgv gvclustoff gvcluston'
 
 NB. 13 Euclids Elements books in Roman numerals
 RomanElementsBooks=:<;._1 ' I II III IV V VI VII VIII IX X XI XII XIII'
@@ -112,7 +166,7 @@ NB. tab character
 TAB=:a.{~9
 
 NB. version, make count and date
-VMDeucgvuts=:'0.5.0';24;'28 Jun 2023 14:17:07'
+VMDeucgvuts=:'0.7.0';9;'29 Jun 2023 17:11:22'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -318,9 +372,9 @@ NB. https://mathcs.clarku.edu/~djoyce/elements/
 NB.
 NB. monad:  btcl =. eucjoycebkdeps blclHtmlFiles
 NB.
-NB.   NB. justifications in first three books
-NB.   bks=. 'bookI/propI*html';'bookII/propII*.html';'bookIII/propIII*.html'
-NB.   eucjoycebkdeps ; 1&dir&.> (<'~temp/') ,&.> bks
+NB.   NB. justifications in first two books
+NB.   bks=. 'bookI/propI*html';'bookII/propII*.html'
+NB.   eucjoycebkdeps ; 1&dir&.> (<'~temp/elements/') ,&.> bks
 
 ;(<@justfile@winpathsep ,. eucjoycejust@read)&.> y
 )
@@ -332,9 +386,8 @@ NB.*eucjoycecncts v-- format Joyce node connections.
 NB.
 NB. monad:  blcl =. eucjoycecncts btclPropJust
 NB.
-NB.   NB. first six books - Byrne's original
-NB.   bks=. 'bookI/propI*.html';'bookII/propII*.html';'bookIII/propIII*.html'
-NB.   bks=. bks , 'bookIV/propIV*.html';'bookV/propV*.html';'bookVI/propVI*.html'
+NB.   NB. first two books
+NB.   bks=. 'bookI/propI*.html';'bookII/propII*.html'
 NB.
 NB.   pn=. eucjoycebkdeps ; 1&dir&.> (<'~temp/') ,&.> bks
 NB.   cn=. eucjoycecncts pn
@@ -357,11 +410,13 @@ pj=. pj }.&.>~ -'.'={:&> pj=. 1 {"1 pj
 
 NB. rename postulates
 pstnew=. 2 }.&.> pstold=. <;._1 ' I.Post.1 I.Post.2 I.Post.3 I.Post.4 I.Post.5'
-ix=. 0 -.~ <"1 I."1 pj =/~ pstold
+ix=. <@I."1 pj=/~pstold
 for_pr. ix do. pj=. (pr_index{pstnew) (;pr)} pj end.
+
+pj ,. pn
   
 NB. format graphviz connections 
-(dblquote pj) ,&.> (<' -> ') ,&.> (dblquote pn) ,&.> ';'
+NB. (dblquote pj) ,&.> (<' -> ') ,&.> (dblquote pn) ,&.> ';'
 )
 
 
@@ -491,24 +546,29 @@ nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
 'node attribute delimiters' assert (1 = +/nbI E. y) *. 1 = +/neI E. y
 
 NB. preamble and postamble
-pr=. bI beforestr y [ po=. allwhitetrim eI,eI afterstr y
+gpr=. bI beforestr y [ gpo=. allwhitetrim eI,eI afterstr y
 
 NB. remove old node attributes
-pr=. allwhitetrim nbI beforestr pr
+gpr=. allwhitetrim nbI beforestr gpr
 
 NB. book nodes
-c=. CR -.~ tlf eI beforestr bI afterstr y
-c=. (<'"; ') -.&.>~ ('->'&beforestr ; '->'&afterstr);._1 tlf c -.CR
-c=. c #~ *./"1 ] 0 < #&> c
+gc=. CR -.~ tlf eI beforestr bI afterstr y
 
-NB. sort by Euclid book and numeric proposition
-NB. number and make connections unique
-s=. >('.'&beforestr ; '.'&afterstr )&.> 1 {"1 c
-c=. ~. c {~ /: (RomanElementsBooks i. 0 {"1 s) ,. ".&> 1 {"1 s
-'node self loop(s)' assert 0 = +/ =/"1 c
+if. #allwhitetrim gc do.
+  gc=. (<'"; ') -.&.>~ ('->'&beforestr ; '->'&afterstr);._1 tlf gc -.CR
+  gc=. gc #~ *./"1 ] 0 < #&> gc
+
+  NB. sort by Euclid book and numeric proposition
+  NB. number and make connections unique
+  s=. >('.'&beforestr ; '.'&afterstr )&.> 1 {"1 gc
+  gc=. ~. gc {~ /: (RomanElementsBooks i. 0 {"1 s) ,. ".&> 1 {"1 s
+  'node self loop(s)' assert 0 = +/ =/"1 gc
+else.
+  gc=. 0 2$<''
+end.
 
 NB. preamble, postamble, connections
-pr;po;<c
+gpr;gpo;<gc
 )
 
 
@@ -516,14 +576,15 @@ eucpropback=:4 : 0
 
 NB.*eucpropback v-- generate reverse proposition digraph.
 NB.
-NB. dyad:  clNode eucpropback clGv
+NB. dyad:  cl =. clNode eucpropback clGv
 NB.
 NB.   path=. jpath '~JACKS/eucgvuts/'
 NB.   gv=. read path,'euclid_digraph_books_1_6_dependencies.gv'
 NB.
 NB.   NB. typical use
 NB.   gt=. 'I.47' eucpropback gv
-NB.   (toHOST gt) write gf=. jpath '~temp/euclid_i_47_dependencies.gv'
+NB.   gf=. jpath '~temp/euclid_i_47_dependencies.gv'
+NB.   (toHOST gt) write gf
 NB.   graphview gf
 
 gs=. s: gc [ 'gpr gpo gc'=. eucnctsparse y
@@ -539,6 +600,31 @@ end.
 
 title=. 'Proposition ',x,' Dependencies'
 title fmteucgv gpr;gpo;<5 s: |."1 dn
+)
+
+
+eucsixbookdeps=:3 : 0
+
+NB.*eucsixbookdeps v-- justifications from Euclid books I-VI.
+NB.
+NB. NOTE:  assumes   html  has   been   copied  to  J   directory
+NB. ~temp/elements
+NB.
+NB. monad:  clGv =. eucsixbookdeps uuIgnore
+NB.
+NB.   gv=. eucsixbookdeps 0
+NB.   (toHOST gv) write gf=. jpath '~temp/euclid_digraph_books_1_6.gv'
+NB.   graphview gf 
+
+NB. j profile !(*)=. dir
+bks=. 'bookI/propI*html';'bookII/propII*.html';'bookIII/propIII*.html'
+bks=. bks,'bookIV/propIV*.html';'bookV/propV*.html';'bookVI/propVI*.html'
+gc=. eucjoycecncts eucjoycebkdeps ; 1&dir&.> (<'~temp/elements/') ,&.> bks
+'gpr gpo t'=. eucnctsparse SixBooksHeader
+
+title=. 'Euclid''s Elements Proposition Digraph - Books I-VI - data from: '
+title=. title,'https://mathcs.clarku.edu/~djoyce/elements/elements.html'
+title fmteucgv gpr;gpo;<gc
 )
 
 
@@ -558,53 +644,9 @@ NB.   ngv=. eucsortBgv gv
 NB.   (toHOST ngv) write dotgv_ijod_
 NB.   graphview dotgv_ijod_
 
-bI=. eucSTARTBOOKDEPS [ eI=. eucENDBOOKDEPS
-nbI=. eucSTARTNODEATTRS [ neI=. eucENDNODEATTRS
-
-'gpr gpo gc'=. eucnctsparse y
-
-NB. main site url
-urh=. 'https://mathcs.clarku.edu/~djoyce/elements/book'
-
-NB. terminal nodes - end of the trail cowboy
-t=. (~.,gc) -. 0 {"1 gc
-t=. (dblquote t) ,&.> <' [fillcolor=',ncolorTERMINAL,'];'
-tends=. LF,('// terminal nodes',LF) , ;t ,&.> LF
-
-NB. postulate node attributes
-p=. gc #~ +./@('Post.'&E.)&> 0 {"1 gc
-p=. /:~ p #~ ~: 0 {"1 p
-purl=. tolower&.> ((0 {"1 p) -.&.> '.') ,&.> <'.html"];'
-purl=. (<' [fillcolor=',ncolorPOSTULATE,', URL="',urh,'I/') ,&.> purl
-gpost=. (dblquote 0 {"1 p) ,&.> purl
-gpost=. LF,('// postulates',LF),ctl ;gpost ,&.> LF
-
-NB. common notions
-cnurl=. ' [fillcolor=',ncolorNOTION,', URL="',urh,'I/cn.html"];'
-cn=. gc #~ +./@('C.N'&E.)&> 0 {"1 gc
-cn=. /:~ cn #~ ~: 0 {"1 cn
-comn=. (dblquote 0 {"1 cn) ,&.> <cnurl
-comn=. LF,('// common notions',LF),ctl ;comn ,&.> LF
-
-NB. definition node attributes
-d=. gc #~ +./@('.Def.'&E.)&> 0 {"1 gc
-d=. d #~ ~: 0 {"1 d
-NB. NOTE: the links to definitions are not one-to-one
-def=. (dblquote 0 {"1 d) ,&.> <' [fillcolor=',ncolorDEFINITION,'];'
-def=. LF,('// definitions',LF),ctl ;def ,&.> LF
-
-NB. progposition node attributes
-gprop=. ~. 1 {"1 gc
-t=. (<'/prop') ,&.> (gprop -.&.> '.') ,&.> <'.html"];'
-gprurh=. <' [URL="',urh
-gprop=. (dblquote gprop) ,&.> gprurh ,&.> ('.'&beforestr&.> gprop) ,&.> t
-gprop=. LF,('// propositions',LF),ctl ;gprop ,&.> LF
-
-NB. reassemble 
-natt=. nbI,(2#LF),(allwhitetrim tends,gpost,comn,def,gprop),(2#LF),neI
-gc=. 0 2 1 {"1 (dblquote gc) ,"1 <' -> '
-gc=. (0 1 {"1 gc) ,. (2 {"1 gc) ,&.> ';'
-gpr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 gc),LF,gpo
+title=. 'Euclid''s Elements Proposition Digraph - Books I-VI - data from: '
+title=. title,'https://mathcs.clarku.edu/~djoyce/elements/elements.html'
+title fmteucgv eucnctsparse y
 )
 
 
@@ -661,7 +703,7 @@ firstones=:> (0: , }:)
 
 fmteucgv=:3 : 0
 
-NB.*fmteucgv v-- wordtext
+NB.*fmteucgv v-- format graphiz gv code.
 NB.
 NB. monad:  clGv =. fmteucgv bl
 NB. dyad: clGV =. clTitle fmteucgv bl
@@ -711,6 +753,7 @@ def=. LF,('// definitions',LF),ctl ;def ,&.> LF
 NB. corollaries
 cr=. gc #~ +./@('.Cor'&E.)&> 0 {"1 gc
 cr=. cr #~ ~: 0 {"1 cr
+crlk=. ~.('.Cor'&beforestr&.> 0 {"1 cr) ,. 0 {"1 cr
 cor=. (1 {"1 pcd) {~ (0 {"1 pcd) i. 0 {"1 cr
 cor=. LF,('// corollaries',LF),ctl ;cor ,&.> LF
 
@@ -723,7 +766,7 @@ gprop=. LF,('// propositions',LF),ctl ;gprop ,&.> LF
 
 NB. reassemble 
 natt=. nbI,(2#LF),(allwhitetrim gpost,comn,def,cor,gprop,tends),(2#LF),neI
-gc=. 0 2 1 {"1 (dblquote gc) ,"1 <' -> '
+gc=. 0 2 1 {"1 (dblquote ~.crlk,gc) ,"1 <' -> '
 gc=. (0 1 {"1 gc) ,. (2 {"1 gc) ,&.> ';'
 gpr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 gc),LF,gpo
 )
@@ -829,32 +872,21 @@ t=. c (<ix;1)} t
 NB. appends trailing line feed character if necessary
 tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 
-
-tolower=:3 : 0
-
-NB.*tolower v-- convert to lower case.
-NB.
-NB. monad: cl =. tolower cl
-
-x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
-($y) $ ((x{n) { (97+i.26){a.) x}t
-)
-
 NB. standardizes path delimiter to windows back \ slash
 winpathsep=:'\'&(('/' I.@:= ])} )
 
 NB.POST_eucgvuts post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230628j141707
+NB. (eucgvuts) interface word(s): 20230629j171122
 NB. --------------------------
 NB. eucjoycebkdeps  NB. justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
-NB. eucjoycedeps    NB. extract noted book dependencies from Joyce html
 NB. eucjoycehtml    NB. html from David Joyce's online Elements
 NB. eucjoycetabs    NB. extract dependency tables from Joyce html
+NB. eucpropback     NB. generate reverse proposition digraph
+NB. eucsixbookdeps  NB. justifications from Euclid books I-VI
 NB. eucsortBgv      NB. second sort and format euclid book digraphs
-NB. eucsortgv       NB. sort euclid book digraphs
 NB. gvclustoff      NB. dot code marked cluster(s) off
 NB. gvcluston       NB. dot code marked cluster(s) on
 )
