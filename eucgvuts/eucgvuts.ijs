@@ -18,8 +18,8 @@ NB. 23jun28 (PostCNDefLinks) added
 NB. 23jun29 (SixBooksHeader) added
 
 NB. addons used by this ad-hoc-ky code
-load 'addons/graphics/graphviz/graphview.ijs'
-load 'web/gethttp'
+load '~addons/graphics/graphviz/graphview.ijs'
+load '~addons/web/gethttp/gethttp.ijs'
 
 coclass 'eucgvuts'
 
@@ -166,7 +166,7 @@ NB. tab character
 TAB=:a.{~9
 
 NB. version, make count and date
-VMDeucgvuts=:'0.7.0';9;'29 Jun 2023 17:11:22'
+VMDeucgvuts=:'0.7.5';2;'30 Jun 2023 12:01:43'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -561,6 +561,8 @@ if. #allwhitetrim gc do.
   NB. sort by Euclid book and numeric proposition
   NB. number and make connections unique
   s=. >('.'&beforestr ; '.'&afterstr )&.> 1 {"1 gc
+  NB. remove any '.Cor' suffixes
+  s=. (0 {"1 s) ,. '.'&beforestr&.> 1 {"1 s
   gc=. ~. gc {~ /: (RomanElementsBooks i. 0 {"1 s) ,. ".&> 1 {"1 s
   'node self loop(s)' assert 0 = +/ =/"1 gc
 else.
@@ -764,9 +766,12 @@ gprurh=. <' [URL="',urh
 gprop=. (dblquote gprop) ,&.> gprurh ,&.> ('.'&beforestr&.> gprop) ,&.> t
 gprop=. LF,('// propositions',LF),ctl ;gprop ,&.> LF
 
-NB. reassemble 
+NB. make dependencies unique 
+gc=. ~.crlk,gc
+
+NB. reassemble and format code 
 natt=. nbI,(2#LF),(allwhitetrim gpost,comn,def,cor,gprop,tends),(2#LF),neI
-gc=. 0 2 1 {"1 (dblquote ~.crlk,gc) ,"1 <' -> '
+gc=. 0 2 1 {"1 (dblquote gc) ,"1 <' -> '
 gc=. (0 1 {"1 gc) ,. (2 {"1 gc) ,&.> ';'
 gpr,(2#LF),natt,(2#LF),bI,LF,(ctl ;"1 gc),LF,gpo
 )
@@ -875,10 +880,13 @@ tlf=:] , ((10{a.)"_ = {:) }. (10{a.)"_
 NB. standardizes path delimiter to windows back \ slash
 winpathsep=:'\'&(('/' I.@:= ])} )
 
+NB. writes a list of bytes to file
+write=:1!:2 ]`<@.(32&>@(3!:0))
+
 NB.POST_eucgvuts post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230629j171122
+NB. (eucgvuts) interface word(s): 20230630j120143
 NB. --------------------------
 NB. eucjoycebkdeps  NB. justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
