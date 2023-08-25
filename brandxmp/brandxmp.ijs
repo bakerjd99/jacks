@@ -54,13 +54,16 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.6.5';4;'21 May 2023 12:08:31'
+VMDbrandxmp=:'0.7.0';4;'25 Aug 2023 12:34:07'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
 
 NB. xmp list line length
 XMPWID=:75
+
+NB. name of directory xmp zip backup file
+XMPZIPFILE=:'00xmpbak.zip'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -155,8 +158,15 @@ if. #htxmp do.
   txt=. txt,LF,ctl ;"1 rit ,. brtxt 
 end.
 
+NB. backup current xmp files -- uses J's zip.exe assumed on path
+adir=. tslash2 y
+ferase xmpbak=. '"',adir,XMPZIPFILE,'"'
+zcmd=. 'zip -j ',xmpbak,' "',adir,'*.xmp"'
+NB. j profile !(*)=. shell
+msgs=. shell zcmd
+
 NB. write audit file
-afile [ (toHOST tlf txt) write afile=. (tslash2 y),XMPAUDITFILE
+afile [ (toHOST tlf txt) write afile=. adir,XMPAUDITFILE
 )
 
 NB. retains string before first occurrence of (x)
@@ -285,6 +295,9 @@ NB. monad:  ct =. rawfreq blclFiles
 
 NB. boxes UTF8 names
 fboxname=:([: < 8 u: >) ::]
+
+NB. erase files - cl | blcl of path file names
+ferase=:1!:55 ::(_1:)@(fboxname&>)@boxopen
 
 NB. 1 if file exists 0 otherwise
 fexist=:1:@(1!:4) ::0:@(fboxname&>)@boxopen
@@ -446,6 +459,17 @@ x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
 ($y) $ ((x{n) { (97+i.26){a.) x}t
 )
 
+
+toupper=:3 : 0
+
+NB.*toupper v-- convert to upper case
+NB.
+NB. monad:  cl =. toupper cl
+
+x=. I. 26 > n=. ((97+i.26){a.) i. t=. ,y
+($y) $ ((x{n) { (65+i.26){a.) x}t
+)
+
 NB. appends trailing / iff last character is not \ or /
 tslash2=:([: - '\/' e.~ {:) }. '/' ,~ ]
 
@@ -458,7 +482,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20230521j120831
+NB. (brandxmp) interface word(s): 20230825j123407
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
