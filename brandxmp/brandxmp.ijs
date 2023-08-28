@@ -54,7 +54,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.0';4;'25 Aug 2023 12:34:07'
+VMDbrandxmp=:'0.7.0';6;'28 Aug 2023 15:22:43'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -115,7 +115,7 @@ NB. 2. raws without sidecar xmps
 NB. 3. raws with xmps missing titles
 NB. 4. titles of xmps - shows name|hash if branded
 NB.
-NB. monad:  clAuditFile =. audbranddir clDirectory
+NB. monad:  (clAuditFile ; clXmpZip) =. audbranddir clDirectory
 NB.
 NB.   r0=. 'c:/pictures/2022/Washington/04_apr/d7500'
 NB.   r1=. 'c:\pictures\2022\North Rim Monument Valley\06_jun\d7500'
@@ -161,12 +161,20 @@ end.
 NB. backup current xmp files -- uses J's zip.exe assumed on path
 adir=. tslash2 y
 ferase xmpbak=. '"',adir,XMPZIPFILE,'"'
-zcmd=. 'zip -j ',xmpbak,' "',adir,'*.xmp"'
+NB. j profile !(*)=. IFWIN IFUNIX
+if. IFWIN do.
+  zcmd=. 'zip -f -j ',xmpbak,' "',adir,'*.xmp"'
+elseif. IFUNIX do.
+  NB. msgs=. shell 'rm ',xmpbak
+  zcmd=. 'zip ',xmpbak,' "',adir,'"*.xmp'
+elseif.do.
+  'OS not supported' assert 0
+end.
 NB. j profile !(*)=. shell
-msgs=. shell zcmd
+smoutput msgs=. shell zcmd
 
 NB. write audit file
-afile [ (toHOST tlf txt) write afile=. adir,XMPAUDITFILE
+afile;xmpbak [ (toHOST tlf txt) write afile=. adir,XMPAUDITFILE
 )
 
 NB. retains string before first occurrence of (x)
@@ -482,7 +490,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20230825j123407
+NB. (brandxmp) interface word(s): 20230828j152243
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
