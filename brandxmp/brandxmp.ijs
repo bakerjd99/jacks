@@ -54,7 +54,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.0';6;'28 Aug 2023 15:22:43'
+VMDbrandxmp=:'0.7.0';9;'07 Sep 2023 12:51:48'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -98,6 +98,9 @@ a: -.~ , ;1&dir&.> (<(tslash2 y) ,'*.') ,&.> ext
 
 NB. trims all leading and trailing blanks
 alltrim=:] #~ [: -. [: (*./\. +. *./\) ' '&=
+
+NB. signal with optional message
+assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
 
 
 audbranddir=:3 : 0
@@ -163,7 +166,8 @@ adir=. tslash2 y
 ferase xmpbak=. '"',adir,XMPZIPFILE,'"'
 NB. j profile !(*)=. IFWIN IFUNIX
 if. IFWIN do.
-  zcmd=. 'zip -f -j ',xmpbak,' "',adir,'*.xmp"'
+  opts=. (fexist xmpbak)#' -f '
+  zcmd=. 'zip ',opts,' -j ',xmpbak,' "',adir,'*.xmp"'
 elseif. IFUNIX do.
   NB. msgs=. shell 'rm ',xmpbak
   zcmd=. 'zip ',xmpbak,' "',adir,'"*.xmp'
@@ -357,6 +361,9 @@ NB. appending '.xmp' to the source file name
 (fexist xmp) # raw,.xmp=.raw ,&.> <'.xmp'
 )
 
+NB. session manager output
+smoutput=:0 0 $ 1!:2&2
+
 NB. xml BEGIN and END tags
 tags=:'<'&,@,&'>' ; '</'&,@,&'>'
 
@@ -490,7 +497,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (brandxmp) interface word(s): 20230828j152243
+NB. (brandxmp) interface word(s): 20230907j125148
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
