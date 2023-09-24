@@ -13,100 +13,103 @@ For details see blog posts - listed from newest to oldest:
 
 `[begin-list]`
 
-1. [Sympathy for Ptolemaic Epicyclers](https://analyzethedatanotthedrivel.org/2023/04/07/sympathy-for-ptolemaic-epicyclers/)
+1. [J graphviz’s Euclid’s Elements](https://analyzethedatanotthedrivel.org/2023/06/28/j-graphvizs-euclids-elements/)
+ * [`eucgvuts`](https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs)
+
+2. [Sympathy for Ptolemaic Epicyclers](https://analyzethedatanotthedrivel.org/2023/04/07/sympathy-for-ptolemaic-epicyclers/)
  * [`riseset`](https://github.com/bakerjd99/jackshacks)
 
-2. Two posts about using SQLite with J see: [`mirrorxref`](https://github.com/bakerjd99/jacks/tree/master/mirrorxref)
+3. Two posts about using SQLite with J see: [`mirrorxref`](https://github.com/bakerjd99/jacks/tree/master/mirrorxref)
  * [“Managing” a SQLite Database with J (Part 1)](https://analyzethedatanotthedrivel.org/2022/08/03/managing-a-sqlite-database-with-j-part-1/)
  * [“Managing” a SQLite Database with J (Part 2)](https://analyzethedatanotthedrivel.org/2022/08/08/managing-a-sqlite-database-with-j-part-2/)
 
-3. [Stupid J Jupyter Tricks](https://analyzethedatanotthedrivel.org/2022/07/24/stupid-j-jupyter-tricks/)
+4. [Stupid J Jupyter Tricks](https://analyzethedatanotthedrivel.org/2022/07/24/stupid-j-jupyter-tricks/)
  * [`ipynb`](https://github.com/bakerjd99/jacks/tree/master/ipynbfrjod)
 
-4. [Branding XMP Sidecar Files with J](https://analyzethedatanotthedrivel.org/2022/07/17/branding-xmp-sidecar-files-with-j/)
+5. [Branding XMP Sidecar Files with J](https://analyzethedatanotthedrivel.org/2022/07/17/branding-xmp-sidecar-files-with-j/)
  * [`brandxmp`](https://github.com/bakerjd99/jacks/tree/master/brandxmp)
 
-5. [JOD goes into the Arctic Code Vault](https://analyzethedatanotthedrivel.org/2020/08/17/jod-goes-into-the-arctic-code-vault/)
+6. [JOD goes into the Arctic Code Vault](https://analyzethedatanotthedrivel.org/2020/08/17/jod-goes-into-the-arctic-code-vault/)
 
-6. [Using jodliterate](https://analyzethedatanotthedrivel.org/2020/05/25/using-jodliterate/)
+7. [Using jodliterate](https://analyzethedatanotthedrivel.org/2020/05/25/using-jodliterate/)
  * [`jodliterate`](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
 
-7. [More J Pandoc Syntax HighLighting](https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/)
+8. [More J Pandoc Syntax HighLighting](https://analyzethedatanotthedrivel.org/2020/02/19/more-j-pandoc-syntax-highlighting/)
  * [`jpdh.md`](https://github.com/bakerjd99/jacks/tree/master/pandocexamples)
 
-8. [NumPy another Iverson Ghost](https://analyzethedatanotthedrivel.org/2018/03/31/numpy-another-iverson-ghost/)
+9. [NumPy another Iverson Ghost](https://analyzethedatanotthedrivel.org/2018/03/31/numpy-another-iverson-ghost/)
  * [`numpyjlove`](https://github.com/bakerjd99/jacks/tree/master/numpyjlove)
 
-9. [SWAG a J/EXCEL/GIT Personal Cash Flow Forecasting Mob](https://bakerjd99.wordpress.com/2016/01/10/swag-a-jexcelgit-personal-cash-flow-forecasting-mob/)
+10. [SWAG a J/EXCEL/GIT Personal Cash Flow Forecasting Mob](https://bakerjd99.wordpress.com/2016/01/10/swag-a-jexcelgit-personal-cash-flow-forecasting-mob/)
  * [`swag`](https://github.com/bakerjd99/jacks/tree/master/swag)
 
-10. [Parsing the Bitcoin Genesis Block with J](http://bakerjd99.wordpress.com/2014/07/03/parsing-the-bitcoin-genesis-block-with-j/)
+11. [Parsing the Bitcoin Genesis Block with J](http://bakerjd99.wordpress.com/2014/07/03/parsing-the-bitcoin-genesis-block-with-j/)
  * [`bitcoin`](https://github.com/bakerjd99/jacks/tree/master/bitcoin)
 
-11. [APL Software Archaeology `.dbi` Edition](http://bakerjd99.wordpress.com/2013/12/26/apl-software-archaeology-dbi-edition/)
+12. [APL Software Archaeology `.dbi` Edition](http://bakerjd99.wordpress.com/2013/12/26/apl-software-archaeology-dbi-edition/)
  * [`dbi`](https://github.com/bakerjd99/jacks/tree/master/dbi)
 
-12. [JHS with the DHTMLX Grid](http://bakerjd99.wordpress.com/2012/12/03/jhs-with-the-dhtmlx-grid/)
+13. [JHS with the DHTMLX Grid](http://bakerjd99.wordpress.com/2012/12/03/jhs-with-the-dhtmlx-grid/)
  * [`griddemo`](https://github.com/bakerjd99/jacks/tree/master/griddemo)
 
-13. [JHS meets MathJax](http://bakerjd99.wordpress.com/2012/11/25/jhs-meets-mathjax/)
+14. [JHS meets MathJax](http://bakerjd99.wordpress.com/2012/11/25/jhs-meets-mathjax/)
  * [`mathjaxdemo`](https://github.com/bakerjd99/jacks/tree/master/mathjaxdemo)
 
-14. [Semi-Literate JOD](http://bakerjd99.wordpress.com/2012/10/01/semi-literate-jod/)
+15. [Semi-Literate JOD](http://bakerjd99.wordpress.com/2012/10/01/semi-literate-jod/)
  * [`jodliterate`](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
 
-15. [Pandoc based J Syntax Highlighting](http://bakerjd99.wordpress.com/2012/09/20/pandoc-based-j-syntax-highlighting/)
+16. [Pandoc based J Syntax Highlighting](http://bakerjd99.wordpress.com/2012/09/20/pandoc-based-j-syntax-highlighting/)
  * [`jodliterate`](https://github.com/bakerjd99/jacks/tree/master/jodliterate)
 
-16. [Writing Portable J addons](http://bakerjd99.wordpress.com/2012/07/23/writing-portable-j-addons/)
+17. [Writing Portable J addons](http://bakerjd99.wordpress.com/2012/07/23/writing-portable-j-addons/)
  * [`WritingPortableJaddons.pdf`](https://github.com/bakerjd99/jacks/blob/master/dogpony)
 
-17. [Turn your iPhone into a jPhone](http://bakerjd99.wordpress.com/2012/06/23/turn-your-iphone-into-a-jphone-2/)
+18. [Turn your iPhone into a jPhone](http://bakerjd99.wordpress.com/2012/06/23/turn-your-iphone-into-a-jphone-2/)
  * [`jPhoneBlogExamples.ijs`](https://github.com/bakerjd99/jacks/blob/master/phones/jPhoneBlogExamples.ijs)
 
-18. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
+19. [GPX from Google Maps KML J Script](http://bakerjd99.wordpress.com/2012/05/16/gpx-from-google-maps-kml-j-script/)
  * [`gpxfrmapkml.ijs`](https://github.com/bakerjd99/jacks/blob/master/geotagged/gpxfrmapkml.ijs)
 
-19. The next four posts use code from the directory [`texfrwpxml`](https://github.com/bakerjd99/jacks/tree/master/texfrwpxml)
+20. The next four posts use code from the directory [`texfrwpxml`](https://github.com/bakerjd99/jacks/tree/master/texfrwpxml)
  * [WordPress to LaTeX with Pandoc and J: Prerequisites (Part 1)](http://bakerjd99.wordpress.com/2012/02/11/wordpress-to-latex-with-pandoc-and-j-prerequisites-part-1/)
  * [WordPress to LaTeX with Pandoc and J: LaTeX Directories (Part 2)](http://bakerjd99.wordpress.com/2012/02/18/wordpress-to-latex-with-pandoc-and-j-latex-directories-part-2-2/)
  * [WordPress to LaTeX with Pandoc and J: Using TeXfrWpxml.ijs (Part 3)](http://bakerjd99.wordpress.com/2012/02/25/wordpress-to-latex-with-pandoc-and-j-using-texfrwpxml-ijs-part-3/)
  * [Turn your Blog into an eBook](http://bakerjd99.wordpress.com/2012/03/04/turn-your-blog-into-an-ebook/)
 
-20. [Typesetting UTF8 APL code with the LaTeX lstlisting package](http://bakerjd99.wordpress.com/2011/08/15/typesetting-utf8-apl-code-with-the-latex-lstlisting-package/)
+21. [Typesetting UTF8 APL code with the LaTeX lstlisting package](http://bakerjd99.wordpress.com/2011/08/15/typesetting-utf8-apl-code-with-the-latex-lstlisting-package/)
   * [`latex`](https://github.com/bakerjd99/jacks/tree/master/latex)
 
-21. [Common Table Expression (CTE) SQLServer Queries with J](http://bakerjd99.wordpress.com/2011/08/13/common-table-expression-cte-sqlserver-queries-with-j/)
+22. [Common Table Expression (CTE) SQLServer Queries with J](http://bakerjd99.wordpress.com/2011/08/13/common-table-expression-cte-sqlserver-queries-with-j/)
   * [`sqlstuff`](https://github.com/bakerjd99/jacks/tree/master/sqlstuff)
 
-22. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
+23. [Open Source Hilbert for the Kindle](http://bakerjd99.wordpress.com/2011/07/12/open-source-hilbert-for-the-kindle/)
   * [`hilbert`](https://github.com/bakerjd99/jacks/blob/master/hilbert)
 
-23. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
+24. [SmugShot Metadata Mess](http://bakerjd99.wordpress.com/2011/04/03/smugshot-metadata-mess/)
   * [`SmugShotFix.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugShotFix.ijs)
 
-24. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
+25. [A C# .Net class for calling J](http://bakerjd99.wordpress.com/2010/05/28/a-c-net-class-for-calling-j/)
   * [`jserver`](https://github.com/bakerjd99/jacks/tree/master/jserver)
 
-25. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
+26. [Assigning SmugMug Print Size Keys](http://bakerjd99.wordpress.com/2010/02/21/assigning-smugmug-print-size-keys/)
   * [`SmugPrintSizes.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugPrintSizes.ijs)
 
-26. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
+27. [More on SmugMug Duplicates](http://bakerjd99.wordpress.com/2010/02/11/more-on-smugmug-duplicates/)
   * [`SmugDupsFrMD5.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugDupsFrMD5.ijs)
 
-27. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
+28. [SmugMug Duplicate Image Hunting](http://bakerjd99.wordpress.com/2010/02/05/smugmug-duplicate-image-hunting/)
   * [`SmugDupsFrMD5.ijs`](https://github.com/bakerjd99/jacks/blob/master/smugmug/SmugDupsFrMD5.ijs)
 
-28. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
+29. [Google Earth Image Touring](http://bakerjd99.wordpress.com/2009/10/04/google-earth-image-touring/)
   * [`kml.ijs`](https://github.com/bakerjd99/jacks/blob/master/geotagged/kml.ijs)
 
-29. [Fake Programming](http://bakerjd99.wordpress.com/2009/09/09/fake-progamming/)
+30. [Fake Programming](http://bakerjd99.wordpress.com/2009/09/09/fake-progamming/)
   * [`analystgraphs.ijs`](https://github.com/bakerjd99/jacks/blob/master/graphviz/analystgraphs.ijs)
 
 `[end-list]`
 
 John Baker
-May 10, 2023
+September 23, 2023
 
 [^1]:  Code from other programming languages will appear in `Jacks`. Usually with some relation to J but I am not making 
 any promises. ["A foolish consistency is the hobgoblin of little minds."](http://dictionary.reference.com/browse/a-foolish-consistency-is-the-hobgoblin-of-little-minds)
