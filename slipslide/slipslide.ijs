@@ -24,7 +24,7 @@ NB. root words (ROOTWORDSslipslide) group
 ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide lyinghuman shootermarble slipslide0'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.0';4;'21 Dec 2023 12:59:56'
+VMDslipslide=:'0.5.0';01;'21 Dec 2023 13:10:51'
 
 
 lyinghuman=:3 : 0
@@ -155,7 +155,7 @@ S,vn,an,>:cnt
 NB.POST_slipslide post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (slipslide) interface word(s): 20231221j125956
+NB. (slipslide) interface word(s): 20231221j131051
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble
