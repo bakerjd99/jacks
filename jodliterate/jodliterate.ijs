@@ -574,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'1.0.0';13;'05 Feb 2023 10:29:28 MT'
+jodliterateVMD=:'1.0.1';4;'22 Dec 2023 13:11:48 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1560,6 +1560,8 @@ NB.
 NB.   setjodliterate 'c:\temp'           NB. windows
 NB.   setjodliterate '/home/john/temp'   NB. linux 
 NB.
+NB.   setjodliterate '~temp'  NB. use J defined folders
+NB.
 NB. dyad: (paRc ; clDir) =. clAuthor setjodliterate clWorkingDir | zl
 NB.
 NB.   NB. set LaTeX \author{...} text
@@ -1579,8 +1581,8 @@ if. 0 e. $y do. y=. DOC__dob [ dob=. {:{.DPATH__ST__JODobj end.
 
 JLAUTHOR_ajodliterate_=: x
 
-NB. profile (*)=. IFWIN
-JLDIRECTORY_ajodliterate_=: jpathsep`winpathsep@.(IFWIN) tslash2 y
+NB. profile (*)=. IFWIN jpath
+JLDIRECTORY_ajodliterate_=: jpathsep`winpathsep@.(IFWIN) jpath tslash2 y
 
 NB. write main latex preamble and cleaner iff missing
 preamble=. 'JODLiteratePreamble.tex'  
@@ -1804,7 +1806,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20230205j102928
+NB. (jodliterate) interface word(s): 20231222j131148
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words
