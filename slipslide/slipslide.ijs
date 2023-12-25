@@ -24,7 +24,7 @@ NB. root words (ROOTWORDSslipslide) group
 ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide lyinghuman shootermarble slipslide0'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.0';01;'21 Dec 2023 13:10:51'
+VMDslipslide=:'0.5.1';01;'25 Dec 2023 12:25:13'
 
 
 lyinghuman=:3 : 0
@@ -96,19 +96,19 @@ NB.*slipslide0  v-- estimate  slide  of  object  on  frictionless
 NB. plane.
 NB.
 NB. This verb estimates how far a slowly  moving <20 m/sec object
-NB. will slide  on a perfectly frictionless flat  plane when only
+NB. will slide  on a perfectly flat frictionless  plane when only
 NB. acted upon by air resistance.
 NB.
 NB. verbatim:
 NB.
 NB. The basic formula is: R = ½ρCAv^2  https://physics.info/drag/
 NB.
-NB. R   drag force (Newtons) (kg*m/sec^2)							
-NB. ρ   air density (kg/m^3)	
+NB. R   drag force (Newtons) (kg*m/sec^2)				
+NB. ρ   air density (kg/m^3)
 NB. C   coefficient of drag
-NB.     constant determined by experiment				
-NB. A   projected area (m^2)							
-NB. v   velocity (m/sec)	
+NB.     constant determined by experiment	
+NB. A   projected area (m^2)				
+NB. v   velocity (m/sec)
 NB.
 NB. monad:  flSva =. slipslide fl
 NB.
@@ -133,8 +133,11 @@ NB.   (0.001,1000 * 3600 * 2) slipslide0 lyinghuman 8.8
 
 'rho C A M vn'=. y [ 'dT cnt'=. x
 
-NB. initial drag force and acceleration
-an=. rn % M [ rn=. 0.5 * rho * C * A * vn^2
+NB. drag constant
+drgc=. 0.5 * rho * C * A
+
+NB. initial acceleration and drag
+an=. rn % M [ rn=. drgc * vn^2
 
 S=.  0  NB. total distance
 
@@ -142,20 +145,20 @@ for_step. i. cnt do.
   dS=. dT * vn       NB. step distance
   vn=. vn - an * dT  NB. new velocity (decreasing)
 
-  NB. new drag and acceleration
-  an=. rn % M [ rn=. 0.5 * rho * C * A * vn^2
+  NB. new acceleration and drag
+  an=. rn % M [ rn=. drgc * vn^2
 
   S=. S + dS
 end.
 
 NB. distance, end velocity, acceleration, step count
-S,vn,an,>:cnt
+S,vn,an,cnt
 )
 
 NB.POST_slipslide post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (slipslide) interface word(s): 20231221j131051
+NB. (slipslide) interface word(s): 20231225j122513
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble
