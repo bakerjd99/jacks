@@ -6,13 +6,15 @@ NB. frictionless plane  when acted  upon  only  by stationary air
 NB. resistance.
 NB.
 NB. verbatim: interface word(s):
-NB. -------------------------------------------------------------
+NB. -----------------------------------------------------------------------
 NB.  lyinghuman    - slide parameters for a human lying down facing wind
 NB.  shootermarble - slide parameters for 19mm glass shooter marble
 NB.  slipslide0    - estimate slide of object on frictionless plane
 NB.
 NB. created: 2023Dec21
-NB. ------------------------------------------------------------------------------
+NB. -----------------------------------------------------------------------
+NB. 23dec26 slight refactor - correct final count
+NB. 23dec27 compare with zig version
 
 coclass 'slipslide'
 NB.*end-header
@@ -21,10 +23,13 @@ NB. interface words (IFACEWORDSslipslide) group
 IFACEWORDSslipslide=:<;._1 ' lyinghuman shootermarble slipslide0'
 
 NB. root words (ROOTWORDSslipslide) group      
-ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide lyinghuman shootermarble slipslide0'
+ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide linpathsep lyinghuman shootermarble slipslide0 winpathsep'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.1';3;'26 Dec 2023 10:44:17'
+VMDslipslide=:'0.5.1';6;'27 Dec 2023 16:12:51'
+
+NB. standardizes path delimiter to linux forward / slash
+linpathsep=:'/'&(('\' I.@:= ])} )
 
 
 lyinghuman=:3 : 0
@@ -118,6 +123,10 @@ NB.   slipslide0 shootermarble 1
 NB.
 NB. dyad:  flSva =. fldTCnt slipslide fl
 NB.
+NB.   NB. zig test case - show many digits
+NB.   9!:11 [ 17 
+NB.   0.001 25 slipslide0 shootermarble 1
+NB.
 NB.   NB. a 1 m/sec marble is still slowly moving
 NB.   NB. after 2 hours and has rolled around 1/2 km
 NB.   (0.001,1000 * 3600 * 2) slipslide0 slip
@@ -149,16 +158,20 @@ for_step. i. cnt do.
   an=. rn % M [ rn=. drgc * vn^2
 
   S=. S + dS
+  NB. smoutput step, dS, vn, S
 end.
 
 NB. distance, end velocity, acceleration, step count
 S,vn,an,cnt
 )
 
+NB. standardizes path delimiter to windows back \ slash
+winpathsep=:'\'&(('/' I.@:= ])} )
+
 NB.POST_slipslide post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (slipslide) interface word(s): 20231226j104417
+NB. (slipslide) interface word(s): 20231227j161251
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble
