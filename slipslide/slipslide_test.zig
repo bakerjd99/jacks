@@ -1,5 +1,6 @@
 const std = @import("std");
 const expect = @import("std").testing.expect;
+const print = std.debug.print;
 
 // slideslide0 for shooter marble as a zig test
 
@@ -53,20 +54,19 @@ test "shooter marble slip slide" {
     
     var i: i64 = 0;
     var dS: f64 = 0;
-    while (i < cnt) {
+    while (i < cnt) : (i += 1) {
         dS = vn * dT;           // step distance
         vn = vn - (an * dT);    // new velocity (decreasing)
         rn = drgc * (vn * vn);  // new drag force
         an = rn/mm;             // new acceleration
         S += dS;                // total distance
-        i += 1;
     }
     try expect(i == 7200000);
 
-    std.log.warn("\nfinal count: {}\n", .{i});
-    std.log.warn("\nmarble mass: {}\n", .{mm});
-    std.log.warn("\nmarble area: {}\n", .{ma});
-    std.log.warn("\nfinal velocity: {}\n", .{vn});
-    std.log.warn("\nfinal acceleration: {}\n", .{an});
-    std.log.warn("\ntotal distance: {}\n", .{S});
+    print("\nfinal count: {d}", .{i});
+    print("\nmarble mass: {d}", .{mm});
+    print("\nmarble area: {d}", .{ma});
+    print("\nfinal velocity: {d}", .{vn});
+    print("\nfinal acceleration: {d}", .{an});
+    print("\ntotal distance: {d}", .{S});
 }

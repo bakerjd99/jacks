@@ -15,6 +15,7 @@ NB. created: 2023Dec21
 NB. -----------------------------------------------------------------------
 NB. 23dec26 slight refactor - correct final count
 NB. 23dec27 compare with zig version
+NB. 23dec69 adjusted (shootermarble, lyinghuman) added jupyter notebook
 
 coclass 'slipslide'
 NB.*end-header
@@ -23,10 +24,13 @@ NB. interface words (IFACEWORDSslipslide) group
 IFACEWORDSslipslide=:<;._1 ' lyinghuman shootermarble slipslide0'
 
 NB. root words (ROOTWORDSslipslide) group      
-ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide linpathsep lyinghuman shootermarble slipslide0 winpathsep'
+ROOTWORDSslipslide=:<;._1 ' IFACEWORDSslipslide ROOTWORDSslipslide VMDslipslide linpathsep lyinghuman portchars shootermarble slipslide0 winpathsep'
+
+NB. slipslide0 numeric parameter titles/units
+SlideParms=:<;._1 '|air density (kg/m^3)|drag constant|cross area (m^2)|object mass (kg)|initial velocity (m/sec)'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.1';6;'27 Dec 2023 16:12:51'
+VMDslipslide=:'0.5.2';6;'29 Dec 2023 16:54:22'
 
 NB. standardizes path delimiter to linux forward / slash
 linpathsep=:'/'&(('\' I.@:= ])} )
@@ -36,7 +40,7 @@ lyinghuman=:3 : 0
 
 NB.*lyinghuman v-- slide parameters for a human lying down facing wind.
 NB.
-NB. monad:  fl =. lyinghuman faV
+NB. monad:  bt =. lyinghuman faV
 NB.
 NB.   lyinghuman 8.8  NB. roll down frictionless 4m 
 
@@ -55,15 +59,18 @@ NB. head forward cross section area (m^2)
 ha=. 0.2
 
 NB. air, drag, area, mass, velocity
-rho,c,ha,hm,y
+SlideParms ,. <"0 rho,c,ha,hm,y
 )
+
+NB. portable box drawing characters
+portchars=:[: 9!:7 '+++++++++|-'"_ [ ]
 
 
 shootermarble=:3 : 0
 
 NB.*shootermarble v-- slide parameters for 19mm glass shooter marble.
 NB.
-NB. monad:  fl =. shootermarble faV
+NB. monad:  bt =. shootermarble faV
 NB.
 NB.   shootermarble 1     NB. 1 m/sec
 NB.   shootermarble 8.8   NB. roll down frictionless 4m 
@@ -91,7 +98,7 @@ NB. area shooter marble (m^2)
 ma=. 1p1 * rm^2
 
 NB. air, sphere drag, area marble, mass marble, velocity
-rho,c,ma,mm,y
+SlideParms ,. <"0 rho,c,ma,mm,y
 )
 
 
@@ -108,24 +115,24 @@ NB. verbatim:
 NB.
 NB. The basic formula is: R = ½ρCAv^2  https://physics.info/drag/
 NB.
-NB. R   drag force (Newtons) (kg*m/sec^2)				
+NB. R   drag force (Newtons) (kg*m/sec^2)			
 NB. ρ   air density (kg/m^3)
 NB. C   coefficient of drag
-NB.     constant determined by experiment	
-NB. A   projected area (m^2)				
+NB.     constant determined by experiment
+NB. A   projected area (m^2)			
 NB. v   velocity (m/sec)
 NB.
 NB. monad:  flSva =. slipslide fl
 NB.
 NB.   NB. air, sphere drag, area marble, mass marble, velocity
-NB.   slip=. shootermarble 1
-NB.   slipslide0 shootermarble 1
+NB.   slip=. ; {:"1 shootermarble 1
+NB.   slipslide0 slip
 NB.
 NB. dyad:  flSva =. fldTCnt slipslide fl
 NB.
 NB.   NB. zig test case - show many digits
 NB.   9!:11 [ 17 
-NB.   0.001 25 slipslide0 shootermarble 1
+NB.   0.001 25 slipslide0 slip
 NB.
 NB.   NB. a 1 m/sec marble is still slowly moving
 NB.   NB. after 2 hours and has rolled around 1/2 km
@@ -135,7 +142,7 @@ NB.   NB. spreadsheet cross check
 NB.   0.001 19970 slipslide0 slip
 NB.
 NB.   NB. a human is still sliding after two hours
-NB.   (0.001,1000 * 3600 * 2) slipslide0 lyinghuman 8.8
+NB.   (0.001,1000 * 3600 * 2) slipslide0 ; {:"1 lyinghuman 8.8
 
 0.001 1000 slipslide0 y
 :
@@ -171,7 +178,7 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 NB.POST_slipslide post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (slipslide) interface word(s): 20231227j161251
+NB. (slipslide) interface word(s): 20231229j165422
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble
