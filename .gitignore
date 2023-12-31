@@ -1,6 +1,7 @@
 Thumbs.db
 
 ## jacks files to ignore
+desktop.ini
 jserver/Backup/
 jserver/obj/Debug/
 .DS_Store
