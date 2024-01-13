@@ -219,7 +219,7 @@ NB.
 NB. monad:  BlogHashes uuIgnore
 
 NB. system word !(*)=. jpath
-'blog folders not set' assert 0 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX';'~BLOG1DR'
+'blog folders not set' assert 0 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX';'~BLOGCLD'
 
 hstamp=. ' Last SHA256 hash: ',(timestamp ''),LF
 
@@ -242,7 +242,7 @@ hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.ncx'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.jpg'
 (toJ hstamp,hash) write xhtmlpath,'bmexhtmlsha256.txt'
 
-onedrvpath=. jpath '~BLOG1DR/'
+onedrvpath=. jpath '~BLOGCLD/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.pdf'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.epub'
 (toJ hstamp,hash) write onedrvpath,'bmsha256.txt'
@@ -1448,7 +1448,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor 
 
 smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20230506j93953
+NB. (TeXfrWpxml) interface word(s): 20240113j114402
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
