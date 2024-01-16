@@ -574,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 NB. jodliterate version make and date
-jodliterateVMD=:'1.0.1';4;'22 Dec 2023 13:11:48 MT'
+jodliterateVMD=:'1.0.1';10;'16 Jan 2024 11:35:37 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1806,7 +1806,7 @@ writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 NB.POST_jodliterate post processor (-.)=:
 
 smoutput IFACE=: (0 : 0)
-NB. (jodliterate) interface word(s): 20231222j131148
+NB. (jodliterate) interface word(s): 20240116j113537
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words
@@ -1824,9 +1824,14 @@ coinsert  'ajodliterate'
 (3 : 0) ''
 try.
 NB. use any pandoc set in the JOD profile for this machine
-if. wex_ajod_ <'PREFERREDPANDOC_ijod_' do. THISPANDOC_ajodliterate_=: PREFERREDPANDOC_ijod_ end.
+if. wex_ajod_ <'PREFERREDPANDOC_ijod_' do. 
+  THISPANDOC_ajodliterate_=: PREFERREDPANDOC_ijod_
+else.
+  smoutput 'PREFERREDPANDOC_ijod_ not set'
+end.
 if. +./@('pandoc'&E.) panver=. ;0{ <;._2 tlf (shell THISPANDOC_ajodliterate_,' --version') -. CR do.
   smoutput 'NOTE: adjust pandoc path if current version (',panver,') is not >= 2.9.1.1'
+  smoutput 'in unix shells try searching with: where pandoc'
 end.
 catch.
   smoutput 'ERROR: pandoc not set - adjust THISPANDOC_ajodliterate_'
