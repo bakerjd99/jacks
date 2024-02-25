@@ -17,6 +17,7 @@ NB.  LatexFrWordpress - experimental conversion of Wordpress XML to LaTeX
 NB.  MainMarkdown     - assembles *.markdown files in EPUB directory in a master file
 NB.  MarkdownFrLatex  - converts edited LaTeX post files to image free markdown
 NB.  countYearposts   - adds post counts to table of content lines
+NB.  retocidNavposts  - reset list item table of content ids in nav_xhtml
 NB.                                                         
 NB. author:  John D. Baker
 NB. created: 2012feb10
@@ -37,6 +38,7 @@ NB. 22jul19 (countYearposts) added
 NB. 23apr10 switch (BlogHashes) to sha-256
 NB. 23apr12 use configured folders ~BLOGTEX, ~BLOGMD if defined
 NB. 23may02 add timestamp to (BlogHashes)
+NB. 24feb20 (retocidNavposts) added
 
 require 'task'
 coclass 'TeXfrWpxml' 
@@ -173,7 +175,7 @@ NB. HTML file extension
 HTMLEXT=:'.html'
 
 NB. interface words (IFACEWORDSTeXfrWpxml) group
-IFACEWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown LatexFrWordpress MainMarkdown MarkdownFrLatex countYearposts'
+IFACEWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown LatexFrWordpress MainMarkdown MarkdownFrLatex countYearposts retocidNavposts'
 
 NB. substitute for WordPress $latex ... $ blocks - must be untouched by latex
 LATEXFRAGMARK=:'LLLATEXFRAGGG'
@@ -191,7 +193,7 @@ NB. pandoc shell command prefix
 PANDOCCMD=:'pandoc -o '
 
 NB. root words (ROOTWORDSTeXfrWpxml) group      
-ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs countYearposts postfiles posttex showpass uedposts'
+ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs countYearposts postfiles posttex retocidNavposts showpass uedposts'
 
 NB. placeholder substitute for WordPress source blocks - must be untouched by LaTeX
 SOURCEBLOCKMARK=:'SSSOURCEBLOCKEEE'
@@ -1116,6 +1118,28 @@ NB. reads a file as a list of bytes
 read=:1!:1&(]`<@.(32&>@(3!:0)))
 
 
+retocidNavposts=:3 : 0
+
+NB.*retocidNavposts v-- reset list item table of content ids in nav_xhtml.
+NB.
+NB. monad:  cl =. retocidNavposts clXhtml
+NB.
+NB.    nav=. read jpath '~BLOGMD/xhtml/nav.xhtml'
+NB.    nav_new=. retocidNavposts nav
+NB.    nav_new write jpath '~BLOGMD/xhtml/nav_new.xhtml'
+
+NB. cut into toc items and other
+'idx strs'=. '<li id="toc-li-' cutstridx y
+
+NB. clip trailing id nos from strs after toc items
+afstrs=. (>:idx) -. #strs
+strs=. (('">'&,)@('">'&afterstr)&.> afstrs{strs) afstrs} strs
+
+NB. renumber toc ids
+;((idx{strs) ,&.> ":&.> <"0 i. #idx) idx} strs
+)
+
+
 rmLatexGraphics=:3 : 0
 
 NB.*rmLatexGraphics v-- remove/blank out LaTeX graphics.
@@ -1445,10 +1469,10 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 NB. writes a list of bytes to file
 write=:1!:2 ]`<@.(32&>@(3!:0))
 
-NB.POST_TeXfrWpxml TeXfrWpxml post processor 
+NB.POST_TeXfrWpxml TeXfrWpxml post processor. 
 
-smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20240113j114402
+(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE=: (0 : 0)
+NB. (TeXfrWpxml) interface word(s): 20240221j131922
 NB. -------------------------------
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
@@ -1456,6 +1480,7 @@ NB. LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
 NB. MainMarkdown      NB. assembles *.markdown files in EPUB directory in a master file
 NB. MarkdownFrLatex   NB. converts edited LaTeX post files to image free markdown
 NB. countYearposts    NB. adds post counts to table of content lines
+NB. retocidNavposts   NB. reset list item table of content ids in nav_xhtml
 )
 
 SetTeXfrWpxmlPaths 0
