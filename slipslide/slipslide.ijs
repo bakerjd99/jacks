@@ -30,7 +30,7 @@ NB. slipslide0 numeric parameter titles/units
 SlideParms=:<;._1 '|air density (kg/m^3)|drag constant|cross area (m^2)|object mass (kg)|initial velocity (m/sec)'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.2';6;'29 Dec 2023 16:54:22'
+VMDslipslide=:'0.5.2';13;'01 Jun 2024 10:35:48'
 
 NB. standardizes path delimiter to linux forward / slash
 linpathsep=:'/'&(('\' I.@:= ])} )
@@ -115,11 +115,11 @@ NB. verbatim:
 NB.
 NB. The basic formula is: R = ½ρCAv^2  https://physics.info/drag/
 NB.
-NB. R   drag force (Newtons) (kg*m/sec^2)			
+NB. R   drag force (Newtons) (kg*m/sec^2)
 NB. ρ   air density (kg/m^3)
 NB. C   coefficient of drag
 NB.     constant determined by experiment
-NB. A   projected area (m^2)			
+NB. A   projected area (m^2)
 NB. v   velocity (m/sec)
 NB.
 NB. monad:  flSva =. slipslide fl
@@ -177,8 +177,8 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 
 NB.POST_slipslide post processor. 
 
-smoutput IFACE=: (0 : 0)
-NB. (slipslide) interface word(s): 20231229j165422
+(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_slipslide=: (0 : 0)
+NB. (slipslide) interface word(s): 20240601j103548
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble

@@ -175,7 +175,7 @@ NB. HTML file extension
 HTMLEXT=:'.html'
 
 NB. interface words (IFACEWORDSTeXfrWpxml) group
-IFACEWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown LatexFrWordpress MainMarkdown MarkdownFrLatex countYearposts retocidNavposts'
+IFACEWORDSTeXfrWpxml=:<;._1 ' BlogFreqs BlogHashes FixBaddown LatexFrWordpress MainMarkdown MarkdownFrLatex countYearposts retocidNavposts'
 
 NB. substitute for WordPress $latex ... $ blocks - must be untouched by latex
 LATEXFRAGMARK=:'LLLATEXFRAGGG'
@@ -193,7 +193,7 @@ NB. pandoc shell command prefix
 PANDOCCMD=:'pandoc -o '
 
 NB. root words (ROOTWORDSTeXfrWpxml) group      
-ROOTWORDSTeXfrWpxml=:<;._1 ' BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs countYearposts postfiles posttex retocidNavposts showpass uedposts'
+ROOTWORDSTeXfrWpxml=:<;._1 ' BlogFreqs BlogHashes FixBaddown IFACEWORDSTeXfrWpxml LatexFrWordpress MainMarkdown MarkdownFrLatex ROOTWORDSTeXfrWpxml SetTeXfrWpxmlPaths blogimgs countYearposts postfiles posttex retocidNavposts showpass uedposts'
 
 NB. placeholder substitute for WordPress source blocks - must be untouched by LaTeX
 SOURCEBLOCKMARK=:'SSSOURCEBLOCKEEE'
@@ -214,6 +214,19 @@ NB. wget shell command prefix
 WGETCMD=:'wget --no-clobber --no-check-certificate --output-document='
 
 
+BlogFreqs=:3 : 0
+
+NB.*BlogFreqs v-- frequencies of file extensions in blog folders.
+NB.
+NB. monad:  bt =. BlogFreqs uuIgnore
+
+NB. j profile !(*)=. dirtree jpath jpath_j_
+cfgs=. ' ~BLOGWP ~BLOGTEX ~BLOGMD ~BLOGCLD'
+('not all folder(s) configured: ',cfgs) assert iscf&> bf=. <;._1 cfgs
+freqlist justext&.> {."1 ;dirtree@jpath&.> bf
+)
+
+
 BlogHashes=:3 : 0
 
 NB.*BlogHashes v-- update blog hashes.
@@ -221,7 +234,8 @@ NB.
 NB. monad:  BlogHashes uuIgnore
 
 NB. system word !(*)=. jpath
-'blog folders not set' assert 0 0 0 -: (] -: jpath)&> '~BLOGMD';'~BLOGTEX';'~BLOGCLD'
+cfgs=. ' ~BLOGWP ~BLOGTEX ~BLOGMD ~BLOGCLD'
+('blog folders not set: ',cfgs) assert iscf&> <;._1 cfgs
 
 hstamp=. ' Last SHA256 hash: ',(timestamp ''),LF
 
@@ -247,7 +261,9 @@ hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir xhtmlpath,'*.jpg'
 onedrvpath=. jpath '~BLOGCLD/'
 hash=. ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.pdf'
 hash=. hash, LF, ctl ;"1 ' ' ,&.> sha256dir onedrvpath,'*.epub'
-(toJ hstamp,hash) write onedrvpath,'bmsha256.txt'
+pubhash=. toJ hstamp,hash 
+pubhash write onedrvpath,'bmsha256.txt'
+pubhash write jpath '~BLOGWP/bmsha256.txt'
 )
 
 
@@ -786,6 +802,9 @@ NB. take at most FILETITLELEN chars and append unique post id
 NB. 0's all but first 1 in runs of 1's - like (firstone) but differs for nulls
 firstones=:> (0: , }:)
 
+NB. frequency distribution of boxed list items
+freqlist=:~. ,: [: <"0 #/.~
+
 NB. size of file in bytes
 fsize=:1!:4 ::(_1:)@(fboxname&>)@boxopen
 
@@ -874,6 +893,19 @@ if. #y do.
 else.
   x
 end.
+)
+
+
+iscf=:3 : 0
+
+NB.*iscf v-- is configured folder (1 folder set, 0 otherwise): iscf '~JACKS'
+NB.
+NB. NOTE: using explict to stop JOD dependency searching.
+NB.
+NB. monad:  clPath =. iscf clCfg
+
+NB. j profile - do not look further !(*)=. jpath_j_
+-.(jpath_j_ y) -: y
 )
 
 NB. standarizes J path delimiter to unix/linux forward slash
@@ -1471,9 +1503,10 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 
 NB.POST_TeXfrWpxml TeXfrWpxml post processor. 
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20240221j131922
+(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_TeXfrWpxml=: (0 : 0)
+NB. (TeXfrWpxml) interface word(s): 20240601j95849
 NB. -------------------------------
+NB. BlogFreqs         NB. frequencies of file extensions in blog folders
 NB. BlogHashes        NB. update blog hashes
 NB. FixBaddown        NB. attempt to convert *.baddown files to *.markddown
 NB. LatexFrWordpress  NB. experimental conversion of Wordpress XML to LaTeX
