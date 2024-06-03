@@ -210,7 +210,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.8';9;'27 May 2023 12:00:36'
+MIRRORVMD=:'0.9.8';11;'03 Jun 2024 14:43:52'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -1321,13 +1321,12 @@ dstat ImageCnt [ sqlclose__dt ''
 
 NotDivisible=:3 : 0
 
-NB.*NotDivisible  v--  albums with  image  counts  that  are  not
-NB. divisible by 3 and 5.
+NB.*NotDivisible v-- album image counts not divisible by 3 and 5.
 NB.
-NB. This  verb  finds  albums  with  image  counts that  are  not
-NB. divisibe by  3 and 5. This weird requirement was motivated by
-NB. how the SmugMug iPhone App displays galleries. It breaks  the
-NB. images into rows  of three or five. I  don't  like incomplete
+NB. This  verb  finds  albums  with  image  counts  that are  not
+NB. divisibe by 3 and 5. This weird requirement was motivated  by
+NB. how the  SmugMug iPhone App displays galleries. It breaks the
+NB. images into  rows of three  or five. I don't like  incomplete
 NB. terminal rows.
 NB.
 NB. monad:  bt =. NotDivisible clMirrorDb
@@ -2194,8 +2193,8 @@ date;time
 
 NB.POST_MirrorXref post processor. 
 
-smoutput IFACE=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20230527j120036
+(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_MirrorXref=: (0 : 0)
+NB. (MirrorXref) interface word(s): 20240603j144352
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
