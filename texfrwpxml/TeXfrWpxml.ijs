@@ -1503,8 +1503,8 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 
 NB.POST_TeXfrWpxml TeXfrWpxml post processor. 
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_TeXfrWpxml=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20240601j95849
+smoutput IFACE_TeXfrWpxml=: (0 : 0)
+NB. (TeXfrWpxml) interface word(s): 20240812j130724
 NB. -------------------------------
 NB. BlogFreqs         NB. frequencies of file extensions in blog folders
 NB. BlogHashes        NB. update blog hashes

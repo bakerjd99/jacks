@@ -84,7 +84,7 @@ NB. root words (ROOTWORDSipynb) group
 ROOTWORDSipynb=:<;._1 ' IFACEWORDSipynb PYESCAPECHRS ROOTWORDSipynb VMDipynb ipynbfrjod'
 
 NB. version, make count and date
-VMDipynb=:'0.8.0';16;'25 Feb 2024 12:21:03'
+VMDipynb=:'0.8.0';17;'12 Aug 2024 13:08:51'
 
 NB. retains string (y) before last occurrence of (x)
 beforelaststr=:] {.~ 1&(i:~)@([ E. ])
@@ -169,10 +169,10 @@ toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
 NB. writes a list of bytes to file
 write=:1!:2 ]`<@.(32&>@(3!:0))
 
-NB.POST_ipynb ipynb post processor 
+NB.POST_ipynb ipynb post processor. 
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE=: (0 : 0)
-NB. (ipynb) interface word(s): 20240225j122103
+smoutput IFACE=: (0 : 0)
+NB. (ipynb) interface word(s): 20240812j130851
 NB. --------------------------
 NB. ipynbfrjod  NB. extract J words from JOD and insert in blank jupyter notebook
 )

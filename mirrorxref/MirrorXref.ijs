@@ -210,7 +210,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.8';11;'03 Jun 2024 14:43:52'
+MIRRORVMD=:'0.9.8';13;'12 Aug 2024 13:33:04'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -2193,8 +2193,8 @@ date;time
 
 NB.POST_MirrorXref post processor. 
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_MirrorXref=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20240603j144352
+smoutput IFACE_MirrorXref=: (0 : 0)
+NB. (MirrorXref) interface word(s): 20240812j133304
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates

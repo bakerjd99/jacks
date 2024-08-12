@@ -30,7 +30,7 @@ NB. slipslide0 numeric parameter titles/units
 SlideParms=:<;._1 '|air density (kg/m^3)|drag constant|cross area (m^2)|object mass (kg)|initial velocity (m/sec)'
 
 NB. version, make count and date
-VMDslipslide=:'0.5.2';13;'01 Jun 2024 10:35:48'
+VMDslipslide=:'0.5.2';16;'12 Aug 2024 13:27:44'
 
 NB. standardizes path delimiter to linux forward / slash
 linpathsep=:'/'&(('\' I.@:= ])} )
@@ -177,8 +177,8 @@ winpathsep=:'\'&(('/' I.@:= ])} )
 
 NB.POST_slipslide post processor. 
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_slipslide=: (0 : 0)
-NB. (slipslide) interface word(s): 20240601j103548
+smoutput IFACE_slipslide=: (0 : 0)
+NB. (slipslide) interface word(s): 20240812j132744
 NB. --------------------------
 NB. lyinghuman     NB. slide parameters for a human lying down facing wind
 NB. shootermarble  NB. slide parameters for 19mm glass shooter marble
