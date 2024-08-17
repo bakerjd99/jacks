@@ -574,7 +574,7 @@ NB. pandoc LaTeX fragment from (WRAPPREFIX) - these strings must correspond
 WRAPPREFIXTEX=:'\RegionMarkerTok{)}\KeywordTok{=.}\RegionMarkerTok{)}\KeywordTok{=.}'
 
 
-jodliterateVMD=:'1.0.1';13;'03 Jun 2024 15:58:44 MT'
+jodliterateVMD=:'1.0.1';14;'17 Aug 2024 11:54:49 MT'
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
@@ -1803,10 +1803,10 @@ NB. write file as list of bytes - throws unambiguous error on failure
 writeas=:(1!:2 ]`<@.(32&>@(3!:0))) ::([: 'cannot write file'&(13!:8) 1:)
 
 
-NB.POST_jodliterate post processor (-.)=:
+NB.POST_jodliterate post processor. (-.)=:
 
-(".;(0=nc <'SHOWSMO_ijod_'){'1';'SHOWSMO_ijod_') smoutput IFACE_jodliterate=: (0 : 0)
-NB. (jodliterate) interface word(s): 20240603j155844
+smoutput IFACE_jodliterate=: (0 : 0)
+NB. (jodliterate) interface word(s): 20240817j115449
 NB. --------------------------------
 NB. THISPANDOC      NB. full pandoc path - use (pandoc) if on shell path
 NB. formifacetex    NB. formats hyperlinked and highlighted interface words

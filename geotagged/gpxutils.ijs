@@ -9,7 +9,9 @@ NB.
 NB. verbatim: interface words
 NB.
 NB.  allrecent   - all recent images from last waypoint generation
+NB.  csvfrtab    - poi CSV text from TAB delimited text file
 NB.  csvfrwpt    - poi CSV text from waypoint text file
+NB.  gpskm       - distances in km from Google Maps coordinates
 NB.  gpxfrmapkml - gpx from Google maps kml
 NB.  gpxfrmirror - extracts geotagged images from mirror_db and generates gpx
 NB.  gpxfrpoicsv - converts poi csv files to gpx
@@ -19,6 +21,7 @@ NB. created: 2019dec11
 NB. changes: -----------------------------------------------------
 NB. 19dec18 added (allrecent)
 NB. 22jun18 merged (gpxfrmapkml) and dependents
+NB. 24aug17 added (csvfrtab, gpskm)
 
 require 'data/sqlite regex'
 coclass 'gpxutils'
@@ -87,7 +90,7 @@ NB. regular expression matching placeholder variables in html lists
 HTMLVARBPATTERN=:'{{[a-z]*}}'
 
 NB. interface words (IFACEWORDSgpxutils) group
-IFACEWORDSgpxutils=:<;._1 ' allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
+IFACEWORDSgpxutils=:<;._1 ' allrecent csvfrwpt csvfrtab gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
 
 NB. line feed character
 LF=:10{a.
@@ -96,10 +99,10 @@ NB. gpx file written by (gpxutils)
 MIRRORGPXFILE=:'c:/pd/coords/gpx/geotagged smugmug images.gpx'
 
 NB. root words (ROOTWORDSgpxutils) group      
-ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrwpt gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
+ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';32;'12 Aug 2024 13:18:22'
+VMDgpxutils=:'0.9.0';37;'17 Aug 2024 12:32:17'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -135,6 +138,9 @@ sql fst y
 
 NB. trims all leading and trailing blanks
 alltrim=:] #~ [: -. [: (*./\. +. *./\) ' '&=
+
+NB. arc tangent
+arctan=:_3&o.
 
 NB. signal with optional message
 assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
@@ -198,6 +204,53 @@ end. y                              NB. altered string
 )
 
 
+charsub=:4 : 0
+
+NB.*charsub v-- single character pair replacements.
+NB.
+NB. dyad:  clPairs charsub cu
+NB.
+NB.   '-_$ ' charsub '$123 -456 -789'
+
+'f t'=. ((#x)$0 1)<@,&a./.x
+t {~ f i. y
+)
+
+NB. cosine radians
+cos=:2&o.
+
+
+csvfrtab=:3 : 0
+
+NB.*csvfrtab v-- poi CSV text from TAB delimited text file.
+NB.
+NB. monad:  cl =. csvfrtab clFile
+NB.
+NB.   f=. jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+NB.   p=. jpath '~temp/chile_antarctica_2026'
+NB.   t=. csvfrtab f
+NB.   (toHOST t) write p,'.csv'
+NB.   g=. gpxfrpoicsv p,'.csv'
+NB.   (toHOST g) write p,'.gpx'
+
+NB. parse TAB delimited text
+ct=. readtd2 y
+
+NB. required columns
+'column(s) missing' assert (;:'Location Latitude Longitude') e. 0{ct
+
+Longitude=. ,&','&.> }. ct {"1~ (0{ct) i. <'Longitude'
+Latitude=. ,&','&.> }. ct {"1~ (0{ct) i. <'Latitude'
+Location=. }. ct {"1~ (0{ct) i. <'Location'
+
+NB. replace any commas in names with blanks
+Location=. rebc@(', '&charsub)&.> Location
+
+NB. form poi CSV
+ctl ;"1 Longitude ,. Latitude ,. Location
+)
+
+
 csvfrwpt=:3 : 0
 
 NB.*csvfrwpt v-- poi CSV text from waypoint text file.
@@ -205,7 +258,7 @@ NB.
 NB. monad:  cl =. csvfrwpt clFile
 NB.
 NB.   f=. jpath '~addons/jacks/testdata/gps_oz_nz_2022.txt'
-NB.   p=. jpath '~temp/gps_oz_nz'
+NB.   p=. jpath '~temp'
 NB.   t=. csvfrwpt f
 NB.   (toHOST t) write p,'.csv'
 NB.   g=. gpxfrpoicsv p,'.csv'
@@ -231,6 +284,71 @@ ctl=:}.@(,@(1&(,"1)@(-.@(*./\."1@(=&' '@])))) # ,@((10{a.)&(,"1)@]))
 
 NB. enclose all character lists in blcl in " quotes
 dblquote=:'"'&,@:(,&'"')&.>
+
+
+earthdist=:4 : 0
+
+NB.*earthdist v-- distance in km between n points on the Earth's surface.
+NB.
+NB. dyad:  (fl | ft) earthdist (fl | ft)
+NB. 
+NB.   NB. Paris longitude, latitude
+NB.   NB. ddfrdms computes decimal degrees from degree, minutes, seconds
+NB.   l1     =. ddfrdms _2 _20 _14    NB.  2d 20m 14s (East)
+NB.   theta1 =. ddfrdms 48 50 11      NB. 48d 40m 11s (North)
+NB.
+NB.   NB. Washington
+NB.   l2     =. ddfrdms 77 3 56       NB. 77d  3m 56s (West)
+NB.   theta2 =. ddfrdms 38 55 17      NB. 38d 55m 17s (North)
+NB.
+NB.   NB. rounded to 2 decimals matches Meeus
+NB.   6181.63 = ". '0.2' 8!:2 (l1,theta1) earthdist l2,theta2
+NB.
+NB.   NB. table arguments
+NB.   (|: 5 # ,: l1,theta1) earthdist |: 5 # ,: l2,theta2
+
+a=.  6378.14      NB. Earth's mean radius (km)
+fl=. % 298.257    NB. Earth's flattening (a * 1 - fl) is polar radius
+
+NB. zero distances mask
+b=.  *./ x = y
+
+NB. longitudes and latitudes in decimal degrees
+NB. western longitudes +, northern latitudes +
+NB. (*)=. l1 l2 theta1 theta2
+'l1 theta1'=.  x [ 'l2 theta2'=. y
+
+f=.      rfd -: theta1 + theta2
+g=.      rfd -: theta1 - theta2
+lambda=. rfd -: l1 - l2
+
+sqrsin=. *: @ sin
+sqrcos=. *: @ cos
+
+sinlam=.  sqrsin lambda [ coslam=. sqrcos lambda
+sqrcosg=. sqrcos g [ sqrsing=. sqrsin g
+sqrsinf=. sqrsin f [ sqrcosf=. sqrcos f
+
+s=. (coslam * sqrsing) + sinlam * sqrcosf
+c=. (coslam * sqrcosg) + sinlam * sqrsinf
+
+omega=. arctan %: s % c
+r3=. 3 * (%: s * c) % omega
+d=.  +: omega * a
+h1=. (<: r3) % +: c
+h2=. (>: r3) % +: s
+
+NB. required distance
+d=. d * (>: fl*h1*sqrsinf*sqrcosg) - fl*h2*sqrcosf*sqrsing
+
+NB. handle any zero distances
+if. +./ b do.
+  NB. cannot do b*d as d is undefined _. for zero distances
+  if. #$ d do. 0 (I. b)} d elseif. b do. 0 elseif. 1 do. d end.
+else.
+  d
+end.
+)
 
 
 eletags=:4 : 0
@@ -324,6 +442,36 @@ d [ sqlclose__db '' [ d=. sqlreads__db x [ db=. sqlopen_psqlite_ y
 
 NB. get pure element text
 geteletext=:] betweenstrs~ [: tags [: alltrim [
+
+
+gpskm=:3 : 0
+
+NB.*gpskm v-- distances in km from Google Maps coordinates.
+NB.
+NB. monad:  bt =. gpskm clFile
+NB.
+NB.   gpskm jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+NB.
+NB. dyad:  bt =. flMeeusLonLat gpskm clFile
+NB.
+NB.   NB. distance from Meeus location Longitude +W, Latitude +N
+NB.   0 0 gpskm jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+
+NB. (mirrorstats) home location !(*)=. MeeusHomeLonLat
+MeeusHomeLonLat gpskm y
+:
+NB. read TAB delimited locations
+ct=. readtd2 y
+
+NB. required columns
+'column(s) missing' assert (;:'Location Latitude Longitude') e. 0{ct
+
+Longitude=. ".&> }. ct {"1~ (0{ct) i. <'Longitude'
+Latitude=. ".&> }. ct {"1~ (0{ct) i. <'Latitude'
+Location=. }. ct {"1~ (0{ct) i. <'Location'
+
+Location ,. <"0 x earthdist |: (-Longitude) ,. Latitude
+)
 
 
 gpxfrmapkml=:3 : 0
@@ -558,6 +706,18 @@ end.
 NB. reads a file as a list of bytes
 read=:1!:1&(]`<@.(32&>@(3!:0)))
 
+NB. read TAB delimited table files - faster than (readtd) - see long document
+readtd2=:[: <;._2&> (a.{~9) ,&.>~ [: <;._2 [: (] , ((10{a.)"_ = {:) }. (10{a.)"_) (13{a.) -.~ 1!:1&(]`<@.(32&>@(3!:0)))
+
+NB. removes multiple blanks (char only)
+rebc=:] #~ [: -. '  '&E.
+
+NB. radians from degrees
+rfd=:*&0.0174532925199432955
+
+NB. sine radians
+sin=:1&o.
+
 NB. xml BEGIN and END tags
 tags=:'<'&,@,&'>' ; '</'&,@,&'>'
 
@@ -595,10 +755,12 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20240812j131822
+NB. (gpxutils) interface word(s): 20240817j123217
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
+NB. csvfrtab     NB. poi CSV text from TAB delimited text file
 NB. csvfrwpt     NB. poi CSV text from waypoint text file
+NB. gpskm        NB. distances in km from Google Maps coordinates
 NB. gpxfrmapkml  NB. gpx from Google maps kml
 NB. gpxfrmirror  NB. extracts geotagged images from mirror_db and generates gpx
 NB. gpxfrpoicsv  NB. converts poi csv files to gpx
