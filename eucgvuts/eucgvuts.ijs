@@ -166,7 +166,7 @@ NB. tab character
 TAB=:a.{~9
 
 NB. version, make count and date
-VMDeucgvuts=:'0.7.5';2;'30 Jun 2023 12:01:43'
+VMDeucgvuts=:'0.7.5';5;'18 Aug 2024 10:15:22'
 
 NB. mark end of book dot digraph nodes
 eucENDBOOKDEPS=:'//===end-book-deps'
@@ -512,7 +512,7 @@ if. -. +./tbs=. +./@('</table>'&E.)&> bks do. nada
 else.
 
   NB. all tables on pages
-  bks=. {{ '</table>'&beforestr&.> ('<table ' E. y) <;.1 y }} &.> tbs#bks
+  bks=. {{ '</table>'&beforestr&.> ('<table ' E. y) <;.1 y }}   &.> tbs#bks
   
   tbs=. >: I. tbs  NB. elements book numbers
 
@@ -799,7 +799,7 @@ NB. cut out on clusters
 'ix ct'=. (bCl;eCl) cutnestidx y
 
 NB. turn them off and reassemble
-; ({{ ctl '//' ,"1 ];._2 tlf y -. CR }} &.> ix{ct) ix} ct
+; ({{ ctl '//' ,"1 ];._2 tlf y -. CR }}   &.> ix{ct) ix} ct
 )
 
 
@@ -824,7 +824,7 @@ NB. cut out off clusters
 'ix ct'=. (bCl;eCl) cutnestidx y
 
 NB. turn them on and reassemble
-; ({{ ctl '//'&afterstr"1 ];._2 tlf y -. CR }} &.> ix{ct) ix} ct
+; ({{ ctl '//'&afterstr"1 ];._2 tlf y -. CR }}   &.> ix{ct) ix} ct
 )
 
 NB. file name from fully qualified file names
@@ -885,9 +885,9 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 
 NB.POST_eucgvuts post processor. 
 
-smoutput IFACE=: (0 : 0)
-NB. (eucgvuts) interface word(s): 20230630j120143
-NB. --------------------------
+smoutput IFACE_eucgvuts=: (0 : 0)
+NB. (eucgvuts) interface word(s): 20240818j101522
+NB. ----------------------------
 NB. eucjoycebkdeps  NB. justifications from Joyce book html files
 NB. eucjoycecncts   NB. format Joyce node connections
 NB. eucjoycehtml    NB. html from David Joyce's online Elements

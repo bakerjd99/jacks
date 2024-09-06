@@ -98,11 +98,14 @@ LF=:10{a.
 NB. gpx file written by (gpxutils)
 MIRRORGPXFILE=:'c:/pd/coords/gpx/geotagged smugmug images.gpx'
 
+NB. home base longitude latitude using Meeus conventions
+MeeusHomeLonLat=:0 0
+
 NB. root words (ROOTWORDSgpxutils) group      
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';37;'17 Aug 2024 12:32:17'
+VMDgpxutils=:'0.9.0';41;'22 Aug 2024 10:08:32'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -226,7 +229,7 @@ NB.*csvfrtab v-- poi CSV text from TAB delimited text file.
 NB.
 NB. monad:  cl =. csvfrtab clFile
 NB.
-NB.   f=. jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+NB.   f=. jpath '~temp/chile_antarctica_2026.txt'
 NB.   p=. jpath '~temp/chile_antarctica_2026'
 NB.   t=. csvfrtab f
 NB.   (toHOST t) write p,'.csv'
@@ -450,14 +453,17 @@ NB.*gpskm v-- distances in km from Google Maps coordinates.
 NB.
 NB. monad:  bt =. gpskm clFile
 NB.
-NB.   gpskm jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+NB.   dt=. gpskm jpath '~temp/chile_antarctica_2026.txt'
+NB.
+NB.   NB. sorted by increasing distance
+NB.   (] { ~ [: /: {:"1) dt
 NB.
 NB. dyad:  bt =. flMeeusLonLat gpskm clFile
 NB.
 NB.   NB. distance from Meeus location Longitude +W, Latitude +N
-NB.   0 0 gpskm jpath '~JACKSHACKS/testdata/chile_antarctica_2026.txt'
+NB.   0 0 gpskm jpath '~temp/chile_antarctica_2026.txt'
 
-NB. (mirrorstats) home location !(*)=. MeeusHomeLonLat
+NB. home location - Meeus conventions
 MeeusHomeLonLat gpskm y
 :
 NB. read TAB delimited locations
@@ -754,8 +760,8 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 
 NB.POST_gpxutils post processor. 
 
-smoutput IFACE=: (0 : 0)
-NB. (gpxutils) interface word(s): 20240817j123217
+smoutput IFACE_gpxutils=: (0 : 0)
+NB. (gpxutils) interface word(s): 20240822j100832
 NB. -----------------------------
 NB. allrecent    NB. all recent images from last waypoint generation
 NB. csvfrtab     NB. poi CSV text from TAB delimited text file
