@@ -14,13 +14,13 @@ For details see blog posts - listed from newest to oldest:
 `[begin-list]`
 
 1. [Decoding and Encoding RSV Files with J](https://analyzethedatanotthedrivel.org/2024/01/12/decoding-and-encoding-rsv-files-with-j/)
- * [`rsv`](https://github.com/bakerjd99/jackshacks/blob/main/riseset.ijs)
+ * [`rsv.ijs`](https://github.com/bakerjd99/jackshacks/blob/main/riseset.ijs)
 
 2. [J graphviz’s Euclid’s Elements](https://analyzethedatanotthedrivel.org/2023/06/28/j-graphvizs-euclids-elements/)
- * [`eucgvuts`](https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs)
+ * [`eucgvuts.ijs`](https://github.com/bakerjd99/jacks/blob/master/eucgvuts/eucgvuts.ijs)
 
 3. [Sympathy for Ptolemaic Epicyclers](https://analyzethedatanotthedrivel.org/2023/04/07/sympathy-for-ptolemaic-epicyclers/)
- * [`riseset`](https://github.com/bakerjd99/jackshacks)
+ * [`riseset.ijs`](https://github.com/bakerjd99/jackshacks/blob/main/riseset.ijs)
 
 4. Two posts about using SQLite with J see: [`mirrorxref`](https://github.com/bakerjd99/jacks/tree/master/mirrorxref)
  * [“Managing” a SQLite Database with J (Part 1)](https://analyzethedatanotthedrivel.org/2022/08/03/managing-a-sqlite-database-with-j-part-1/)
@@ -30,7 +30,7 @@ For details see blog posts - listed from newest to oldest:
  * [`ipynb`](https://github.com/bakerjd99/jacks/tree/master/ipynbfrjod)
 
 6. [Branding XMP Sidecar Files with J](https://analyzethedatanotthedrivel.org/2022/07/17/branding-xmp-sidecar-files-with-j/)
- * [`brandxmp`](https://github.com/bakerjd99/jacks/tree/master/brandxmp)
+ * [`brandxmp.ijs`](https://github.com/bakerjd99/jacks/blob/master/brandxmp/brandxmp.ijs)
 
 7. [JOD goes into the Arctic Code Vault](https://analyzethedatanotthedrivel.org/2020/08/17/jod-goes-into-the-arctic-code-vault/)
 
