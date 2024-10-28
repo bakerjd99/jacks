@@ -1464,16 +1464,8 @@ toHOST=:toCRLF
 NB. converts character strings to J delimiter LF
 toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
 
-
-tolower=:3 : 0
-
-NB.*tolower v-- convert to lower case.
-NB.
-NB. monad: cl =. tolower cl
-
-x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
-($y) $ ((x{n) { (97+i.26){a.) x}t
-)
+NB. convert to lower case
+tolower=:0&(3!:12)
 
 
 uedposts=:3 : 0
@@ -1504,7 +1496,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor. 
 
 smoutput IFACE_TeXfrWpxml=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20240812j130724
+NB. (TeXfrWpxml) interface word(s): 20241028j122529
 NB. -------------------------------
 NB. BlogFreqs         NB. frequencies of file extensions in blog folders
 NB. BlogHashes        NB. update blog hashes
