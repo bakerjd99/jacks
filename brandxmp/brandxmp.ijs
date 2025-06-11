@@ -13,6 +13,7 @@ NB. created: 2022jul13
 NB. ------------------------------------------------------------------------------
 NB. 22jul15 (audbrandxmp) added
 NB. 22jul16 (audbrandxmp) renamed (audbranddir) to match (titbranddir)
+NB. 25jun05 raf (fujifilm raws) type added to (RAWFILETYPES)
 
 coclass 'brandxmp'
 
@@ -30,7 +31,7 @@ NB. write bytes (x) and return file (y)
 wrecho=: {{ y [ x (write :: _1:) y }}
 
 NB. image types considered raw - adjust if necessary
-RAWFILETYPES=: <;._1 ' jpg tif tiff nef dng png jpeg heic'
+RAWFILETYPES=: <;._1 ' jpg tif tiff nef dng png jpeg heic raf'
 
 XMPTITLEFRAG=: (0 : 0)
 <dc:title>
@@ -54,7 +55,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.0';16;'12 Aug 2024 13:33:59'
+VMDbrandxmp=:'0.7.0';18;'05 Jun 2025 17:56:59'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -463,16 +464,8 @@ toHOST=:toCRLF
 NB. converts character strings to J delimiter LF
 toJ=:((10{a.) I.@(e.&(13{a.))@]}  ])@:(#~ -.@((13 10{a.)&E.@,))
 
-
-tolower=:3 : 0
-
-NB.*tolower v-- convert to lower case.
-NB.
-NB. monad: cl =. tolower cl
-
-x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
-($y) $ ((x{n) { (97+i.26){a.) x}t
-)
+NB. convert to lower case
+tolower=:0&(3!:12)
 
 
 toupper=:3 : 0
@@ -497,7 +490,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE_brandxmp=: (0 : 0)
-NB. (brandxmp) interface word(s): 20240812j133359
+NB. (brandxmp) interface word(s): 20250605j175659
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files

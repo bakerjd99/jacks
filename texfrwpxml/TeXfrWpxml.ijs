@@ -1496,7 +1496,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_TeXfrWpxml TeXfrWpxml post processor. 
 
 smoutput IFACE_TeXfrWpxml=: (0 : 0)
-NB. (TeXfrWpxml) interface word(s): 20241028j122529
+NB. (TeXfrWpxml) interface word(s): 20250404j114837
 NB. -------------------------------
 NB. BlogFreqs         NB. frequencies of file extensions in blog folders
 NB. BlogHashes        NB. update blog hashes
