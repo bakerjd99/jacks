@@ -18,6 +18,7 @@ NB.  addprintsizes  - adds additional sizes to size lists
 NB.  minsizechanges - number of key differences beteen old and new sizes
 NB.  moreprintsizes - add additional print sizes
 NB.  resizekey      - list mirror_db images getting new size keys with expanded size key list
+NB.  savesmugstats  - save SmugMug notebook statistics
 NB.  sizekey2       - size key from image dimensions
 NB.  sizekeychanges - images with size key changes when size list changes
 NB.  sizekeycheck   - compare new computed size keys with online keys
@@ -29,6 +30,7 @@ NB. 25jun15 Darktable aspect ratios added to (SMUGPYTERSIZES)
 NB. 25jun16 (sizekey2) replaces (sizkey)
 NB. 25jun20 (addprintsizes, minsizechanges, ununsized) added
 NB. 25jun21 (shrinkkeys, nszfrkeys, keysfrnsz) added
+NB. 25jun22 (savesmugstats) added
 
 require 'data/sqlite'
 coclass 'ResizeKeys'
@@ -44,7 +46,7 @@ NB. bump resolution to insure excellent print quality
 DPIBUMP=:120
 
 NB. interface words (IFACEWORDSResizeKeys) group
-IFACEWORDSResizeKeys=:<;._1 ' addprintsizes minsizechanges moreprintsizes resizekey sizekey2 sizekeychanges sizekeycheck ununsized'
+IFACEWORDSResizeKeys=:<;._1 ' addprintsizes minsizechanges moreprintsizes resizekey savesmugstats sizekey2 sizekeychanges sizekeycheck ununsized'
 
 NB. minimum print dpi
 MINDPI=:72
@@ -61,8 +63,11 @@ NOPRINTKEY=:'0z9'
 NB. keyword for images that do not match (SMUGPYTERSIZES)
 NORATIOKEY=:'0z1'
 
+NB. default monad path - needs trailing path delimiter, e.g: ~temp/
+PUTTERSPATH=:'~temp/'
+
 NB. root words (ROOTWORDSResizeKeys) group
-ROOTWORDSResizeKeys=:<;._1 ' IFACEWORDSResizeKeys ROOTWORDSResizeKeys VMDResizeKeys addprintsizes minsizechanges resizekey ununsized'
+ROOTWORDSResizeKeys=:<;._1 ' IFACEWORDSResizeKeys ROOTWORDSResizeKeys VMDResizeKeys addprintsizes minsizechanges resizekey savesmugstats ununsized'
 
 NB. round off for print surface area (square inches)
 SMUGAREAROUND=:0.0500000000000000028
@@ -77,7 +82,7 @@ NB. print sizes matching Jupyter/Python see: 50 list SMUGPYTERSIZES
 SMUGPYTERSIZES=:<;._1 ' 1x1.414214 1x1.618034 1x2.35 1x2.39 1x3.5 2x2 2x2.5 2x2.65 2x2.828428 2x3 2x3.236068 2x3.5 2x4 2x4.7 2x4.78 2x5 2x7 2.125x2.75 2.25x4 2.25x5.25 2.5x2.5 2.5x3 2.5x3.25 2.5x3.35 2.5x3.5 2.5x4 2.75x3.5 2.75x4 2.75x4.25 2.75x7 3x3 3x4 3x5 3x7 3x8.125 3x9 3x12 3x15 3x18 3.5x3.5 3.5x5 3.5x6 3.75x6.75 3.75x8 4x4 4x5 4x5.3 4x5.656856 4x6 4x6.472136 4x7 4x8 4x9.4 4x9.56 4x10 4x14 4.25x5.5 4.5x8 4.5x10.5 5x5 5x6 5x6.5 5x6.7 5x7 5x8 5x10 5x30 5.5x7 5.5x8 5.5x8.5 5.5x14 6x6 6x8 6x10 6x12 6x14 6x15 6x16.25 6x18 6x21 6x24 6x30 6x36 7x10 7x12 7.5x13.5 7.5x16 8x8 8x10 8x10.6 8x11.313712 8x12 8x12.944272 8x14 8x16 8x18.8 8x19.12 8x20 8x24 8x28 8x32 8x40 8.5x11 9x12 9x15 9x16 9x21 9x36 10x10 10x12 10x13 10x13.4 10x14 10x15 10x16 10x20 10x25 10x30 10x35 10x40 10x60 11x14 11x16 11x17 11x28 12x12 12x15 12x16 12x18 12x20 12x24 12x28 12x30 12x32.5 12x36 12x42 12x48 12x60 12x72 14x20 14x24 15x18 15x27 15x32 16x16 16x20 16x21.2 16x22.627424 16x24 16x25.888544 16x28 16x32 16x37.6 16x38.24 16x40 16x56 17x22 18x24 18x32 18x42 20x20 20x24 20x26 20x26.8 20x28 20x30 20x32 20x40 22x28 22x32 22x34 22x56 24x32 24x36 24x40 24x65 24x72 24x96 24x120 24x144 28x40 28x48 30x30 30x54 30x64'
 
 NB. version, make count, and date
-VMDResizeKeys=:'0.7.0';01;'21 Jun 2025 22:55:22'
+VMDResizeKeys=:'0.7.0';3;'22 Jun 2025 11:50:42'
 
 
 addprintsizes=:3 : 0
@@ -112,6 +117,9 @@ g=. /:&.> 1&{"1 &.> r
 NB. signal with optional message
 assert=:0 0"_ $ 13!:8^:((0: e. ])`(12"_))
 
+NB. boxes open nouns
+boxopen=:<^:(L. = 0:)
+
 
 charsub=:4 : 0
 
@@ -144,6 +152,12 @@ NB.   0.0005 0.05 500 dpiarearatio 2000 3000
 'aspect area dpi'=. x
 (area round (*/y) % *: dpi) ,: aspect round (<./y) % >./y
 )
+
+NB. boxes UTF8 names
+fboxname=:([: < 8 u: >) ::]
+
+NB. 1 if file exists 0 otherwise
+fexist=:1:@(1!:4) ::0:@(fboxname&>)@boxopen
 
 
 fsd=:4 : 0
@@ -217,6 +231,12 @@ sz=. iz (I. 0 = 0{"1 sz)} sz
 NB. reform keys
 s: (' x'&charsub)@":&.> <"1 sz
 )
+
+NB. extracts the extension from qualified file names
+justext=:''"_`(] #~ [: -. [: +./\. '.'&=)@.('.'&e.)
+
+NB. file name from fully qualified file names
+justfile=:(] #~ [: -. [: +./\ '.'&=)@(] #~ [: -. [: +./\. e.&':\')
 
 
 keysfrnsz=:3 : 0
@@ -295,6 +315,9 @@ NB. interpolate expanded sizes
 sortprintsizes ;(5&s:)@itrpsizes&.> 2 {"1 printsizestable ns
 )
 
+NB. J name class
+nc=:4!:0
+
 
 nszfrkeys=:3 : 0
 
@@ -368,6 +391,48 @@ NB. return sorted by aspect ratio
 )
 
 
+putmd=:3 : 0
+
+NB.*putmd v-- store Markdown as JOD text macros.
+NB.
+NB. monad:  putmd clFile
+NB. dyad: clPath putmd clFile
+
+PUTTERSPATH putmd y
+:
+NB. load 'general/jod' !(*)=. jpath put MACRO_ajod_ MARKDOWN_ajod_ badcl_ajod_ badrc_ajod_
+file=. (jpath x),y  
+'JOD not available' assert 0=nc <'JODobj'
+('file does not exist -> ',file) assert fexist file
+'file is not markdown' assert (<tolower justext file) e. ;:'md markdown'
+mdname=. (justfile winpathsep file),'_md'
+NB. store all markdown as UTF-8
+md=. utf8 read file
+MACRO_ajod_ put mdname;MARKDOWN_ajod_;md
+)
+
+
+putnb=:3 : 0
+
+NB.*putnb v-- store Jupyter notebooks as JOD text macros.
+NB.
+NB. monad:  putnb clFile
+NB. dyad: clPath putnb clFile
+
+PUTTERSPATH putnb y
+:
+NB. load 'general/jod' !(*)=. jpath put MACRO_ajod_ IPYNB_ajod_ badcl_ajod_ badrc_ajod_
+file=. (jpath x),y 
+'JOD not available' assert 0=nc <'JODobj'
+('file does not exist -> ',file) assert fexist file
+'file is not notebook' assert (<tolower justext file) e. ;:'ipynb'
+nbname=. (justfile winpathsep file),'_ipynb'
+NB. store ipynb as UTF-8
+ipynb=. utf8 read file
+MACRO_ajod_ put nbname;IPYNB_ajod_;ipynb
+)
+
+
 ratiofrkey=:3 : 0
 
 NB.*ratiofrkey v-- size key from image dimensions.
@@ -378,6 +443,9 @@ NB.   ratiofrkey 0 {"1 sizekeycheck '~MIRROR/mirror.db'
 
 %/"1 ] _1&"."1 'x z '&charsub&> 5 s: ;y
 )
+
+NB. reads a file as a list of bytes
+read=:1!:1&(]`<@.(32&>@(3!:0)))
 
 
 resizekey=:3 : 0
@@ -413,6 +481,20 @@ NB. retain images with new size keys
 
 NB. round (y) to nearest (x) (e.g. 1000 round 12345)
 round=:[ * [: (<.) 0.5 + %~
+
+
+savesmugstats=:3 : 0
+
+NB.*saveSmugMugStats v-- save SmugMug notebook statistics.
+NB.
+NB. monad:  savesmugstats uuIgnore
+NB. dyad:  clPath savesmugstats uuIgnore
+
+'~JUPYTER/' savesmugstats 0
+:
+s=. 'Mirror_SmugMug_Statistics.ipynb';'Mirror_SmugMug_Statistics.md'
+s [ x putnb ;0{s [ x putmd ;1{s
+)
 
 
 shrinkkeys=:4 : 0
@@ -615,6 +697,9 @@ NB.   sortprintsizes <;.1 ' ',reb '10x10 20x30   3x2 2x3 12x8  8x12 10x10   '
 (~. ' x'&charsub&.> ":&.> /:~ (/:~)&.> ".&.> 'x '&charsub&.> y) -.&.> ' '
 )
 
+NB. convert to lower case
+tolower=:0&(3!:12)
+
 
 ununsized=:3 : 0
 
@@ -644,15 +729,22 @@ if. 0=x do. st else.
 end.
 )
 
+NB. character list to UTF-8
+utf8=:8&u:
+
+NB. standardizes path delimiter to windows back \ slash
+winpathsep=:'\'&(('/' I.@:= ])} )
+
 NB.POST_ResizeKeys post processor. 
 
 smoutput IFACE_ResizeKeys=: (0 : 0)
-NB. (ResizeKeys) interface word(s): 20250621j225522
+NB. (ResizeKeys) interface word(s): 20250622j115042
 NB. ------------------------------
 NB. addprintsizes   NB. adds additional sizes to size lists
 NB. minsizechanges  NB. number of key differences beteen old and new sizes
 NB. moreprintsizes  NB. add additional print sizes
 NB. resizekey       NB. list mirror_db images getting new size keys with expanded size key list
+NB. savesmugstats   NB. save SmugMug notebook statistics
 NB. sizekey2        NB. size key from image dimensions
 NB. sizekeychanges  NB. images with size key changes when size list changes
 NB. sizekeycheck    NB. compare new computed size keys with online keys
