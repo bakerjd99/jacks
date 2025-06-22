@@ -18,6 +18,7 @@ NB.  addprintsizes  - adds additional sizes to size lists
 NB.  minsizechanges - number of key differences beteen old and new sizes
 NB.  moreprintsizes - add additional print sizes
 NB.  resizekey      - list mirror_db images getting new size keys with expanded size key list
+NB.  sizekey2       - size key from image dimensions
 NB.  sizekeychanges - images with size key changes when size list changes
 NB.  sizekeycheck   - compare new computed size keys with online keys
 NB.  ununsized      - resized images with new tables
@@ -43,7 +44,7 @@ NB. bump resolution to insure excellent print quality
 DPIBUMP=:120
 
 NB. interface words (IFACEWORDSResizeKeys) group
-IFACEWORDSResizeKeys=:<;._1 ' addprintsizes minsizechanges moreprintsizes resizekey sizekeychanges sizekeycheck ununsized'
+IFACEWORDSResizeKeys=:<;._1 ' addprintsizes minsizechanges moreprintsizes resizekey sizekey2 sizekeychanges sizekeycheck ununsized'
 
 NB. minimum print dpi
 MINDPI=:72
@@ -76,7 +77,7 @@ NB. print sizes matching Jupyter/Python see: 50 list SMUGPYTERSIZES
 SMUGPYTERSIZES=:<;._1 ' 1x1.414214 1x1.618034 1x2.35 1x2.39 1x3.5 2x2 2x2.5 2x2.65 2x2.828428 2x3 2x3.236068 2x3.5 2x4 2x4.7 2x4.78 2x5 2x7 2.125x2.75 2.25x4 2.25x5.25 2.5x2.5 2.5x3 2.5x3.25 2.5x3.35 2.5x3.5 2.5x4 2.75x3.5 2.75x4 2.75x4.25 2.75x7 3x3 3x4 3x5 3x7 3x8.125 3x9 3x12 3x15 3x18 3.5x3.5 3.5x5 3.5x6 3.75x6.75 3.75x8 4x4 4x5 4x5.3 4x5.656856 4x6 4x6.472136 4x7 4x8 4x9.4 4x9.56 4x10 4x14 4.25x5.5 4.5x8 4.5x10.5 5x5 5x6 5x6.5 5x6.7 5x7 5x8 5x10 5x30 5.5x7 5.5x8 5.5x8.5 5.5x14 6x6 6x8 6x10 6x12 6x14 6x15 6x16.25 6x18 6x21 6x24 6x30 6x36 7x10 7x12 7.5x13.5 7.5x16 8x8 8x10 8x10.6 8x11.313712 8x12 8x12.944272 8x14 8x16 8x18.8 8x19.12 8x20 8x24 8x28 8x32 8x40 8.5x11 9x12 9x15 9x16 9x21 9x36 10x10 10x12 10x13 10x13.4 10x14 10x15 10x16 10x20 10x25 10x30 10x35 10x40 10x60 11x14 11x16 11x17 11x28 12x12 12x15 12x16 12x18 12x20 12x24 12x28 12x30 12x32.5 12x36 12x42 12x48 12x60 12x72 14x20 14x24 15x18 15x27 15x32 16x16 16x20 16x21.2 16x22.627424 16x24 16x25.888544 16x28 16x32 16x37.6 16x38.24 16x40 16x56 17x22 18x24 18x32 18x42 20x20 20x24 20x26 20x26.8 20x28 20x30 20x32 20x40 22x28 22x32 22x34 22x56 24x32 24x36 24x40 24x65 24x72 24x96 24x120 24x144 28x40 28x48 30x30 30x54 30x64'
 
 NB. version, make count, and date
-VMDResizeKeys=:'0.6.0';23;'21 Jun 2025 21:55:57'
+VMDResizeKeys=:'0.7.0';01;'21 Jun 2025 22:55:22'
 
 
 addprintsizes=:3 : 0
@@ -416,7 +417,7 @@ round=:[ * [: (<.) 0.5 + %~
 
 shrinkkeys=:4 : 0
 
-NB.*shrinkkeys v-- numeric sizes from keys.
+NB.*shrinkkeys v-- reduce keys size by (x).
 NB.
 NB. dyad:  blclKeys =. fa shrinkkeys blclKeys
 NB.
@@ -460,7 +461,7 @@ NB.   OnlineImageFile ,.~ <"0 (200;0.0005;0.05;<PANORAMICINCHSIZES) sizekey2 Ori
 
 'area ratio'=. (prec,tolr,dpi) dpiarearatio y
 
-NB. area controls the size picked for matching
+NB. NOTE: area controls the size picked for matching
 NB. aspect ratios - (ADJUSTAREA) can be used to
 NB. to minimize the differences between old sizes
 NB. and new sizes - see (minsizechanges)
@@ -646,12 +647,13 @@ end.
 NB.POST_ResizeKeys post processor. 
 
 smoutput IFACE_ResizeKeys=: (0 : 0)
-NB. (ResizeKeys) interface word(s): 20250621j215557
+NB. (ResizeKeys) interface word(s): 20250621j225522
 NB. ------------------------------
 NB. addprintsizes   NB. adds additional sizes to size lists
 NB. minsizechanges  NB. number of key differences beteen old and new sizes
 NB. moreprintsizes  NB. add additional print sizes
 NB. resizekey       NB. list mirror_db images getting new size keys with expanded size key list
+NB. sizekey2        NB. size key from image dimensions
 NB. sizekeychanges  NB. images with size key changes when size list changes
 NB. sizekeycheck    NB. compare new computed size keys with online keys
 NB. ununsized       NB. resized images with new tables
