@@ -14,6 +14,7 @@ NB. ----------------------------------------------------------------------------
 NB. 22jul15 (audbrandxmp) added
 NB. 22jul16 (audbrandxmp) renamed (audbranddir) to match (titbranddir)
 NB. 25jun05 raf (fujifilm raws) type added to (RAWFILETYPES)
+NB. 25jul04 jp2 jpeg 2000 type added to (RAWFILETYPES)
 
 coclass 'brandxmp'
 
@@ -31,7 +32,7 @@ NB. write bytes (x) and return file (y)
 wrecho=: {{ y [ x (write :: _1:) y }}
 
 NB. image types considered raw - adjust if necessary
-RAWFILETYPES=: <;._1 ' jpg tif tiff nef dng png jpeg heic raf'
+RAWFILETYPES=:<;._1 ' dng heic jp2 jpeg jpg nef png raf tif tiff'
 
 XMPTITLEFRAG=: (0 : 0)
 <dc:title>
@@ -55,7 +56,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.0';18;'05 Jun 2025 17:56:59'
+VMDbrandxmp=:'0.7.0';19;'04 Jul 2025 09:25:51'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -490,12 +491,16 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE_brandxmp=: (0 : 0)
-NB. (brandxmp) interface word(s): 20250605j175659
+NB. (brandxmp) interface word(s): 20250704j92551
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
 NB. titbranddir  NB. brand eligible xmp files in directory
 NB. titbrandxmp  NB. brand xmp sidecar file with file name and hash of associated image
+
+  NB. typical calls
+  titbranddir 'C:\pictures\2006\Ottawa\16bit'
+  audbranddir 'C:\pictures\2006\Ottawa\16bit'
 )
 
 cocurrent 'base'

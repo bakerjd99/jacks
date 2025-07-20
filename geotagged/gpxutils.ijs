@@ -8,20 +8,24 @@ NB. iPhone app and other GPS devices that import gpx data.
 NB.
 NB. verbatim: interface words
 NB.
-NB.  allrecent   - all recent images from last waypoint generation
-NB.  csvfrtab    - poi CSV text from TAB delimited text file
-NB.  csvfrwpt    - poi CSV text from waypoint text file
-NB.  gpskm       - distances in km from Google Maps coordinates
-NB.  gpxfrmapkml - gpx from Google maps kml
-NB.  gpxfrmirror - extracts geotagged images from mirror_db and generates gpx
-NB.  gpxfrpoicsv - converts poi csv files to gpx
-NB.  gpxfrrecent - gpx from recent waypoints
+NB.  alaska_yukon_wpt - update alaska yukon waypoints
+NB.  allrecent        - all recent images from last waypoint generation
+NB.  csvfrgm          - poi CSV text from google maps lat, lon, desc layout
+NB.  csvfrtab         - poi CSV text from TAB delimited text file
+NB.  csvfrwpt         - poi CSV text from waypoint text file
+NB.  gpskm            - distances in km from Google Maps coordinates
+NB.  gpxfrmapkml      - gpx from Google maps kml
+NB.  gpxfrmirror      - extracts geotagged images from mirror_db and generates gpx
+NB.  gpxfrpoicsv      - converts poi csv files to gpx
+NB.  gpxfrrecent      - gpx from recent waypoints
 NB.
 NB. created: 2019dec11
 NB. changes: -----------------------------------------------------
 NB. 19dec18 added (allrecent)
 NB. 22jun18 merged (gpxfrmapkml) and dependents
 NB. 24aug17 added (csvfrtab, gpskm)
+NB. 25jul18 (csvfrgm) added
+NB. 25jul19 (alaska_yukon_wpt) added
 
 require 'data/sqlite regex'
 coclass 'gpxutils'
@@ -90,7 +94,7 @@ NB. regular expression matching placeholder variables in html lists
 HTMLVARBPATTERN=:'{{[a-z]*}}'
 
 NB. interface words (IFACEWORDSgpxutils) group
-IFACEWORDSgpxutils=:<;._1 ' allrecent csvfrwpt csvfrtab gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
+IFACEWORDSgpxutils=:<;._1 ' alaska_yukon_wpt allrecent csvfrgm csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
 
 NB. line feed character
 LF=:10{a.
@@ -102,16 +106,31 @@ NB. home base longitude latitude using Meeus conventions
 MeeusHomeLonLat=:0 0
 
 NB. root words (ROOTWORDSgpxutils) group      
-ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils allrecent csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent write'
+ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils alaska_yukon_wpt allrecent csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrrecent'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.0';41;'22 Aug 2024 10:08:32'
+VMDgpxutils=:'0.9.2';2;'19 Jul 2025 18:01:57'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
 
 NB. retains string after first occurrence of (x)
 afterstr=:] }.~ #@[ + 1&(i.~)@([ E. ])
+
+
+alaska_yukon_wpt=:3 : 0
+
+NB.*alaska_yukon_wpt v-- update alaska yukon waypoints.
+NB.
+NB. monad:  alaska_yukon_wpt uuIgnore
+
+NB. !(*)=. jpath smoutput
+csv=. csvfrgm read txt=. jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.txt'
+wcnt=. (":#csv),' Alaska/Yukon waypoints'
+(',' fmtcd csv) write camps=. jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.csv'
+(gpxfrpoicsv camps) write gpx=. jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.gpx'
+,. wcnt;txt;camps;gpx
+)
 
 
 allrecent=:3 : 0
@@ -141,6 +160,9 @@ sql fst y
 
 NB. trims all leading and trailing blanks
 alltrim=:] #~ [: -. [: (*./\. +. *./\) ' '&=
+
+NB. trims all leading and trailing white space
+allwhitetrim=:] #~ [: -. [: (*./\. +. *./\) ] e. (9 10 13 32{a.)"_
 
 NB. arc tangent
 arctan=:_3&o.
@@ -223,6 +245,27 @@ NB. cosine radians
 cos=:2&o.
 
 
+csvfrgm=:3 : 0
+
+NB.*csvfrgm v-- poi CSV text from google maps lat, lon, desc layout.
+NB.
+NB. monad:  cl =. csvfrgm clTxt
+NB.
+NB.   csv=. read jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.txt'
+NB.   (',' fmtcd csvfrgm csv) write camps=. jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.csv'
+NB.   (gpxfrpoicsv camps) write jpath '~TRAVEL/alaska_yukon/yukon_alaska_campgrounds.gpx'
+
+NB. text in latitude, longitude, description
+csv=. rebrow ];._2 tlf y -. CR
+
+NB. exactly two commas per line
+'comma delimiters invalid' assert 2 = +/"1 ',' = csv
+
+NB. flip to longitude, latitude, description
+1 0 2 {"1 allwhitetrim&.> ',' parsecsv tlf ctl csv
+)
+
+
 csvfrtab=:3 : 0
 
 NB.*csvfrtab v-- poi CSV text from TAB delimited text file.
@@ -260,7 +303,7 @@ NB.*csvfrwpt v-- poi CSV text from waypoint text file.
 NB.
 NB. monad:  cl =. csvfrwpt clFile
 NB.
-NB.   f=. jpath '~addons/jacks/testdata/gps_oz_nz_2022.txt'
+NB.   f=. jpath '~JACKSHACKS/testdata/gps_oz_nz_2022.txt'
 NB.   p=. jpath '~temp'
 NB.   t=. csvfrwpt f
 NB.   (toHOST t) write p,'.csv'
@@ -364,6 +407,9 @@ tag=. alltrim x
 '<',tag,'>',y,'</',tag,'>'
 )
 
+NB. format tables as (x) character delimited LF terminated text - see long document
+fmtcd=:4 : 'tlf ctl }."1 ;"1 (x&,)@":&.> y'
+
 
 fmtmirrorgpx=:3 : 0
 
@@ -418,7 +464,7 @@ fsd=:4 : 0
 
 NB.*fsd v-- fetch sqlite dictionary array.
 NB.
-NB. dyad:  clSql fsd clDb
+NB. dyad:  bt =. clSql fsd clDb
 NB.
 NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
 NB.   sql=. 'select ImageKey, OriginalWidth, OriginalHeight, OnlineImageFile, Keywords from OnlineImage'
@@ -718,6 +764,9 @@ readtd2=:[: <;._2&> (a.{~9) ,&.>~ [: <;._2 [: (] , ((10{a.)"_ = {:) }. (10{a.)"_
 NB. removes multiple blanks (char only)
 rebc=:] #~ [: -. '  '&E.
 
+NB. deletes all blank rows from character table
+rebrow=:] #~ [: -. [: *./"1 ' '&=
+
 NB. radians from degrees
 rfd=:*&0.0174532925199432955
 
@@ -761,16 +810,18 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE_gpxutils=: (0 : 0)
-NB. (gpxutils) interface word(s): 20240822j100832
+NB. (gpxutils) interface word(s): 20250719j180157
 NB. -----------------------------
-NB. allrecent    NB. all recent images from last waypoint generation
-NB. csvfrtab     NB. poi CSV text from TAB delimited text file
-NB. csvfrwpt     NB. poi CSV text from waypoint text file
-NB. gpskm        NB. distances in km from Google Maps coordinates
-NB. gpxfrmapkml  NB. gpx from Google maps kml
-NB. gpxfrmirror  NB. extracts geotagged images from mirror_db and generates gpx
-NB. gpxfrpoicsv  NB. converts poi csv files to gpx
-NB. gpxfrrecent  NB. gpx from recent waypoints
+NB.  alaska_yukon_wpt - update alaska yukon waypoints
+NB.  allrecent        - all recent images from last waypoint generation
+NB.  csvfrgm          - poi CSV text from google maps lat, lon, desc layout
+NB.  csvfrtab         - poi CSV text from TAB delimited text file
+NB.  csvfrwpt         - poi CSV text from waypoint text file
+NB.  gpskm            - distances in km from Google Maps coordinates
+NB.  gpxfrmapkml      - gpx from Google maps kml
+NB.  gpxfrmirror      - extracts geotagged images from mirror_db and generates gpx
+NB.  gpxfrpoicsv      - converts poi csv files to gpx
+NB.  gpxfrrecent      - gpx from recent waypoints
 )
 
 cocurrent 'base'
