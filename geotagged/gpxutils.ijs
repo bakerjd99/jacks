@@ -8,16 +8,17 @@ NB. iPhone app and other GPS devices that import gpx data.
 NB.
 NB. verbatim: interface words
 NB.
-NB.  alaska_yukon_wpt - update alaska yukon waypoints
-NB.  allrecent        - all recent images from last waypoint generation
-NB.  csvfrgm          - poi CSV text from google maps lat, lon, desc layout
-NB.  csvfrtab         - poi CSV text from TAB delimited text file
-NB.  csvfrwpt         - poi CSV text from waypoint text file
-NB.  gpskm            - distances in km from Google Maps coordinates
-NB.  gpxfrmapkml      - gpx from Google maps kml
-NB.  gpxfrmirror      - extracts geotagged images from mirror_db and generates gpx
-NB.  gpxfrpoicsv      - converts poi csv files to gpx
-NB.  gpxfrrecent      - gpx from recent waypoints
+NB.  alaska_yukon_wpt     - update alaska yukon waypoints
+NB.  allrecent            - all recent images from last waypoint generation
+NB.  chile_antarctica_wpt - update antarctica chile waypoints
+NB.  csvfrgm              - poi CSV text from google maps lat, lon, desc layout
+NB.  csvfrtab             - poi CSV text from TAB delimited text file
+NB.  csvfrwpt             - poi CSV text from waypoint text file
+NB.  gpskm                - distances in km from Google Maps coordinates
+NB.  gpxfrmapkml          - gpx from Google maps kml
+NB.  gpxfrmirror          - extracts geotagged images from mirror_db and generates gpx
+NB.  gpxfrpoicsv          - converts poi csv files to gpx
+NB.  gpxfrrecent          - gpx from recent waypoints
 NB.
 NB. created: 2019dec11
 NB. changes: -----------------------------------------------------
@@ -26,6 +27,8 @@ NB. 22jun18 merged (gpxfrmapkml) and dependents
 NB. 24aug17 added (csvfrtab, gpskm)
 NB. 25jul18 (csvfrgm) added
 NB. 25jul19 (alaska_yukon_wpt) added
+NB. 25jul25 (loadgpxexclusions) added
+NB. 25sep13 (chile_antarctica_wpt) added
 
 require 'data/sqlite regex'
 coclass 'gpxutils'
@@ -88,13 +91,13 @@ NB. valid gpx name characters
 GPXNAMECHARS=:' -()0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 NB. get geotagged images from mirror - rows in desc upload date
-GpxGeotaggedMirror_sql=:'select Latitude, Longitude, RealDate, UploadDate, OnlineImageFile from OnlineImage where Keywords like "%geotagged%"'
+GpxGeotaggedMirror_sql=:'select ImageKey, Latitude, Longitude, RealDate, UploadDate, OnlineImageFile from OnlineImage where Keywords like "%geotagged%"'
 
 NB. regular expression matching placeholder variables in html lists
 HTMLVARBPATTERN=:'{{[a-z]*}}'
 
 NB. interface words (IFACEWORDSgpxutils) group
-IFACEWORDSgpxutils=:<;._1 ' alaska_yukon_wpt allrecent csvfrgm csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
+IFACEWORDSgpxutils=:<;._1 ' alaska_yukon_wpt allrecent chile_antarctica_wpt csvfrgm csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrpoicsv gpxfrrecent'
 
 NB. line feed character
 LF=:10{a.
@@ -106,10 +109,10 @@ NB. home base longitude latitude using Meeus conventions
 MeeusHomeLonLat=:0 0
 
 NB. root words (ROOTWORDSgpxutils) group      
-ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils alaska_yukon_wpt allrecent csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrrecent'
+ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils alaska_yukon_wpt allrecent chile_antarctica_wpt csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrrecent'
 
 NB. version, make count, and date
-VMDgpxutils=:'0.9.2';2;'19 Jul 2025 18:01:57'
+VMDgpxutils=:'0.9.3';4;'13 Sep 2025 19:03:14'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -239,6 +242,21 @@ NB.   '-_$ ' charsub '$123 -456 -789'
 
 'f t'=. ((#x)$0 1)<@,&a./.x
 t {~ f i. y
+)
+
+
+chile_antarctica_wpt=:3 : 0
+
+NB.*chile_antarctica_wpt v-- update antarctica chile waypoints.
+NB.
+NB. monad:  chile_antarctica_wpt uuIgnore
+
+NB. !(*)=. jpath smoutput
+wpt=. readtd2 txt=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.txt'
+wcnt=. (":#wpt),' Antarctica/Chile waypoints'
+(',' fmtcd 2 1 0 {"1 }. wpt) write camps=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.csv'
+(gpxfrpoicsv camps) write gpx=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.gpx'
+,. wcnt;txt;camps;gpx
 )
 
 NB. cosine radians
@@ -407,6 +425,12 @@ tag=. alltrim x
 '<',tag,'>',y,'</',tag,'>'
 )
 
+NB. boxes UTF8 names
+fboxname=:([: < 8 u: >) ::]
+
+NB. 1 if file exists 0 otherwise
+fexist=:1:@(1!:4) ::0:@(fboxname&>)@boxopen
+
 NB. format tables as (x) character delimited LF terminated text - see long document
 fmtcd=:4 : 'tlf ctl }."1 ;"1 (x&,)@":&.> y'
 
@@ -418,15 +442,30 @@ NB.
 NB. monad:  fmtmirrorgpx btSqlDict
 
 NB. insure any singletons are shaped
-ix=. I. (0 {"1 y) e. ;:'RealDate UploadDate OnlineImageFile'
+ix=. I. (0 {"1 y) e. ;:'RealDate UploadDate OnlineImageFile ImageKey'
 y=. (boxopen&.> (<ix;1){y) (<ix;1)} y
 y=. (,&.> 1 {"1 y) (<a:;1)} y
 
 NB. quit if no data
 if. +./ 0 = #&> 1 {"1 y do. '' return. end.
 
-NB. !(*)=. Latitude Longitude RealDate UploadDate OnlineImageFile
+NB. !(*)=. ImageKey Latitude Longitude RealDate UploadDate OnlineImageFile
 (0 {"1 y)=. 1 {"1 y
+
+NB. fetch any exclusions and remove !(*)=. jpath
+if. #exi=. loadgpxexclusions jpath '~MIRROR/exclude_from_gpx.txt' do.
+  NB. !(*)=. RemoveImageKey RemoveOnlineImageFile
+  (0 {"1 exi)=. 1 {"1 exi
+  bx=. -.ImageKey e. RemoveImageKey
+  NB. remove from lists
+  ImageKey=.        bx#ImageKey
+  'no gpx images' assert 0 < #ImageKey
+  OnlineImageFile=. bx#OnlineImageFile
+  RealDate=.        bx#RealDate
+  UploadDate=.      bx#UploadDate 
+  Latitude=.        bx#Latitude
+  Longitude=.       bx#Longitude
+end.
 
 NB. clean file names
 names=. '['&beforestr@justfile&.> OnlineImageFile
@@ -570,13 +609,12 @@ NB.*gpxfrmirror v-- extracts geotagged images from mirror_db and generates gpx.
 NB.
 NB. monad:  clGpx =. gpxfrmirror clMirrorDb
 NB.
-NB.   trg=. jpath '~addons/jacks/testdata/small_mirror.db'
-NB.   gpx=. gpxfrmirror trg
+NB.   gpx=. gpxfrmirror '~MIRROR/mirror.db'
 NB.   (toHOST gpx) write jpath '~temp/geotagged_images.gpx'
 NB. 
 NB. dyad:  clGpx =. iaN gpxfrmirror clMirrorDb
 NB.
-NB.   10 gpxfrmirror trg
+NB.   10 gpxfrmirror '~MIRROR/mirror.db'
 
 0 gpxfrmirror y NB. all waypoints default
 :
@@ -698,6 +736,22 @@ NB. file name from fully qualified file names
 justfile=:(] #~ [: -. [: +./\ '.'&=)@(] #~ [: -. [: +./\. e.&':\')
 
 
+loadgpxexclusions=:3 : 0
+
+NB.*loadgpxexclusions v-- load list of images to exclude from generated gpx.
+NB.
+NB. monad:  loadgpxexclusions clFile
+NB.
+NB.   loadgpxexclusions jpath '~MIRROR/exclude_from_gpx.txt' 
+
+if. fexist y do. 
+ (0{tb) ,. <"1 |: }. tb=. readtd2 y
+else.
+ 0 0$a:
+end.
+)
+
+
 parsecsv=:3 : 0
 
 NB.*parsecsv v--  parses comma delimited  files. (x) is the field
@@ -810,18 +864,19 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE_gpxutils=: (0 : 0)
-NB. (gpxutils) interface word(s): 20250719j180157
+NB. (gpxutils) interface word(s): 20250913j190314
 NB. -----------------------------
-NB.  alaska_yukon_wpt - update alaska yukon waypoints
-NB.  allrecent        - all recent images from last waypoint generation
-NB.  csvfrgm          - poi CSV text from google maps lat, lon, desc layout
-NB.  csvfrtab         - poi CSV text from TAB delimited text file
-NB.  csvfrwpt         - poi CSV text from waypoint text file
-NB.  gpskm            - distances in km from Google Maps coordinates
-NB.  gpxfrmapkml      - gpx from Google maps kml
-NB.  gpxfrmirror      - extracts geotagged images from mirror_db and generates gpx
-NB.  gpxfrpoicsv      - converts poi csv files to gpx
-NB.  gpxfrrecent      - gpx from recent waypoints
+NB. alaska_yukon_wpt      NB. update alaska yukon waypoints
+NB. allrecent             NB. all recent images from last waypoint generation
+NB. chile_antarctica_wpt  NB. update antarctica chile waypoints
+NB. csvfrgm               NB. poi CSV text from google maps lat, lon, desc layout
+NB. csvfrtab              NB. poi CSV text from TAB delimited text file
+NB. csvfrwpt              NB. poi CSV text from waypoint text file
+NB. gpskm                 NB. distances in km from Google Maps coordinates
+NB. gpxfrmapkml           NB. gpx from Google maps kml
+NB. gpxfrmirror           NB. extracts geotagged images from mirror_db and generates gpx
+NB. gpxfrpoicsv           NB. converts poi csv files to gpx
+NB. gpxfrrecent           NB. gpx from recent waypoints
 )
 
 cocurrent 'base'
