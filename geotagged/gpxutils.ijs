@@ -111,8 +111,11 @@ MeeusHomeLonLat=:0 0
 NB. root words (ROOTWORDSgpxutils) group      
 ROOTWORDSgpxutils=:<;._1 ' IFACEWORDSgpxutils ROOTWORDSgpxutils VMDgpxutils alaska_yukon_wpt allrecent chile_antarctica_wpt csvfrtab csvfrwpt gpskm gpxfrmapkml gpxfrmirror gpxfrrecent'
 
+NB. tab character
+TAB=:a.{~9
+
 NB. version, make count, and date
-VMDgpxutils=:'0.9.3';4;'13 Sep 2025 19:03:14'
+VMDgpxutils=:'0.9.3';7;'30 Sep 2025 09:57:03'
 
 NB. retains string (y) after last occurrence of (x)
 afterlaststr=:] }.~ #@[ + 1&(i:~)@([ E. ])
@@ -252,11 +255,13 @@ NB.
 NB. monad:  chile_antarctica_wpt uuIgnore
 
 NB. !(*)=. jpath smoutput
-wpt=. readtd2 txt=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.txt'
-wcnt=. (":#wpt),' Antarctica/Chile waypoints'
-(',' fmtcd 2 1 0 {"1 }. wpt) write camps=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.csv'
-(gpxfrpoicsv camps) write gpx=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.gpx'
-,. wcnt;txt;camps;gpx
+txt=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.txt'
+'wpt delimiters off' assert 3 = +/"1 TAB = ];._2  tlf (read txt) -. CR
+wpt=. readtd2 txt
+wcnt=. (":<:#wpt),' Antarctica/Chile waypoints'
+(',' fmtcd 2 1 0 {"1 }. wpt) write csv=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.csv'
+(gpxfrpoicsv csv) write gpx=. jpath '~TRAVEL/chile_antarctica/chile_antarctica_2026.gpx'
+,. wcnt;txt;csv;gpx
 )
 
 NB. cosine radians
@@ -864,7 +869,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_gpxutils post processor. 
 
 smoutput IFACE_gpxutils=: (0 : 0)
-NB. (gpxutils) interface word(s): 20250913j190314
+NB. (gpxutils) interface word(s): 20250930j95703
 NB. -----------------------------
 NB. alaska_yukon_wpt      NB. update alaska yukon waypoints
 NB. allrecent             NB. all recent images from last waypoint generation
