@@ -5,6 +5,7 @@ NB.
 NB. interface word(s):
 NB. ------------------------------------------------------------------------------
 NB.  audbranddir - audit xmp/raw image directories
+NB.  branddir    - brand xmp files and zip current
 NB.  sidecars    - image raws with corresponding sidecar xmp files
 NB.  titbranddir - brand eligible xmp files in directory
 NB.  titbrandxmp - brand xmp sidecar file with file name and hash of associated image
@@ -15,6 +16,7 @@ NB. 22jul15 (audbrandxmp) added
 NB. 22jul16 (audbrandxmp) renamed (audbranddir) to match (titbranddir)
 NB. 25jun05 raf (fujifilm raws) type added to (RAWFILETYPES)
 NB. 25jul04 jp2 jpeg 2000 type added to (RAWFILETYPES)
+NB. 25dec11 (branddir) added
 
 coclass 'brandxmp'
 
@@ -47,16 +49,16 @@ NB. carriage return character
 CR=:13{a.
 
 NB. interface words (IFACEWORDSbrandxmp) group
-IFACEWORDSbrandxmp=:<;._1 ' audbranddir sidecars titbranddir titbrandxmp'
+IFACEWORDSbrandxmp=:<;._1 ' audbranddir branddir sidecars titbranddir titbrandxmp'
 
 NB. line feed character
 LF=:10{a.
 
 NB. root words (ROOTWORDSbrandxmp) group      
-ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp audbranddir titbranddir'
+ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp branddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.0';19;'04 Jul 2025 09:25:51'
+VMDbrandxmp=:'0.7.5';2;'11 Dec 2025 12:57:36'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -208,6 +210,19 @@ mask=. ~:/\ llst
 
 NB. boxes open nouns
 boxopen=:<^:(L. = 0:)
+
+
+branddir=:3 : 0
+
+NB.*branddir v-- brand xmp files and zip current.
+NB.
+NB. monad:  branddir clDirectory
+NB.
+NB.   branddir 'C:\pictures\2025\Idaho\11_nov\iPhoneRaw'
+
+smoutput titbranddir y
+smoutput audbranddir y
+)
 
 
 changestr=:4 : 0
@@ -491,7 +506,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE_brandxmp=: (0 : 0)
-NB. (brandxmp) interface word(s): 20250704j92551
+NB. (brandxmp) interface word(s): 20251211j125736
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
@@ -499,8 +514,10 @@ NB. titbranddir  NB. brand eligible xmp files in directory
 NB. titbrandxmp  NB. brand xmp sidecar file with file name and hash of associated image
 
   NB. typical calls
-  titbranddir 'C:\pictures\2006\Ottawa\16bit'
-  audbranddir 'C:\pictures\2006\Ottawa\16bit'
+  branddir 'C:\pictures\2025\Idaho\11_nov\iPhoneRaw'
+
+  titbranddir 'C:\pictures\2025\Idaho\11_nov\x100vi'
+  audbranddir 'C:\pictures\2025\Idaho\11_nov\x100vi'
 )
 
 cocurrent 'base'
