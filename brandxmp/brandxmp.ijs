@@ -58,7 +58,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp branddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.5';2;'11 Dec 2025 12:57:36'
+VMDbrandxmp=:'0.7.5';3;'13 Dec 2025 11:59:43'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -506,9 +506,10 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE_brandxmp=: (0 : 0)
-NB. (brandxmp) interface word(s): 20251211j125736
+NB. (brandxmp) interface word(s): 20251213j115943
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
+NB. branddir     NB. brand xmp files and zip current
 NB. sidecars     NB. image raws with corresponding sidecar xmp files
 NB. titbranddir  NB. brand eligible xmp files in directory
 NB. titbrandxmp  NB. brand xmp sidecar file with file name and hash of associated image
