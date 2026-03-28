@@ -17,6 +17,7 @@ NB. 22jul16 (audbrandxmp) renamed (audbranddir) to match (titbranddir)
 NB. 25jun05 raf (fujifilm raws) type added to (RAWFILETYPES)
 NB. 25jul04 jp2 jpeg 2000 type added to (RAWFILETYPES)
 NB. 25dec11 (branddir) added
+NB. 26mar28 hif (fujifilm) heic type added to (RAWFILETYPES)
 
 coclass 'brandxmp'
 
@@ -34,7 +35,7 @@ NB. write bytes (x) and return file (y)
 wrecho=: {{ y [ x (write :: _1:) y }}
 
 NB. image types considered raw - adjust if necessary
-RAWFILETYPES=:<;._1 ' dng heic jp2 jpeg jpg nef png raf tif tiff'
+RAWFILETYPES=:<;._1 ' dng heic hif jp2 jpeg jpg nef png raf tif tiff'
 
 XMPTITLEFRAG=: (0 : 0)
 <dc:title>
@@ -58,7 +59,7 @@ NB. root words (ROOTWORDSbrandxmp) group
 ROOTWORDSbrandxmp=:<;._1 ' IFACEWORDSbrandxmp ROOTWORDSbrandxmp VMDbrandxmp branddir'
 
 NB. version, make count and date
-VMDbrandxmp=:'0.7.5';3;'13 Dec 2025 11:59:43'
+VMDbrandxmp=:'0.7.6';01;'28 Mar 2026 09:42:14'
 
 NB. name and extension of xmp audit file
 XMPAUDITFILE=:'00auditxmp.txt'
@@ -506,7 +507,7 @@ write=:1!:2 ]`<@.(32&>@(3!:0))
 NB.POST_brandxmp post processor. 
 
 smoutput IFACE_brandxmp=: (0 : 0)
-NB. (brandxmp) interface word(s): 20251213j115943
+NB. (brandxmp) interface word(s): 20260328j94214
 NB. -----------------------------
 NB. audbranddir  NB. audit xmp/raw image directories
 NB. branddir     NB. brand xmp files and zip current
