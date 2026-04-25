@@ -210,7 +210,7 @@ NB. mirror directory root path
 MIRRORPATH=:'c:/smugmirror/mirror'
 
 NB. version, make count and date
-MIRRORVMD=:'0.9.8';13;'12 Aug 2024 13:33:04'
+MIRRORVMD=:'0.9.8';21;'19 Apr 2026 16:15:06'
 
 NB. primary SQLite ThumbsPlus test database - copy of primary database
 PRIMARYTEST=:'c:/thumbsdbs/primarytest.tpdb8s'
@@ -1873,7 +1873,7 @@ fsd=:4 : 0
 
 NB.*fsd v-- fetch sqlite dictionary array.
 NB.
-NB. dyad:  clSql fsd clDb
+NB. dyad:  bt =. clSql fsd clDb
 NB.
 NB.   trg=. 'c:/smugmirror/documents/xrefdb/mirror.db'
 NB.   sql=. 'select ImageKey, OriginalWidth, OriginalHeight, OnlineImageFile, Keywords from OnlineImage'
@@ -2088,16 +2088,8 @@ n=. n + <. 0.41 + 0 30.6 #. (12 | m-3),"0 d
 0 >. r $ n - 657378
 )
 
-
-tolower=:3 : 0
-
-NB.*tolower v-- convert to lower case.
-NB.
-NB. monad: cl =. tolower cl
-
-x=. I. 26 > n=. ((65+i.26){a.) i. t=. ,y
-($y) $ ((x{n) { (97+i.26){a.) x}t
-)
+NB. convert to lower case
+tolower=:0&(3!:12)
 
 NB. appends trailing \ character if necessary
 tslash=:] , ('\'"_ = {:) }. '\'"_
@@ -2194,7 +2186,7 @@ date;time
 NB.POST_MirrorXref post processor. 
 
 smoutput IFACE_MirrorXref=: (0 : 0)
-NB. (MirrorXref) interface word(s): 20240812j133304
+NB. (MirrorXref) interface word(s): 20260419j161506
 NB. -------------------------------
 NB. BuildMirror            NB. backup/create/load mirror
 NB. CheckRealDates         NB. check real dates
